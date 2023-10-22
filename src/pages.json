@@ -31,5 +31,33 @@
     "navigationBarTitleText": "uni-app",
     "navigationBarBackgroundColor": "#F8F8F8",
     "backgroundColor": "#F8F8F8"
+  },
+  "tabBar": {
+    "color": "#999999",
+    "selectedColor": "#e34969",
+    "borderStyle": "black",
+    "backgroundColor": "#FFFFFF",
+    "iconWidth": "24px",
+    "list": [{
+        "pagePath": "pages/index/index",
+        "iconPath": "static/icon/index/index_unselected.png",
+        "selectedIconPath": "static/icon/index/index_selected.png",
+        "text": "主页"
+      },
+      {
+        "pagePath": "pages/classTable/classTable",
+        "iconPath": "static/icon/classTable/classTable_unselected.png",
+        "selectedIconPath": "static/icon/classTable/classTable_selected.png",
+        "text": "课表"
+      },
+      {
+        "pagePath": "pages/my/my",
+        "iconPath": "static/icon/my/my_unselected.png",
+        "selectedIconPath": "static/icon/my/my_selected.png",
+        "text": "我的"
+      }
+    ]
   }
 }
+
+
