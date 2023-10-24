@@ -1,19 +1,19 @@
 <template>
-  <div class="contanier">
-    <div class="avatar">
+  <view class="contanier">
+    <view class="avatar">
       <u-avatar
         src="https://th.bing.com/th/id/OIP.rEU63q6oHc08uv3uh2_algHaEK?w=293&h=180&c=7&r=0&o=5&dpr=1.5&pid=1.7"
-        size = "150rpx"
+        :size=70
       ></u-avatar>
-    </div>
-    <div class="head">
+    </view>
+    <view class="head">
       <u-row gutter="5">
         <u-col span="1"> </u-col>
         <u-col span="4">User_name</u-col>
         <u-col span="4">User_information</u-col>
       </u-row>
-    </div>
-    <div class="cell">
+    </view>
+    <view class="cell">
       <u-cell-group title="个人工具">
         <u-cell
           icon="setting-fill"
@@ -27,15 +27,15 @@
           icon="photo"
           title="工具2"
           label="解释"
-          :arrow="true"
+          :isLink="true"
           hover-class="cell-hover-class"
         ></u-cell>
       </u-cell-group>
-    </div>
-    <div class="test">
+    </view>
+    <view class="test">
       <u-tag text="hello" shape="circle" closable:show="show" @close=""></u-tag>
-    </div>
-  </div>
+    </view>
+  </view>
 </template>
 
 <script setup lang="ts"></script>

@@ -12,6 +12,8 @@
     radius="5"
     bgColor="#ffffff"
   ></u-swiper>
+  <view>{{ $t('hello') }}</view>
+
 </template>
 
 <script setup lang="ts">

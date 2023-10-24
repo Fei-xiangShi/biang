@@ -40,20 +40,20 @@
     "iconWidth": "24px",
     "list": [{
         "pagePath": "pages/index/index",
-        "iconPath": "static/icon/index/index_unselected.png",
-        "selectedIconPath": "static/icon/index/index_selected.png",
+        "iconPath": "static/icons/index/index_unselected.png",
+        "selectedIconPath": "static/icons/index/index_selected.png",
         "text": "主页"
       },
       {
         "pagePath": "pages/classTable/classTable",
-        "iconPath": "static/icon/classTable/classTable_unselected.png",
-        "selectedIconPath": "static/icon/classTable/classTable_selected.png",
+        "iconPath": "static/icons/classTable/classTable_unselected.png",
+        "selectedIconPath": "static/icons/classTable/classTable_selected.png",
         "text": "课表"
       },
       {
         "pagePath": "pages/my/my",
-        "iconPath": "static/icon/my/my_unselected.png",
-        "selectedIconPath": "static/icon/my/my_selected.png",
+        "iconPath": "static/icons/my/my_unselected.png",
+        "selectedIconPath": "static/icons/my/my_selected.png",
         "text": "我的"
       }
     ]
