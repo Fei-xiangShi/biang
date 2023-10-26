@@ -1,6 +1,11 @@
 <script setup lang="ts">
 import { onLaunch, onShow, onHide } from "@dcloudio/uni-app";
 onLaunch(() => {
+  let safetop = uni.getStorageSync("menuButtonBoundingClientRect");
+  if (!safetop || safetop.length == 0 || safetop == null || safetop == undefined) {
+    safetop = uni.getMenuButtonBoundingClientRect();
+    uni.setStorageSync("menuButtonBoundingClientRect", safetop);
+  }
   console.log("App Launch");
 });
 onShow(() => {
