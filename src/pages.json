@@ -27,6 +27,27 @@
       }
     }
   ],
+  "subPackages":[
+    {
+      "root":"pages/my/sub",
+      "pages":[
+        {
+          "path":"introduction",
+          "style":{
+            "navigationBarTitleText": "介绍",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path":"uploadAvator",
+          "style":{
+            "navigationBarTitleText": "修改头像或名字",
+            "navigationStyle": "custom"
+          }
+        }
+      ]
+    }
+  ],
   "globalStyle": {
     "navigationBarTextStyle": "black",
     "navigationBarTitleText": "uni-app",
