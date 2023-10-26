@@ -1,5 +1,9 @@
 <template>
   <view class="container">
+    <view class="navbar">
+      <navbar />
+    </view>
+
     <view class="swiper">
       <u-swiper
         :list="swiperList"
@@ -22,9 +26,14 @@
       </view>
     </view>
     <view class="popular-functions">
-      <view class="popular-functions-item" v-for="popularFunction in popularFunctions">
+      <view
+        class="popular-functions-item"
+        v-for="popularFunction in popularFunctions"
+      >
         <u-icon :name="popularFunction.icon" size="20" color="#606266"></u-icon>
-        <view class="popular-functions-item-text">{{ popularFunction.text }}</view>
+        <view class="popular-functions-item-text">{{
+          popularFunction.text
+        }}</view>
       </view>
     </view>
     <view class="class-query-card">
@@ -39,6 +48,8 @@
 </template>
 
 <script setup lang="ts">
+import navbar from "@/components/navbar.vue";
+
 const swiperList = [
   {
     image: "https://cdn.uviewui.com/uview/swiper/swiper2.png",
@@ -114,7 +125,7 @@ const popularFunctions = [
     icon: "account",
     text: "我的",
   },
-]
+];
 </script>
 
 <style scoped>
@@ -126,14 +137,14 @@ const popularFunctions = [
   overflow: hidden;
 }
 
-.toolbox{
+.toolbox {
   display: flex;
   justify-content: space-between;
   padding: 0 20px;
   margin-top: 20px;
 }
 
-.toolbox .toolbox-item{
+.toolbox .toolbox-item {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -141,22 +152,22 @@ const popularFunctions = [
   width: 25%;
 }
 
-.toolbox .toolbox-item .toolbox-item-text{
+.toolbox .toolbox-item .toolbox-item-text {
   font-size: 12px;
   color: #606266;
   margin-top: 5px;
 }
 
-.popular-functions{
+.popular-functions {
   display: flex;
   flex-wrap: wrap;
   padding: 10px;
   margin: 5px 20px;
-  background: rgba(255,255,255,0.5);
+  background: rgba(255, 255, 255, 0.5);
   border-radius: var(--borderRadius-medium, 0.375rem);
 }
 
-.popular-functions .popular-functions-item{
+.popular-functions .popular-functions-item {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -164,13 +175,13 @@ const popularFunctions = [
   width: 20%;
 }
 
-.popular-functions .popular-functions-item .popular-functions-item-text{
+.popular-functions .popular-functions-item .popular-functions-item-text {
   font-size: 12px;
   color: #606266;
   margin-top: 5px;
 }
 
-.class-query-card{
+.class-query-card {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -181,28 +192,28 @@ const popularFunctions = [
   border-radius: var(--borderRadius-medium, 0.375rem);
 }
 
-.class-query-card .title{
+.class-query-card .title {
   display: flex;
   align-items: center;
   height: 1.5rem;
   border-radius: var(--borderRadius-medium, 0.375rem);
 }
 
-.class-query-card .title .title-text{
+.class-query-card .title .title-text {
   margin-left: 10px;
   font-size: 1.5rem;
   color: cornflowerblue;
   font-family: "LXGW WenKai";
 }
 
-.class-query-card .content{
+.class-query-card .content {
   display: flex;
   align-items: center;
   height: 1.5rem;
   border-radius: var(--borderRadius-medium, 0.375rem);
 }
 
-.class-query-card .content .content-text{
+.class-query-card .content .content-text {
   margin-left: 4rem;
   font-size: 1rem;
   color: gray;
