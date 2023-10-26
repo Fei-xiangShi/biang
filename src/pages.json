@@ -17,13 +17,15 @@
     {
       "path": "pages/my/my",
       "style": {
-        "navigationBarTitleText": "我的"
+        "navigationBarTitleText": "我的",
+        "navigationStyle": "custom"
       }
     },
     {
       "path": "pages/classTable/classTable",
       "style": {
-        "navigationBarTitleText": "课表"
+        "navigationBarTitleText": "课表",
+        "navigationStyle": "custom"
       }
     }
   ],
