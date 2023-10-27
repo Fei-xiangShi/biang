@@ -115,7 +115,7 @@
 
 <script setup lang="ts">
 import navbar from "@/components/navbar.vue";
-
+import RouteConfig from "@/config/routes";
 const todoList = [
   "今日待办1",
   "今日待办2",
@@ -267,7 +267,7 @@ const popularFunctions = [
 
 const redirectToClassTable = () => {
   uni.reLaunch({
-    url: "/pages/classTable/classTable",
+    url: RouteConfig.classTablePage.url
   });
 };
 </script>
