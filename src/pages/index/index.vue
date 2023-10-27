@@ -17,11 +17,11 @@
         nextMargin="30"
         radius="5"
         bgColor="rgba(0,0,0,0)"
-      ></u-swiper>
+      />
     </view>
     <view class="toolbox">
       <view class="toolbox-item" v-for="tool in toolbox">
-        <u-icon :name="tool.icon" size="20" color="#606266"></u-icon>
+        <u-icon :name="tool.icon" size="20" color="#606266" />
         <view class="toolbox-item-text">{{ tool.text }}</view>
       </view>
     </view>
@@ -30,7 +30,7 @@
         class="popular-functions-item"
         v-for="popularFunction in popularFunctions"
       >
-        <u-icon :name="popularFunction.icon" size="20" color="#606266"></u-icon>
+        <u-icon :name="popularFunction.icon" size="20" color="#606266" />
         <view class="popular-functions-item-text">{{
           popularFunction.text
         }}</view>
@@ -43,7 +43,7 @@
         :url="notice.url"
         direction="row"
         :step="true"
-      ></u-notice-bar>
+      />
     </view>
     <view class="cards">
       <view class="class-query-card" @tap="redirectToClassTable">
@@ -66,7 +66,7 @@
             circular
             indicator
             indicatorMode="line"
-          ></u-swiper>
+          />
         </view>
         <view class="column-two">
           <view class="todo">
@@ -78,7 +78,7 @@
                 color="black"
                 bgColor="rgba(0,0,0,0)"
                 icon=""
-              ></u-notice-bar>
+              />
             </view>
           </view>
           <view class="kit">
@@ -95,7 +95,7 @@
           </view>
           <view class="content">
             <view class="content-text">学生低价, 吃喝玩乐</view>
-            <u-icon name="arrow-right" :size="8" color="black"></u-icon>
+            <u-icon name="arrow-right" :size="8" color="black" />
           </view>
         </view>
         <view class="store-card">
@@ -104,14 +104,12 @@
           </view>
           <view class="content">
             <view class="content-text">附魔金苹果兑不停</view>
-            <u-icon name="arrow-right" :size="8" color="black"></u-icon>
+            <u-icon name="arrow-right" :size="8" color="black" />
           </view>
         </view>
       </view>
     </view>
-    <view class="tail">
-      <view class="pic"/>结尾放一张图, 完美
-    </view>
+    <view class="tail"> <view class="pic" />结尾放一张图, 完美 </view>
   </view>
 </template>
 
@@ -539,7 +537,7 @@ const redirectToClassTable = () => {
   font-family: "LXGW WenKai";
 }
 
-.tail{
+.tail {
   margin-top: 1rem;
   height: 30px;
   width: auto;
