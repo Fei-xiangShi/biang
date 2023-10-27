@@ -50,35 +50,13 @@
 
 <script setup lang="ts">
 import navbar from "@/components/navbar.vue";
-
+import RouteConfig from "@/config/routes";
+const itemList = RouteConfig.myItemList
 const navToChangeAvatar = () => {
   uni.navigateTo({
-    url: "sub/uploadAvator",
+    url: RouteConfig.changeAvator.url
   });
 };
-
-const itemList = [
-  {
-    icon: "home",
-    text: "功能1",
-    url: "sub/uploadAvator",
-  },
-  {
-    icon: "home",
-    text: "introduction",
-    url: "sub/introduction",
-  },
-  {
-    icon: "home",
-    text: "功能3",
-    url: "sub/introduction",
-  },
-  {
-    icon: "home",
-    text: "功能4",
-    url: "sub/introduction",
-  },
-];
 </script>
 
 <style scoped lang="scss">

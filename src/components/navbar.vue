@@ -24,6 +24,7 @@
 </template>
 
 <script setup lang="ts">
+import RouteConfig from '@/config/routes';
 defineProps({
   returnButtonColor: {
     type: String,
@@ -46,12 +47,13 @@ const goBack = () => {
 
 const changeSchool = () => {
   uni.navigateTo({
-    url: "/pages/schools/index",
+    url: RouteConfig.schoolList.url
   });
 };
 </script>
 
 <style lang="scss">
+
 .statusBar {
   width: 100%;
   height: 0;

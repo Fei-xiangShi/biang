@@ -25,7 +25,7 @@
       "path": "pages/classTable/classTable",
       "style": {
         "navigationBarTitleText": "课表",
-        "navigationStyle": "custom"
+        "navigationStyle":"custom"
       }
     }
   ],
