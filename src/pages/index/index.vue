@@ -1,5 +1,5 @@
 <template>
-  <u-notify :message="noticeMessage" :show="noticeShow" :type="noticeType"/>
+  <u-notify ref="Notify" />
   <modal
     title="选择语言"
     :show="showChooseLangualge"
@@ -8,7 +8,6 @@
     @cancel="cancelLang"
     @confirm="confirmLang"
   >
-
   </modal>
   <view class="container">
     <view class="navbar">
@@ -286,23 +285,26 @@ const redirectToClassTable = () => {
 };
 
 const showChooseLangualge = ref(false);
-const noticeMessage = ref("");
-const noticeShow = ref(false);
-const noticeType = ref("primary");
+const Notify = ref();
+let notify = {
+  message: "",
+  type: "primary",
+  color: "#ffffff",
+  safeAreaInsetTop: true,
+};
 
 const confirmLang = () => {
+  notify.message = "语言已经成功设置";
+  notify.type = "success"
+  Notify.value.show(notify);
   showChooseLangualge.value = false;
-  noticeMessage.value = "语言已经成功设置"
-  noticeShow.value = true;
-  noticeType.value = "success";
 };
 
 const cancelLang = () => {
-  lang = uni.getLocale();
-  uni.setStorageSync("lang", lang);
+  uni.setStorageSync("lang", uni.getLocale());
+  notify.message = "语言将会设置为系统语言";
+  Notify.value.show(notify);
   showChooseLangualge.value = false;
-  noticeMessage.value = "语言将会设置为系统语言"
-  noticeShow.value = true;
 };
 let lang = uni.getStorageSync("lang");
 onMounted(() => {
@@ -310,8 +312,6 @@ onMounted(() => {
     showChooseLangualge.value = true;
   }
 });
-
-
 </script>
 
 <style scoped lang="scss">
