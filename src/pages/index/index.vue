@@ -46,7 +46,7 @@
       ></u-notice-bar>
     </view>
     <view class="cards">
-      <view class="class-query-card">
+      <view class="class-query-card" @tap="redirectToClassTable">
         <view class="title">
           <view class="title-text">输入课程链接课程查询</view>
         </view>
@@ -266,6 +266,12 @@ const popularFunctions = [
     text: "我的",
   },
 ];
+
+const redirectToClassTable = () => {
+  uni.reLaunch({
+    url: "/pages/classTable/classTable",
+  });
+};
 </script>
 
 <style scoped>
