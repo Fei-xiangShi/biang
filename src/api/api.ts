@@ -1,6 +1,10 @@
-import http from "requests"
-import apiUrl from "@/config/apiConfig"
+import http from "./request";
+import apiUrl from "@/config/apiConfig";
 
-export default {
-    http.get("/ics"),
-}
+const Api = {
+  receiveCalender: (data: object) => {
+    http.post(apiUrl.ics, data);
+  },
+};
+
+export default Api;
