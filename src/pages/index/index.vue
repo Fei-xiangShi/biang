@@ -1,7 +1,18 @@
 <template>
+  <u-notify :message="noticeMessage" :show="noticeShow" :type="noticeType"/>
+  <modal
+    title="选择语言"
+    :show="showChooseLangualge"
+    :closeOnClickOverlay="true"
+    @close="cancelLang"
+    @cancel="cancelLang"
+    @confirm="confirmLang"
+  >
+
+  </modal>
   <view class="container">
     <view class="navbar">
-      <navbar />
+      <navbar :showChangeSchoolButton="true" />
     </view>
 
     <view class="swiper">
@@ -116,6 +127,9 @@
 <script setup lang="ts">
 import navbar from "@/components/navbar.vue";
 import RouteConfig from "@/config/routes";
+import { onMounted, ref } from "vue";
+import modal from "@/components/modal.vue";
+
 const todoList = [
   "今日待办1",
   "今日待办2",
@@ -267,12 +281,40 @@ const popularFunctions = [
 
 const redirectToClassTable = () => {
   uni.reLaunch({
-    url: RouteConfig.classTablePage.url
+    url: RouteConfig.classTablePage.url,
   });
 };
+
+const showChooseLangualge = ref(false);
+const noticeMessage = ref("");
+const noticeShow = ref(false);
+const noticeType = ref("primary");
+
+const confirmLang = () => {
+  showChooseLangualge.value = false;
+  noticeMessage.value = "语言已经成功设置"
+  noticeShow.value = true;
+  noticeType.value = "success";
+};
+
+const cancelLang = () => {
+  lang = uni.getLocale();
+  uni.setStorageSync("lang", lang);
+  showChooseLangualge.value = false;
+  noticeMessage.value = "语言将会设置为系统语言"
+  noticeShow.value = true;
+};
+let lang = uni.getStorageSync("lang");
+onMounted(() => {
+  if (!lang || lang.length == 0 || lang == null || lang == undefined) {
+    showChooseLangualge.value = true;
+  }
+});
+
+
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .container {
   display: flex;
   flex-direction: column;
@@ -290,20 +332,18 @@ const redirectToClassTable = () => {
   justify-content: space-between;
   padding: 0 20px;
   margin-top: 20px;
-}
-
-.toolbox .toolbox-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 25%;
-}
-
-.toolbox .toolbox-item .toolbox-item-text {
-  font-size: 12px;
-  color: #606266;
-  margin-top: 5px;
+  .toolbox-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 25%;
+    .toolbox-item-text {
+      font-size: 12px;
+      color: #606266;
+      margin-top: 5px;
+    }
+  }
 }
 
 .popular-functions {
@@ -314,20 +354,18 @@ const redirectToClassTable = () => {
   background: rgba(255, 255, 255, 0.5);
   border-radius: var(--borderRadius-medium, 0.375rem);
   box-shadow: rgba(0, 0, 0, 0.1) 2.4px 2.4px 3.2px;
-}
-
-.popular-functions .popular-functions-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 20%;
-}
-
-.popular-functions .popular-functions-item .popular-functions-item-text {
-  font-size: 12px;
-  color: #606266;
-  margin-top: 5px;
+  .popular-functions-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 20%;
+    .popular-functions-item-text {
+      font-size: 12px;
+      color: #606266;
+      margin-top: 5px;
+    }
+  }
 }
 
 .roll-notice {
@@ -345,196 +383,170 @@ const redirectToClassTable = () => {
   justify-content: center;
   margin: 0px 20px;
   border-radius: var(--borderRadius-medium, 0.375rem);
-}
-
-.cards .class-query-card {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background: url("https://img.zcool.cn/community/01662f554243770000019ae9cb94c1.jpg@1280w_1l_2o_100sh.jpg");
-  height: 100px;
-  border-radius: var(--borderRadius-medium, 0.375rem);
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
-    rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
-}
-
-.cards .class-query-card .title {
-  display: flex;
-  align-items: center;
-  height: 1.5rem;
-}
-
-.cards .class-query-card .title .title-text {
-  margin-left: 10px;
-  font-size: 1.5rem;
-  color: cornflowerblue;
-  font-family: "LXGW WenKai";
-}
-
-.cards .class-query-card .content {
-  display: flex;
-  align-items: center;
-  height: 1.5rem;
-}
-
-.cards .class-query-card .content .content-text {
-  margin-left: 4rem;
-  font-size: 1rem;
-  color: gray;
-  font-family: "LXGW WenKai";
-}
-
-.cards .three-cards {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  margin: 10px 0px;
-  border-radius: var(--borderRadius-medium, 0.375rem);
-}
-
-.cards .three-cards .swipe-card {
-  display: flex;
-  width: 35%;
-  flex-direction: column;
-  justify-content: center;
-  border-radius: var(--borderRadius-medium, 0.375rem);
-}
-
-.cards .three-cards .column-two {
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 60%;
-  border-radius: var(--borderRadius-medium, 0.375rem);
-}
-
-.cards .three-cards .todo {
-  background: linear-gradient(90deg, rgba(255, 0, 0, 0.116) 10%, white 90%);
-  box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  border-radius: var(--borderRadius-medium, 0.375rem);
-}
-
-.cards .three-cards .todo .todo-title {
-  display: flex;
-  align-items: center;
-  font-weight: bold;
-  height: 0.5rem;
-  margin-left: 1rem;
-  margin-top: 0.8rem;
-}
-
-.cards .three-cards .todo .todo-title .title-text {
-  font-size: 1rem;
-  color: black;
-}
-
-.cards .three-cards .todo .todo-content {
-  display: flex;
-  align-items: center;
-  margin: 0 0.35rem;
-}
-
-.cards .three-cards .kit {
-  box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  height: 4.3rem;
-  background: linear-gradient(
-    90deg,
-    rgba(220, 71, 228, 0.442) 40%,
-    rgba(220, 71, 228, 0.316) 95%
-  );
-  border-radius: var(--borderRadius-medium, 0.375rem);
-}
-
-.cards .three-cards .kit .kit-title {
-  display: flex;
-  align-items: center;
-  font-weight: bold;
-  margin-left: 1rem;
-}
-
-.cards .three-cards .kit .kit-content {
-  display: flex;
-  margin: 0 1rem;
-  font-size: 0.6rem;
-}
-
-.cards .two-cards {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.cards .two-cards .purchase-card {
-  background: linear-gradient(60deg, #a6eeee6c 50%, #ffffff59 90%);
-  height: 60px;
-  width: 60%;
-  border-radius: var(--borderRadius-medium, 0.375rem);
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
-    rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
-}
-
-.cards .two-cards .purchase-card .title {
-  display: flex;
-  /* align-items: center; */
-  height: 1.5rem;
-  margin-left: 1rem;
-  margin-top: 0.8rem;
-}
-
-.cards .two-cards .purchase-card .title .title-text {
-  font-size: 1.2rem;
-  color: black;
-}
-
-.cards .two-cards .purchase-card .content {
-  display: flex;
-  align-items: center;
-  margin: 0 1rem;
-}
-
-.cards .two-cards .purchase-card .content .content-text {
-  font-size: 0.6rem;
-  color: rgb(28, 94, 217);
-  font-family: "LXGW WenKai";
-}
-
-.cards .two-cards .store-card {
-  background: linear-gradient(300deg, #ffffff1f 5%, #eeb82f6c 95%);
-  height: 60px;
-  width: 38%;
-  border-radius: var(--borderRadius-medium, 0.375rem);
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
-    rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
-}
-
-.cards .two-cards .store-card .title {
-  display: flex;
-  /* align-items: center; */
-  height: 1.5rem;
-  margin-left: 1rem;
-  margin-top: 0.8rem;
-}
-
-.cards .two-cards .store-card .title .title-text {
-  font-size: 1.2rem;
-}
-
-.cards .two-cards .store-card .content {
-  display: flex;
-  align-items: center;
-  margin: 0 1rem;
-}
-
-.cards .two-cards .store-card .content .content-text {
-  font-size: 0.6rem;
-  color: chocolate;
-  font-family: "LXGW WenKai";
+  .class-query-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    background: url("https://img.zcool.cn/community/01662f554243770000019ae9cb94c1.jpg@1280w_1l_2o_100sh.jpg");
+    height: 100px;
+    border-radius: var(--borderRadius-medium, 0.375rem);
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+      rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+    .title {
+      display: flex;
+      align-items: center;
+      height: 1.5rem;
+      .title-text {
+        margin-left: 10px;
+        font-size: 1.5rem;
+        color: cornflowerblue;
+        font-family: "LXGW WenKai";
+      }
+    }
+    .content {
+      display: flex;
+      align-items: center;
+      height: 1.5rem;
+      .content-text {
+        margin-left: 4rem;
+        font-size: 1rem;
+        color: gray;
+        font-family: "LXGW WenKai";
+      }
+    }
+  }
+  .three-cards {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 10px 0px;
+    border-radius: var(--borderRadius-medium, 0.375rem);
+    .swipe-card {
+      display: flex;
+      width: 35%;
+      flex-direction: column;
+      justify-content: center;
+      border-radius: var(--borderRadius-medium, 0.375rem);
+    }
+    .column-two {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 60%;
+      border-radius: var(--borderRadius-medium, 0.375rem);
+    }
+    .todo {
+      background: linear-gradient(90deg, rgba(255, 0, 0, 0.116) 10%, white 90%);
+      box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      border-radius: var(--borderRadius-medium, 0.375rem);
+      .todo-title {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        height: 0.5rem;
+        margin-left: 1rem;
+        margin-top: 0.8rem;
+        .title-text {
+          font-size: 1rem;
+          color: black;
+        }
+      }
+      .todo-content {
+        display: flex;
+        align-items: center;
+        margin: 0 0.35rem;
+      }
+    }
+    .kit {
+      box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      height: 4.3rem;
+      background: linear-gradient(
+        90deg,
+        rgba(220, 71, 228, 0.442) 40%,
+        rgba(220, 71, 228, 0.316) 95%
+      );
+      border-radius: var(--borderRadius-medium, 0.375rem);
+      .kit-title {
+        display: flex;
+        align-items: center;
+        font-weight: bold;
+        margin-left: 1rem;
+      }
+      .kit-content {
+        display: flex;
+        margin: 0 1rem;
+        font-size: 0.6rem;
+      }
+    }
+  }
+  .two-cards {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    .purchase-card {
+      background: linear-gradient(60deg, #a6eeee6c 50%, #ffffff59 90%);
+      height: 60px;
+      width: 60%;
+      border-radius: var(--borderRadius-medium, 0.375rem);
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+        rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+      .title {
+        display: flex;
+        /* align-items: center; */
+        height: 1.5rem;
+        margin-left: 1rem;
+        margin-top: 0.8rem;
+        .title-text {
+          font-size: 1.2rem;
+          color: black;
+        }
+      }
+      .content {
+        display: flex;
+        align-items: center;
+        margin: 0 1rem;
+        .content-text {
+          font-size: 0.6rem;
+          color: rgb(28, 94, 217);
+          font-family: "LXGW WenKai";
+        }
+      }
+    }
+    .store-card {
+      background: linear-gradient(300deg, #ffffff1f 5%, #eeb82f6c 95%);
+      height: 60px;
+      width: 38%;
+      border-radius: var(--borderRadius-medium, 0.375rem);
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+        rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+      .title {
+        display: flex;
+        /* align-items: center; */
+        height: 1.5rem;
+        margin-left: 1rem;
+        margin-top: 0.8rem;
+        .title-text {
+          font-size: 1.2rem;
+        }
+      }
+      .content {
+        display: flex;
+        align-items: center;
+        margin: 0 1rem;
+        .content-text {
+          font-size: 0.6rem;
+          color: chocolate;
+          font-family: "LXGW WenKai";
+        }
+      }
+    }
+  }
 }
 
 .tail {

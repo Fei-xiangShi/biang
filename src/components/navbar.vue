@@ -8,14 +8,14 @@
         <u-icon
           name="arrow-left"
           :size="20"
-          :color="returnButtonColor"
-        ></u-icon>
+          :color="returnButtonIconColor"
+        />
       </view>
-      <view v-else>
+      <view v-else-if="showChangeSchoolButton">
         <view class="brand" @tap="changeSchool">
           <view class="brand-content"> 悉哈大学 </view>
           <view class="change-school">
-            <u-icon name="arrow-right" :size="10" color="black"></u-icon>
+            <u-icon name="arrow-right" :size="10" color="black"/>
           </view>
         </view>
       </view>
@@ -26,9 +26,13 @@
 <script setup lang="ts">
 import RouteConfig from '@/config/routes';
 defineProps({
-  returnButtonColor: {
+  returnButtonIconColor: {
     type: String,
     default: "black",
+  },
+  showChangeSchoolButton: {
+    type: Boolean,
+    default: false,
   },
 });
 

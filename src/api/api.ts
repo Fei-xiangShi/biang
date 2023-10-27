@@ -2,7 +2,7 @@ import http from "./request";
 import apiUrl from "@/config/apiConfig";
 
 const Api = {
-  receiveCalender: (data: object) => {
+  receiveCalendar: (data: object) => {
     http.post(apiUrl.ics, data);
   },
 };
