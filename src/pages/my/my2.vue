@@ -1,91 +1,66 @@
 <template>
   <view class="container">
     <navbar />
-    <view class="head">
-      <u-row>
-        <u-col span="1"></u-col>
-        <u-col span="4">
-          <view class="avatar">
-            <u-avatar icon="star-fill" @click="navigate('sub/uploadAvator')"></u-avatar>
-          </view>
-        </u-col>
-        <u-col span="7">User_name</u-col>
-      </u-row>
-    </view>
-    <view class="my_function">
-      <view class="my_function_item" v-for="item in item_list" @click="navigate(item.url)">
-        <u-row>
-          <u-col span="1"></u-col>
-          <u-col span="5">
-            <u-icon :name="item.icon" size="30"></u-icon>
-          </u-col>
-          <u-col span="4">
-          <view class="item_text">
-            <view>{{ item.text }}</view>
-          </view>  
-          </u-col>
-          <u-col span="2">
-            <u-icon name="arrow-right"></u-icon>
-          </u-col>
-        </u-row>  
+    <view class="head" enable-background="">
+      <view class="avatar" @tap="navToChangeAvatar">
+        <u-avatar icon="star-fill" />
+      </view>
+      <view class="username">
+        <view class="username-text">User_name</view>
+        <view class="username-arrow">
+          <u-icon name="arrow-right" :size="20"></u-icon>
+        </view>
       </view>
     </view>
-
-    <view class="cell">
-      <u-cell-group title="个人工具">
-        <u-cell
-          size=""
-          icon="setting-fill"
-          title="介绍"
-          isLink
-          url="/pages/my/sub/introduction"
-          value="click here"
-        ></u-cell>
-        <u-cell
-          icon="photo"
-          title="工具2"
-          :isLink="true"
-          hover-class="cell-hover-class"
-        ></u-cell>
-      </u-cell-group>
+    <view class="functions">
+      <view class="first-area area">
+        <u-cell-group>
+          <view v-for="item in itemList" class="funtion">
+            <u-cell
+              :icon="item.icon"
+              :title="item.text"
+              :isLink="true"
+              :url="item.url"
+            />
+          </view>
+        </u-cell-group>
+      </view>
+      <view class="first-gap">
+        <view class="gap">
+          <view class="gap-line-top" />
+          <view class="gap-text">个人工具</view>
+          <view class="gap-line-bottom" />
+        </view>
+      </view>
+      <view class="second-area area">
+        <u-cell-group>
+          <view v-for="item in itemList">
+            <u-cell
+              :icon="item.icon"
+              :title="item.text"
+              :isLink="true"
+              :url="item.url"
+            />
+          </view>
+        </u-cell-group>
+      </view>
     </view>
+    <u-button type="primary"></u-button>
   </view>
 </template>
 
 <script setup lang="ts">
 import navbar from "@/components/navbar.vue";
-const navigate = (url:string) => {
-  console.log("test"),
+import RouteConfig from "@/config/routes";
+const itemList = RouteConfig.myItemList
+const navToChangeAvatar = () => {
   uni.navigateTo({
-    url: url,
+    url: RouteConfig.changeAvator.url
   });
 };
-
-const item_list = [
-  {
-    icon:"home",
-    text:"功能1",
-    url:"sub/uploadAvator"
-  },
-  {
-    icon:"home",
-    text:"introduction",
-    url:"sub/introduction"
-  },
-  {
-    icon:"home",
-    text:"功能3",
-    url:"sub/introduction"
-  },
-  {
-    icon:"home",
-    text:"功能4",
-    url:"sub/introduction"
-  }
-]
 </script>
 
-<style scoped>
+<style scoped lang="scss">
 .container {
   display: flex;
   flex-direction: column;
@@ -97,16 +72,58 @@ const item_list = [
     #fcfcd491 60%
   );
 }
-.my_function{
-  padding: 1px;
+
+.head {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  padding: 20px;
+  .avatar {
+    margin-left: 10px;
+  }
+  .username {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    margin-left: 20px;
+    .username-text {
+      font-size: 1.5rem;
+    }
+    .username-arrow {
+      margin-top: 5px;
+      margin-left: 10px;
+    }
+  }
 }
 
-.my_function .my_function_item{
-  margin-top: 10px;
-}
-
-.avatar {
-  margin-top: 10%;
-  margin-left: 15%;
+.functions{
+  margin: 0 20px;
+  display: flex;
+  flex-direction: column;
+  .area{
+    display: flex;
+    flex-direction: column;
+    border: 1px solid #b6b6b690;
+    border-radius: var(--borderRadius-medium, 0.375rem);
+    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
+    background: rgba(255, 243, 243, 0.23);
+    .funtion{
+      
+    }
+    
+  }
+  .gap{
+      display: flex;
+      flex-direction: column;
+      margin: 10px;
+      .gap-line-bottom{
+        height: 1px;
+        background-color: #00000016;
+        margin-top: 10px;
+      }
+      .gap-text{
+        margin: 0 10px;
+      }
+    }
 }
 </style>

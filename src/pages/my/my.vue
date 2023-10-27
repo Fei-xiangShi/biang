@@ -1,8 +1,8 @@
 <template>
   <view class="container">
-    <navbar />
-    <view class="head">
-      <view class="avatar" @tap="navToChangeAvatar">
+    <navbar :showChangeSchoolButton="true" />
+    <view class="head" @tap="navToChangeAvatar">
+      <view class="avatar">
         <u-avatar icon="star-fill" />
       </view>
       <view class="username">
@@ -12,37 +12,30 @@
         </view>
       </view>
     </view>
-    <view class="functions">
-      <view class="first-area area">
-        <u-cell-group>
-          <view v-for="item in itemList" class="funtion">
-            <u-cell
-              :icon="item.icon"
-              :title="item.text"
-              :isLink="true"
-              :url="item.url"
-            />
+    <view class="myFunction">
+      <view class="myFunctionItem" v-for="item in itemList">
+        <view class="myFunctionItemBorder">
+          <u-icon :name="item.icon" size="30"></u-icon>
+          <view class="myFunctionItemText">
+            {{ item.text }}
           </view>
-        </u-cell-group>
-      </view>
-      <view class="first-gap">
-        <view class="gap">
-          <view class="gap-line-top" />
-          <view class="gap-text">个人工具</view>
-          <view class="gap-line-bottom" />
         </view>
       </view>
-      <view class="second-area area">
-        <u-cell-group>
-          <view v-for="item in itemList">
-            <u-cell
-              :icon="item.icon"
-              :title="item.text"
-              :isLink="true"
-              :url="item.url"
-            />
-          </view>
-        </u-cell-group>
+    </view>
+    <view class="swiperContainer">
+      <view class="swiper">
+        <u-swiper
+          :list="swiperList"
+          keyName="image"
+          showTitle
+          :autoplay="true"
+          circular
+          indicator
+          indicatorMode="line"
+          radius="5"
+          bgColor="rgba(0,0,0,0)"
+          interval="10000"
+        />
       </view>
     </view>
   </view>
@@ -51,12 +44,27 @@
 <script setup lang="ts">
 import navbar from "@/components/navbar.vue";
 import RouteConfig from "@/config/routes";
-const itemList = RouteConfig.myItemList
+const itemList = RouteConfig.myItemList;
 const navToChangeAvatar = () => {
   uni.navigateTo({
-    url: RouteConfig.changeAvator.url
+    url: RouteConfig.changeAvator.url,
   });
 };
+
+const swiperList = [
+  {
+    image: "https://cdn.uviewui.com/uview/swiper/swiper2.png",
+    title: "昨夜星辰昨夜风，画楼西畔桂堂东",
+  },
+  {
+    image: "https://cdn.uviewui.com/uview/swiper/swiper1.png",
+    title: "身无彩凤双飞翼，心有灵犀一点通",
+  },
+  {
+    image: "https://cdn.uviewui.com/uview/swiper/swiper3.png",
+    title: "谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳",
+  },
+];
 </script>
 
 <style scoped lang="scss">
@@ -95,34 +103,43 @@ const navToChangeAvatar = () => {
   }
 }
 
-.functions{
-  margin: 0 20px;
+.myFunction {
+  margin-left: 15px;
+  margin-right: 15px;
   display: flex;
-  flex-direction: column;
-  .area{
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  .myFunctionItem {
+    z-index: 100;
+    background-color: rgba(255, 255, 255, 0.324); /* 透明度设置以提高效果 */
+    margin-top: 25px;
     display: flex;
     flex-direction: column;
-    border: 1px solid #b6b6b690;
-    border-radius: var(--borderRadius-medium, 0.375rem);
-    box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
-    background: rgba(255, 243, 243, 0.23);
-    .funtion{
-      
-    }
-    
-  }
-  .gap{
+    align-items: center;
+    justify-content: center;
+    width: 30%;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+      rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+    .myFunctionItemBorder {
       display: flex;
       flex-direction: column;
-      margin: 10px;
-      .gap-line-bottom{
-        height: 1px;
-        background-color: #00000016;
-        margin-top: 10px;
-      }
-      .gap-text{
-        margin: 0 10px;
-      }
+      align-items: center;
+      justify-content: center;
+      padding: 5px;
     }
+  }
+}
+
+.swiperContainer {
+  display: flex;
+  justify-content: center;
+  align-items: center; 
+  .swiper {
+    margin-top: 40px;
+    width: 350px;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+      rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  }
 }
 </style>
