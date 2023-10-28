@@ -35,6 +35,16 @@ const RouteConfig = {
       text: "功能4",
       url: "sub/introduction",
     },
+    {
+      icon: "home",
+      text: "功能5",
+      url: "sub/introduction",
+    },
+    {
+      icon: "home",
+      text: "功能6",
+      url: "sub/introduction",
+    },
   ]
 };
 
