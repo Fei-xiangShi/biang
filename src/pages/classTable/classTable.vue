@@ -1,8 +1,7 @@
 <template>
   <view class="container">
     <view v-if="haveClassTable">
-      <navbar :show-change-school-button="false" />
-      <classTable />
+      <classTableItem />
     </view>
     <view v-else>
       <navbar :show-change-school-button="true" />
@@ -52,14 +51,13 @@
 </template>
 
 <script setup lang="ts">
-import navbar from "@/components/navbar.vue";
-import classTable from "@/components/classTable.vue";
+import classTableItem from "@/components/classTableItem.vue";
 import Api from "@/api/api";
 import { onMounted, ref } from "vue";
 
 const classTableUrl = ref("");
 const classTableContent = ref("");
-const haveClassTable = ref(false);
+const haveClassTable = ref(true);
 const isLoading = ref(false);
 
 onMounted(() => {

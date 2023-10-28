@@ -1,20 +1,20 @@
 const RouteConfig = {
-    indexPage:{
-      url:"/pages/index/index"
-    },
-    classTablePage:{
-      url:"/pages/classTable/classTable"
-    },
-    myPage:{
-      url:"/pages/my/my"
-    },
-  schoolList:{
-    url:"/pages/schools/index"
+  indexPage: {
+    url: "/pages/index/index",
   },
-  changeAvator:{
-    url:"sub/uploadAvator"
+  classTablePage: {
+    url: "/pages/classTable/classTable",
   },
-  myItemList:[
+  myPage: {
+    url: "/pages/my/my",
+  },
+  schoolList: {
+    url: "/pages/schools/index",
+  },
+  changeAvator: {
+    url: "sub/uploadAvator",
+  },
+  myItemList: [
     {
       icon: "home",
       text: "功能1",
@@ -45,7 +45,7 @@ const RouteConfig = {
       text: "功能6",
       url: "sub/introduction",
     },
-  ]
+  ],
 };
 
 export default RouteConfig;

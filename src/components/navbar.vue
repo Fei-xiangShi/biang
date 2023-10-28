@@ -4,6 +4,7 @@
     <view class="statusBar" :style="{ paddingTop: statusBarHeight + 'px' }" />
     <!-- 真正的导航栏内容 -->
     <view class="navBar">
+      <slot></slot>
       <view class="return-button" @tap="goBack" v-if="!isRootPage()">
         <u-icon
           name="arrow-left"
