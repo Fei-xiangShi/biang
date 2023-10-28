@@ -1,9 +1,9 @@
 <template>
   <view class="container">
-    <view v-if="haveClassTable">
+    <view class="classtable" v-if="haveClassTable">
       <classTableItem />
     </view>
-    <view v-else>
+    <view class="await" v-else>
       <navbar :show-change-school-button="true" />
       <image src="../../static/images/4k.jpg" class="background" />
       <view class="beautiful-sence">
@@ -62,8 +62,8 @@ const isLoading = ref(false);
 
 onMounted(() => {
   let content = uni.getStorageSync("classTableContent");
-  if (!(content == "" || content == null)) {
-    haveClassTable.value = true;
+  if (content == "" || content == null) {
+    haveClassTable.value = false;
   }
 });
 
@@ -92,10 +92,11 @@ const getNewClassTable = () => {
 </script>
 
 <style scoped lang="scss">
-.container {
+
+.await {
   overflow: hidden;
   width: 100%;
-  height: 100%;
+  height: 100vh;
   .background {
     position: absolute;
     top: 0;
