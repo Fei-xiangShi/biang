@@ -1,13 +1,41 @@
 <template>
   <view class="container">
     <navbar :show-change-school-button="false">
-      <view class="name">
+      <view class="name" @tap="open">
         <view class="time-name">{{ nameTime }}</view>
-        <view class="name-arrow">
+        <view class="name-arrow" :class="{'open': showPop}">
           <u-icon name="arrow-right" :size="20" />
         </view>
       </view>
     </navbar>
+    <view class="pop">
+      <u-popup
+        :show="showPop"
+        @close="close"
+        :overlay="true"
+        mode="bottom"
+        :round="10"
+        :closeOnClickOverlay="true"
+        :duration="200"
+      >
+        <view class="popup-content">
+          <view class="popup-title">选择日期</view>
+          <view class="weeks">
+            <view
+              class="week"
+              v-for="(week, index) in weeks"
+              :key="index"
+              @click="
+                toggleWeek(week);
+                close();
+              "
+            >
+              {{ week.name }}
+            </view>
+          </view>
+        </view>
+      </u-popup>
+    </view>
     <view class="tab">
       <u-tabs
         :list="weeks"
@@ -34,7 +62,7 @@
     >
       <view class="date-list">
         <view class="month-and-monthname">
-          <view class="month">{{ month }}月</view>
+          <view class="month">{{ calcMonthNum(month) }}月</view>
         </view>
         <view
           class="weekday-and-date"
@@ -54,6 +82,7 @@
           >{{ item }}</view
         >
       </view>
+      <view class="classes"></view>
     </view>
   </view>
 </template>
@@ -70,6 +99,16 @@ const month = date.getMonth() + 1;
 const todayDate = date.getDate();
 const today = date.getDay();
 const nameTime = `${year}/${month}/${todayDate}`;
+const showPop = ref(false);
+
+const close = () => {
+  showPop.value = false;
+};
+
+const open = () => {
+  showPop.value = true;
+
+};
 
 const calcWeekNum = (date: Date | string) => {
   return Math.max(
@@ -82,6 +121,13 @@ const calcWeekNum = (date: Date | string) => {
       ) + 1
     )
   );
+};
+
+const calcMonthNum = (month: number) => {
+  const currentWeekStartDate = new Date(
+    new Date(semester.start).getTime() + (curretWeekNum.value - 1) * 7 * 24 * 60 * 60 * 1000
+  );
+  return currentWeekStartDate.getMonth() + 1;
 };
 
 const curretWeekNum = ref(calcWeekNum(date));
@@ -231,6 +277,12 @@ const touchEnd = (e: any) => {
   height: 100vh;
   display: flex;
   flex-direction: column;
+  background: linear-gradient(
+    135deg,
+    #a6eeee7a 10%,
+    #91d8c84d 40%,
+    #fcfcd491 60%
+  );
 }
 .name {
   display: flex;
@@ -248,6 +300,11 @@ const touchEnd = (e: any) => {
   .name-arrow {
     display: flex;
     margin-top: 3px;
+    margin-left: 0.5rem;
+    transition: transform 0.3s ease-in-out;
+  }
+  .open {
+    transform: rotate(90deg);
   }
 }
 
@@ -256,6 +313,9 @@ const touchEnd = (e: any) => {
   flex-direction: column;
   flex-flow: column;
   flex: 1;
+  background: rgba($color: #fff, $alpha: 0.4);
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+    rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
   .date-list {
     display: flex;
     flex-direction: row;
@@ -267,6 +327,7 @@ const touchEnd = (e: any) => {
       flex-direction: column;
       align-items: center;
       justify-content: center;
+      width: 12%;
       .month {
         font-size: 1rem;
         font-weight: bold;
@@ -278,6 +339,7 @@ const touchEnd = (e: any) => {
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
+      width: 12.5%; 
       .weekday {
         font-size: 1rem;
         font-weight: bold;
@@ -305,6 +367,7 @@ const touchEnd = (e: any) => {
     justify-content: space-between;
     height: auto;
     flex: 1;
+    width: 12%;
     .time-table-item {
       display: flex;
       flex-direction: column;
