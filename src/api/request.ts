@@ -2,8 +2,8 @@ const request = (url: string, method: "GET" | "POST", data: object) => {
   return new Promise((resolve, reject) => {
     uni.request({
       url: url,
-      method: method,
-      data: data,
+      method,
+      data,
       success(result) {
         resolve(result);
       },
