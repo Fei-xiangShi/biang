@@ -47,7 +47,7 @@ import RouteConfig from "@/config/routes";
 const itemList = RouteConfig.myItemList;
 const navToChangeAvatar = () => {
   uni.navigateTo({
-    url: RouteConfig.changeAvator.url,
+    url: RouteConfig.setting.url,
   });
 };
 
@@ -104,8 +104,8 @@ const swiperList = [
 }
 
 .myFunction {
-  margin-left: 15px;
-  margin-right: 15px;
+  margin-left: 30px;
+  margin-right: 30px;
   display: flex;
   flex-direction: row;
   flex-wrap: wrap;
@@ -113,13 +113,16 @@ const swiperList = [
   .myFunctionItem {
     z-index: 100;
     background-color: rgba(255, 255, 255, 0.324); /* 透明度设置以提高效果 */
+    border: 1px solid;
+    border-color: white;
     margin-top: 25px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 30%;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+    box-shadow: 
+      rgba(0, 0, 0, 0.16) 0px 5px 6px 0px,
       rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
     .myFunctionItemBorder {
       display: flex;
@@ -127,6 +130,9 @@ const swiperList = [
       align-items: center;
       justify-content: center;
       padding: 5px;
+      .myFunctionItemText{
+        font-size: 0.7rem;
+      }
     }
   }
 }

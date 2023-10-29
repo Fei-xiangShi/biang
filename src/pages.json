@@ -41,9 +41,9 @@
           }
         },
         {
-          "path":"uploadAvator",
+          "path":"setting",
           "style":{
-            "navigationBarTitleText": "修改头像或名字",
+            "navigationBarTitleText": "设置",
             "navigationStyle": "custom"
           }
         }

@@ -11,8 +11,8 @@ const RouteConfig = {
   schoolList:{
     url:"/pages/schools/index"
   },
-  changeAvator:{
-    url:"sub/uploadAvator"
+  setting:{
+    url:"sub/setting"
   },
   myItemList:[
     {
