@@ -1,22 +1,24 @@
 <template>
   <view class="container">
-    <navbar />
-    <view class="head" enable-background="">
-    </view>
+    <view class="background">
+
+      <navbar />
+      <view class="head" enable-background="">
+      </view>
     <view class="functions">
       <view class="first-area area">
         <u-cell-group>
           <view v-for="item in itemList" class="funtion">
             <u-cell
-              :icon="item.icon"
+            :icon="item.icon"
               :title="item.text"
               :isLink="true"
               :url="item.url"
-            />
-          </view>
-        </u-cell-group>
-      </view>
-      <view class="first-gap">
+              />
+            </view>
+          </u-cell-group>
+        </view>
+        <view class="first-gap">
         <view class="gap">
           <view class="gap-line-top" />
           <view class="gap-text">个人工具</view>
@@ -31,41 +33,44 @@
               :title="item.text"
               :isLink="true"
               :url="item.url"
-            />
-          </view>
-        </u-cell-group>
+              />
+            </view>
+          </u-cell-group>
+        </view>
+      </view>
+      <view class="logoutButton">
+        <u-button type="primary" text="logout" color="red"></u-button>
       </view>
     </view>
-    <u-button type="primary" text="logout" ></u-button>
   </view>
-</template>
+  </template>
 
 <script setup lang="ts">
 import navbar from "@/components/navbar.vue";
 import RouteConfig from "@/config/routes";
 const itemList = RouteConfig.myItemList
-const navToChangeAvatar = () => {
-  uni.navigateTo({
-    url: RouteConfig.changeAvator.url
-  });
-};
 </script>
 
 <style scoped lang="scss">
 .container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
-  background: linear-gradient(
-    135deg,
-    #a6eeee7a 10%,
-    #91d8c84d 40%,
-    #fcfcd491 60%
-  );
+  .background{
+    height: auto;
+    width: 100%;
+    min-height: 100vh;
+    background: linear-gradient(
+      135deg,
+      #a6eeee7a 10%,
+      #91d8c84d 40%,
+      #fcfcd491 60%
+    );
+    
+  }
 }
 
 .head {
-  margin-top: 20px;
+  margin-top: 5px;
   display: flex;
   flex-direction: row;
   align-items: center;
@@ -101,5 +106,9 @@ const navToChangeAvatar = () => {
         margin: 0 10px;
       }
     }
+}
+.logoutButton{
+  margin-top: 10px;
+  padding: 30px;
 }
 </style>
