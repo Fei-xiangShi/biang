@@ -318,7 +318,8 @@ onMounted(() => {
 .container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: auto;
+  min-height: 100vh;
   background: linear-gradient(
     135deg,
     #a6eeeea3 10%,

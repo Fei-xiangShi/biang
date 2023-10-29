@@ -3,7 +3,7 @@
     <navbar :show-change-school-button="false">
       <view class="name" @tap="open">
         <view class="time-name">{{ nameTime }}</view>
-        <view class="name-arrow" :class="{'open': showPop}">
+        <view class="name-arrow" :class="{ open: showPop }">
           <u-icon name="arrow-right" :size="20" />
         </view>
       </view>
@@ -62,7 +62,7 @@
     >
       <view class="date-list">
         <view class="month-and-monthname">
-          <view class="month">{{ calcMonthNum(month) }}月</view>
+          <view class="month">{{ calcMonthNum() }}月</view>
         </view>
         <view
           class="weekday-and-date"
@@ -74,15 +74,42 @@
           <view class="date">{{ dayItem.date }}</view>
         </view>
       </view>
-      <view class="time-table">
-        <view
-          class="time-table-item"
-          v-for="(item, index) in timeTable"
-          :key="index"
-          >{{ item }}</view
-        >
+      <view class="arrangement">
+        <view class="time-table">
+          <view
+            class="time-table-item"
+            v-for="(item, index) in timeTable"
+            :key="index"
+            >{{ item }}</view
+          >
+        </view>
+        <view class="courses">
+          <view
+            class="course"
+            v-for="course in courses"
+            :style="{
+              left: ((course.weekday - 1) * 100) / 7 + '%',
+              top: ((course.startTime - 8) * 100) / 14 + '%',
+              maxHeight: (course.duration * 100) / 14 + '%',
+              height: (course.duration * 100) / 14 + '%',
+            }"
+          >
+            <view
+              class="course-item"
+              :style="{
+                background:
+                colorList[course.location.length % colorList.length],
+              }"
+            >
+              <view class="course-name">{{ course.summary }}</view>
+              <view class="course-location">{{ course.location }}</view>
+              <view class="course-time">
+                {{ course.start }}
+              </view>
+            </view>
+          </view>
+        </view>
       </view>
-      <view class="classes"></view>
     </view>
   </view>
 </template>
@@ -92,6 +119,7 @@ import navbar from "@/components/navbar.vue";
 import semester from "@/config/semester";
 import timeTable from "@/config/timeTable";
 import { onMounted, ref } from "vue";
+import type Course from "@/models/course";
 
 const date = new Date();
 const year = date.getFullYear();
@@ -100,6 +128,7 @@ const todayDate = date.getDate();
 const today = date.getDay();
 const nameTime = `${year}/${month}/${todayDate}`;
 const showPop = ref(false);
+const courses = ref<any>([]);
 
 const close = () => {
   showPop.value = false;
@@ -107,7 +136,6 @@ const close = () => {
 
 const open = () => {
   showPop.value = true;
-
 };
 
 const calcWeekNum = (date: Date | string) => {
@@ -117,22 +145,22 @@ const calcWeekNum = (date: Date | string) => {
       20,
       Math.floor(
         (Number(new Date(date)) - Number(new Date(semester.start))) /
-          (7 * 24 * 60 * 60 * 1000)
+          (7 * 24 * 3600 * 1000)
       ) + 1
     )
   );
 };
 
-const calcMonthNum = (month: number) => {
+const calcMonthNum = () => {
   const currentWeekStartDate = new Date(
-    new Date(semester.start).getTime() + (curretWeekNum.value - 1) * 7 * 24 * 60 * 60 * 1000
+    new Date(semester.start).getTime() +
+      (curretWeekNum.value - 1) * 7 * 24 * 3600 * 1000
   );
   return currentWeekStartDate.getMonth() + 1;
 };
 
 const curretWeekNum = ref(calcWeekNum(date));
-
-const dayItems = ref([{ date: 0, weekday: "" }]);
+const dayItems = ref([{ date: 0, weekday: "", data: new Date() }]);
 const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
 var weeks: any = [];
 
@@ -181,34 +209,62 @@ const calcWeekList = () => {
 const toggleWeek = (e: any) => {
   curretWeekNum.value = Number(e.id);
   generateWeekDateRange();
+  updateClassTable();
+};
+
+const calcMondayOfWeek = (date: Date) => {
+  const dayOfWeek = date.getDay();
+  const diff = date.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
+  return new Date(date.setDate(diff));
 };
 
 const generateWeekDateRange = () => {
   const start = new Date(semester.start);
   dayItems.value = [];
-  const dayOfWeek = start.getDay();
-  const diff = start.getDate() - dayOfWeek + (dayOfWeek === 0 ? -6 : 1);
-  const mondayOfWeek = new Date(start.setDate(diff));
+  const mondayOfWeek = calcMondayOfWeek(start);
   const currentWeekStartDate = new Date(
-    mondayOfWeek.getTime() + (curretWeekNum.value - 1) * 7 * 24 * 60 * 60 * 1000
+    mondayOfWeek.getTime() + (curretWeekNum.value - 1) * 7 * 24 * 3600 * 1000
   );
-  const end = new Date(
-    currentWeekStartDate.getTime() + 7 * 24 * 60 * 60 * 1000
-  );
+  const end = new Date(currentWeekStartDate.getTime() + 7 * 24 * 3600 * 1000);
   for (
-    let current = currentWeekStartDate;
+    let current = new Date(currentWeekStartDate);
     current < end;
     current.setDate(current.getDate() + 1)
   ) {
+    const data = new Date(current);
     const date = current.getDate();
     const weekday = weekdays[current.getDay()];
-    dayItems.value.push({ date, weekday });
+    dayItems.value.push({ date, weekday, data });
   }
+};
+
+const updateClassTable = () => {
+  courses.value = [];
+  const allClasses = uni.getStorageSync("classTableContent");
+  allClasses.events.forEach((course: Course) => {
+    if (
+      new Date(course.start) >= dayItems.value[0].data &&
+      new Date(course.end) <= dayItems.value[dayItems.value.length - 1].data
+    ) {
+      const icourse = JSON.parse(JSON.stringify(course));
+      icourse.duration =
+        (Number(new Date(course.end)) - Number(new Date(course.start))) /
+        (3600 * 1000);
+
+      icourse.weekday = new Date(course.start).getDay();
+      const timeParts = course.start.split("T")[1].split(":");
+      const hour = parseInt(timeParts[0], 10);
+      const minutes = parseInt(timeParts[1], 10);
+      icourse.startTime = hour + minutes / 60;
+      courses.value.push(icourse);
+    }
+  });
 };
 
 onMounted(() => {
   generateWeekDateRange();
   calcWeekList();
+  updateClassTable();
 });
 
 const colorList = [
@@ -261,11 +317,13 @@ const touchEnd = (e: any) => {
       if (curretWeekNum.value > 1) {
         curretWeekNum.value--;
         generateWeekDateRange();
+        updateClassTable();
       }
     } else {
       if (curretWeekNum.value < 20) {
         curretWeekNum.value++;
         generateWeekDateRange();
+        updateClassTable();
       }
     }
   }
@@ -312,6 +370,8 @@ const touchEnd = (e: any) => {
   display: flex;
   flex-direction: column;
   flex-flow: column;
+  margin: 0 5px;
+  border-radius: 5px 5px 0 0;
   flex: 1;
   background: rgba($color: #fff, $alpha: 0.4);
   box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
@@ -339,7 +399,7 @@ const touchEnd = (e: any) => {
       flex-direction: column;
       align-items: center;
       justify-content: space-between;
-      width: 12.5%; 
+      width: 12.5%;
       .weekday {
         font-size: 1rem;
         font-weight: bold;
@@ -360,18 +420,59 @@ const touchEnd = (e: any) => {
       }
     }
   }
-  .time-table {
+
+  .arrangement {
     display: flex;
-    flex-direction: column;
-    flex-flow: column;
-    justify-content: space-between;
-    height: auto;
+    flex-direction: row;
     flex: 1;
-    width: 12%;
-    .time-table-item {
+    .time-table {
       display: flex;
       flex-direction: column;
-      font-size: 0.9rem;
+      justify-content: space-between;
+      align-items: center;
+      min-width: 12%;
+      .time-table-item {
+        height: 7.142%;
+        display: flex;
+        align-items: center;
+        font-size: 0.8rem;
+      }
+    }
+    .courses {
+      position: relative;
+      flex: 1;
+      overflow: hidden;
+      .course {
+        position: absolute;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        max-width: 13.5%;
+        .course-item {
+          border-radius: 5px;
+          height: 85%;
+          display: flex;
+          flex-direction: column;
+          flex: 1;
+          overflow: hidden;
+          border: 3px solid #f0e8e8;
+          .course-name {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: black;
+          }
+          .course-location {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: black;
+          }
+          .course-time {
+            font-size: 0.8rem;
+            font-weight: bold;
+            color: black;
+          }
+        }
+      }
     }
   }
 }
