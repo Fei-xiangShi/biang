@@ -71,7 +71,9 @@ const swiperList = [
 .container {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  height: auto;
+    width: 100%;
+    min-height: 100vh;
   background: linear-gradient(
     135deg,
     #a6eeee7a 10%,

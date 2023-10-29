@@ -56,9 +56,9 @@ const itemList = RouteConfig.myItemList
   display: flex;
   flex-direction: column;
   .background{
-    position: absolute;
+    height: auto;
     width: 100%;
-    height: 100%;
+    min-height: 100vh;
     background: linear-gradient(
       135deg,
       #a6eeee7a 10%,
