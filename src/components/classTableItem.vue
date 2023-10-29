@@ -19,7 +19,6 @@
         :duration="200"
       >
         <view class="popup-content">
-          <view class="popup-title">选择日期</view>
           <view class="weeks">
             <view
               class="week"
@@ -29,6 +28,10 @@
                 toggleWeek(week);
                 close();
               "
+              :style="{
+                background: week.id == curretWeekNum ? '#f56c6c' : week.id == calcWeekNum(nameTime) ? '#f56c6c7a' : '',
+                color: week.id == curretWeekNum ? '#fff' : '',
+              }"
             >
               {{ week.name }}
             </view>
@@ -98,7 +101,7 @@
               class="course-item"
               :style="{
                 background:
-                colorList[course.location.length % colorList.length],
+                  colorList[course.location.length % colorList.length],
               }"
             >
               <view class="course-name">{{ course.summary }}</view>
@@ -342,6 +345,38 @@ const touchEnd = (e: any) => {
     #fcfcd491 60%
   );
 }
+
+.popup-content {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  .weeks {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    width: 100%;
+    .week {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 25%;
+      height: 40px;
+      font-size: 1rem;
+      font-weight: bold;
+      color: black;
+      border-radius: 5px;
+      margin: 5px;
+      background: rgba($color: #fff, $alpha: 0.4);
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
+        rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+    }
+  }
+}
+
 .name {
   display: flex;
   flex-direction: row;
