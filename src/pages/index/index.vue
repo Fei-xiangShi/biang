@@ -447,14 +447,13 @@ onMounted(() => {
     justify-content: space-between;
     .purchase-card {
       background: linear-gradient(60deg, #a6eeee6c 50%, #ffffff59 90%);
-      height: 60px;
+      min-height: 60px;
       width: 60%;
       border-radius: var(--borderRadius-medium, 0.375rem);
       box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
         rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
       .title {
         display: flex;
-        /* align-items: center; */
         height: 1.5rem;
         margin-left: 1rem;
         margin-top: 0.8rem;
@@ -476,7 +475,7 @@ onMounted(() => {
     }
     .store-card {
       background: linear-gradient(300deg, #ffffff1f 5%, #eeb82f6c 95%);
-      height: 60px;
+      min-height: 60px;
       width: 38%;
       border-radius: var(--borderRadius-medium, 0.375rem);
       box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
