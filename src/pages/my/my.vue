@@ -72,8 +72,8 @@ const swiperList = [
   display: flex;
   flex-direction: column;
   height: auto;
-    width: 100%;
-    min-height: 100vh;
+  width: 100%;
+  min-height: 100vh;
   background: linear-gradient(
     135deg,
     #a6eeee7a 10%,
@@ -123,16 +123,16 @@ const swiperList = [
     align-items: center;
     justify-content: center;
     width: 30%;
-    box-shadow: 
-      rgba(0, 0, 0, 0.16) 0px 5px 6px 0px,
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 6px 0px,
       rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+    border-radius: 10px;
     .myFunctionItemBorder {
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
       padding: 5px;
-      .myFunctionItemText{
+      .myFunctionItemText {
         font-size: 0.7rem;
       }
     }
@@ -142,7 +142,7 @@ const swiperList = [
 .swiperContainer {
   display: flex;
   justify-content: center;
-  align-items: center; 
+  align-items: center;
   .swiper {
     margin-top: 40px;
     width: 350px;
