@@ -1,7 +1,7 @@
 <template>
   <u-notify ref="Notify" />
   <modal
-    title="选择语言"
+    :title="t('选择语言提示')"
     :show="showChooseLangualge"
     :closeOnClickOverlay="true"
     @close="cancelLang"
@@ -22,7 +22,7 @@
             color="#606266"
           />
         </view>
-        <view class="language-item-text">跟随系统</view>
+        <view class="language-item-text">{{ $t("语言跟随系统提示") }}</view>
       </view>
       <view
         class="language-item"
@@ -92,7 +92,7 @@
       />
     </view>
     <view class="toolbox">
-      <view class="toolbox-item" v-for="tool in toolbox">
+      <view class="toolbox-item" v-for="tool in RouteConfig.indexPage.toolbox">
         <u-icon :name="tool.icon" size="20" color="#606266" />
         <view class="toolbox-item-text">{{ tool.text }}</view>
       </view>
@@ -100,7 +100,7 @@
     <view class="popular-functions">
       <view
         class="popular-functions-item"
-        v-for="popularFunction in popularFunctions"
+        v-for="popularFunction in RouteConfig.indexPage.popularFunctions"
       >
         <u-icon :name="popularFunction.icon" size="20" color="#606266" />
         <view class="popular-functions-item-text">{{
@@ -120,10 +120,10 @@
     <view class="cards">
       <view class="class-query-card" @tap="redirectToClassTable">
         <view class="title">
-          <view class="title-text">输入课程链接课程查询</view>
+          <view class="title-text">{{ $t("课表查询按钮标题") }}</view>
         </view>
         <view class="content">
-          <view class="content-text">课表查询, 点击就送</view>
+          <view class="content-text">{{ $t("课表查询按钮内容") }}</view>
         </view>
       </view>
 
@@ -142,7 +142,7 @@
         </view>
         <view class="column-two">
           <view class="todo">
-            <view class="todo-title">今日待办</view>
+            <view class="todo-title">{{$t('待办按钮标题')}}</view>
             <view class="todo-content">
               <u-notice-bar
                 :text="todoList"
@@ -154,8 +154,8 @@
             </view>
           </view>
           <view class="kit">
-            <view class="kit-title">校园好礼</view>
-            <view class="kit-content">/kit tools</view>
+            <view class="kit-title">{{$t('校园好礼按钮标题')}}</view>
+            <view class="kit-content">{{ $t('校园好礼按钮内容') }}</view>
           </view>
         </view>
       </view>
@@ -163,26 +163,26 @@
       <view class="two-cards">
         <view class="purchase-card">
           <view class="title">
-            <view class="title-text">校园好礼</view>
+            <view class="title-text">{{$t('特惠按钮标题')}}</view>
           </view>
           <view class="content">
-            <view class="content-text">学生低价, 吃喝玩乐</view>
+            <view class="content-text">{{ $t('特惠按钮内容') }}</view>
             <u-icon name="arrow-right" :size="8" color="black" />
           </view>
         </view>
         <view class="store-card">
           <view class="title">
-            <view class="title-text">d6商店</view>
+            <view class="title-text">{{ $t('商店按钮标题') }}</view>
           </view>
           <view class="content">
-            <view class="content-text">附魔金苹果兑不停</view>
+            <view class="content-text">{{ $t('商店按钮内容') }}</view>
             <u-icon name="arrow-right" :size="8" color="black" />
           </view>
         </view>
       </view>
     </view>
-    <view class="tail"> 
-      <view class="pic"/>
+    <view class="tail">
+      <view class="pic" />
     </view>
   </view>
 </template>
@@ -194,7 +194,7 @@ import { onMounted, ref } from "vue";
 import modal from "@/components/modal.vue";
 import { useI18n } from "vue-i18n";
 
-const { t } = useI18n();
+const { t, locale } = useI18n();
 
 const check = ref(0);
 
@@ -285,68 +285,6 @@ const swiperList = [
   },
 ];
 
-const toolbox = [
-  {
-    icon: "home",
-    text: "首页",
-  },
-  {
-    icon: "search",
-    text: "搜索",
-  },
-  {
-    icon: "cart",
-    text: "购物车",
-  },
-  {
-    icon: "account",
-    text: "我的",
-  },
-];
-
-const popularFunctions = [
-  {
-    icon: "home",
-    text: "首页",
-  },
-  {
-    icon: "search",
-    text: "搜索",
-  },
-  {
-    icon: "cart",
-    text: "购物车",
-  },
-  {
-    icon: "account",
-    text: "我的",
-  },
-  {
-    icon: "home",
-    text: "首页",
-  },
-  {
-    icon: "search",
-    text: "搜索",
-  },
-  {
-    icon: "cart",
-    text: "购物车",
-  },
-  {
-    icon: "account",
-    text: "我的",
-  },
-  {
-    icon: "account",
-    text: "我的",
-  },
-  {
-    icon: "account",
-    text: "我的",
-  },
-];
-
 const changeLang = (e: any) => {
   check.value = e.currentTarget.id;
 };
@@ -367,7 +305,7 @@ let notify = {
 };
 
 const confirmLang = () => {
-  notify.message = "语言已经成功设置";
+  notify.message = t("成功设置语言提示");
   notify.type = "success";
   Notify.value.show(notify);
   showChooseLangualge.value = false;
@@ -385,11 +323,12 @@ const confirmLang = () => {
       uni.setStorageSync("lang", "en");
       break;
   }
+  locale.value = uni.getStorageSync("lang");
 };
 
 const cancelLang = () => {
   uni.setStorageSync("lang", uni.getLocale());
-  notify.message = "语言将会设置为系统语言";
+  notify.message = t("取消设置语言提示");
   Notify.value.show(notify);
   showChooseLangualge.value = false;
 };
@@ -509,7 +448,6 @@ onMounted(() => {
     .title {
       display: flex;
       align-items: center;
-      height: 1.5rem;
       .title-text {
         margin-left: 10px;
         font-size: 1.5rem;
@@ -520,7 +458,6 @@ onMounted(() => {
     .content {
       display: flex;
       align-items: center;
-      height: 1.5rem;
       .content-text {
         margin-left: 4rem;
         font-size: 1rem;

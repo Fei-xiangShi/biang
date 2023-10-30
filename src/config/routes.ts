@@ -3,6 +3,67 @@ import { i18n } from "@/main";
 const RouteConfig = {
   indexPage: {
     url: "/pages/index/index",
+    toolbox: [
+      {
+        icon: "home",
+        text: i18n.global.t("占位"),
+      },
+      {
+        icon: "search",
+        text: i18n.global.t("占位"),
+      },
+      {
+        icon: "cart",
+        text: i18n.global.t("占位"),
+      },
+      {
+        icon: "account",
+        text: i18n.global.t("占位"),
+      },
+    ],
+
+    popularFunctions: [
+      {
+        icon: "home",
+        text: i18n.global.t("占位"),
+      },
+      {
+        icon: "search",
+        text: i18n.global.t("占位"),
+      },
+      {
+        icon: "cart",
+        text: i18n.global.t("占位"),
+      },
+      {
+        icon: "account",
+        text: i18n.global.t("占位"),
+      },
+      {
+        icon: "home",
+        text: i18n.global.t("占位"),
+      },
+      {
+        icon: "search",
+        text: i18n.global.t("占位"),
+      },
+      {
+        icon: "cart",
+        text: i18n.global.t("占位"),
+      },
+      {
+        icon: "account",
+        text: i18n.global.t("占位"),
+      },
+      {
+        icon: "account",
+        text: i18n.global.t("占位"),
+      },
+      {
+        icon: "account",
+        text: i18n.global.t("占位"),
+      },
+    ],
   },
   classTablePage: {
     url: "/pages/classTable/classTable",

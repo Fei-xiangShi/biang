@@ -1,11 +1,21 @@
 <script setup lang="ts">
 import { onLaunch, onShow, onHide } from "@dcloudio/uni-app";
+import { useI18n } from "vue-i18n";
+
+const { locale } = useI18n();
+
 onLaunch(() => {
   let safetop = uni.getStorageSync("menuButtonBoundingClientRect");
-  if (!safetop || safetop.length == 0 || safetop == null || safetop == undefined) {
+  if (
+    !safetop ||
+    safetop.length == 0 ||
+    safetop == null ||
+    safetop == undefined
+  ) {
     safetop = uni.getMenuButtonBoundingClientRect();
     uni.setStorageSync("menuButtonBoundingClientRect", safetop);
   }
+  locale.value = uni.getStorageSync("lang") || uni.getLocale();
   console.log("App Launch");
 });
 onShow(() => {
