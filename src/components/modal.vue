@@ -5,7 +5,7 @@
     <view class="modal">
       <view class="modal-title">{{ title }}</view>
       <view class="modal-content">{{ content }}</view>
-      <slot v-if="useSlot" />
+      <slot></slot>
       <view class="modal-buttons">
         <view
           class="modal-button cancel"
@@ -28,7 +28,6 @@
 
 <script setup lang="ts">
 import overlay from "@/components/overlay.vue";
-import { useSlots } from "vue";
 
 const props = defineProps({
   show: {
@@ -67,8 +66,6 @@ const props = defineProps({
 
 const emit = defineEmits(["confirm", "cancel", "close"]);
 
-const useSlot = !!useSlots().default;
-
 const onClickOverlay = () => {
   if (props.closeOnClickOverlay) {
     emit("close");
@@ -95,7 +92,6 @@ const onClickOverlay = () => {
   .modal-title {
     font-size: 20px;
     font-weight: bold;
-    margin-bottom: 10px;
   }
   .modal-content {
     font-size: 16px;

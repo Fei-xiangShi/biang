@@ -29,7 +29,12 @@
                 close();
               "
               :style="{
-                background: week.id == curretWeekNum ? '#f56c6c' : week.id == calcWeekNum(nameTime) ? '#f56c6c7a' : '',
+                background:
+                  week.id == curretWeekNum
+                    ? '#f56c6c'
+                    : week.id == calcWeekNum(nameTime) + 1
+                    ? '#f56c6c7a'
+                    : '',
                 color: week.id == curretWeekNum ? '#fff' : '',
               }"
             >
