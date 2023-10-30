@@ -5,6 +5,7 @@ import en from "./locales/en.json";
 import zhHans from "./locales/zh-Hans.json";
 import zhHant from "./locales/zh-Hant.json";
 import { createI18n } from "vue-i18n";
+import './static/fonts/iconfont.css'
 
 const Messages = {
   en,

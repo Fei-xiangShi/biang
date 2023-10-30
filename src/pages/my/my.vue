@@ -15,7 +15,8 @@
     <view class="myFunction">
       <view class="myFunctionItem" v-for="item in itemList">
         <view class="myFunctionItemBorder">
-          <u-icon :name="item.icon" size="30"></u-icon>
+          <i :class="item.icon"></i>
+          <!-- <u-icon :name="item.icon" size="30"></u-icon> -->
           <view class="myFunctionItemText">
             {{ item.text }}
           </view>
@@ -124,6 +125,7 @@ const swiperList = [
     align-items: center;
     justify-content: center;
     width: 30%;
+    height: 50px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 6px 0px,
       rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
     border-radius: 10px;
