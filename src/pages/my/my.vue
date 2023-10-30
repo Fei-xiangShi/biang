@@ -121,9 +121,6 @@ const confirmLang = (id: any) => {
 };
 
 const cancelLang = () => {
-  uni.setStorageSync("lang", uni.getLocale());
-  notify.message = t("取消设置语言提示");
-  Notify.value.show(notify);
   showChooseLangualge.value = false;
 };
 
