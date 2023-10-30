@@ -1,7 +1,7 @@
 {
   "占位": "Unspecified",
-  "选择语言提示": "Please select a language",
-  "成功设置语言提示": "Language has been successfully changed",
+  "选择语言提示": "Please select a language (Restart required)",
+  "成功设置语言提示": "Language has been successfully changed (Restart required)",
   "取消设置语言提示": "The language will be set to the system language",
   "语言跟随系统提示": "System language",
   "课表查询按钮标题": "Course schedule inquiry",
