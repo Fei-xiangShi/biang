@@ -23,8 +23,10 @@ const i18n = createI18n(i18nConfig);
 export function createApp() {
   const app = createSSRApp(App);
   app.use(uViewPlus);
-  app.use(i18n)
+  app.use(i18n);
   return {
     app,
   };
 }
+
+export { i18n };

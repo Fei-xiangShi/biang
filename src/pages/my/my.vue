@@ -44,7 +44,8 @@
 <script setup lang="ts">
 import navbar from "@/components/navbar.vue";
 import RouteConfig from "@/config/routes";
-const itemList = RouteConfig.myItemList;
+
+const itemList = RouteConfig.my.myItemList;
 const navToChangeAvatar = () => {
   uni.navigateTo({
     url: RouteConfig.setting.url,
