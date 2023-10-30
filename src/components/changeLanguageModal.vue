@@ -44,7 +44,7 @@ const check = ref(0);
 defineProps({
   show: {
     type: Boolean,
-    default: true,
+    default: false,
   },
 });
 

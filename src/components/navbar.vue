@@ -14,7 +14,7 @@
       </view>
       <view v-else-if="showChangeSchoolButton">
         <view class="brand" @tap="changeSchool">
-          <view class="brand-content"> 悉哈大学 </view>
+          <view class="brand-content">{{ schoolname }}</view>
           <view class="change-school">
             <u-icon name="arrow-right" :size="10" color="black"/>
           </view>
@@ -26,6 +26,12 @@
 
 <script setup lang="ts">
 import RouteConfig from '@/config/routes';
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+uni.setStorageSync('school', t('悉尼大学'))
+const schoolname = t(uni.getStorageSync('school'))
+
 defineProps({
   returnButtonIconColor: {
     type: String,
