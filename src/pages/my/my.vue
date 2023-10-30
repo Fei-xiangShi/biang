@@ -1,6 +1,14 @@
 <template>
   <view class="container">
     <navbar :showChangeSchoolButton="true" />
+    <u-notify ref="Notify" />
+    <view class="changeLanguageModal">
+      <changeLanguageModal
+        :show="showChooseLangualge"
+        @confirm="confirmLang"
+        @cancel="cancelLang"
+      />
+    </view>
     <view class="head" @tap="navToChangeAvatar">
       <view class="avatar">
         <u-avatar icon="star-fill" />
@@ -13,8 +21,8 @@
       </view>
     </view>
     <view class="myFunction">
-      <view class="myFunctionItem" v-for="item in itemList">
-        <view class="myFunctionItemBorder">
+      <view class="myFunctionItem" v-for="(item, index) in itemList">
+        <view class="myFunctionItemBorder" @tap="functionMethod(item.func)">
           <i :class="item.icon"></i>
           <!-- <u-icon :name="item.icon" size="30"></u-icon> -->
           <view class="myFunctionItemText">
@@ -45,8 +53,20 @@
 <script setup lang="ts">
 import navbar from "@/components/navbar.vue";
 import RouteConfig from "@/config/routes";
+import changeLanguageModal from "@/components/changeLanguageModal.vue";
+import { useI18n } from "vue-i18n";
+import { ref } from "vue";
+const { t, locale } = useI18n();
 
 const itemList = RouteConfig.my.myItemList;
+
+const functionMethod = (index: any) => {
+  if (index === "languageSetting") {
+      showChooseLangualge.value = true;
+  }
+  console.log(index);
+};
+
 const navToChangeAvatar = () => {
   uni.navigateTo({
     url: RouteConfig.setting.url,
@@ -67,6 +87,47 @@ const swiperList = [
     title: "谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳",
   },
 ];
+
+const showChooseLangualge = ref(false);
+const Notify = ref();
+let notify = {
+  message: "",
+  type: "primary",
+  color: "#ffffff",
+  top: 85,
+};
+
+
+const confirmLang = (id: any) => {
+  switch (Number(id)) {
+    case 0:
+      uni.setStorageSync("lang", uni.getLocale());
+      break;
+    case 1:
+      uni.setStorageSync("lang", "zh-Hans");
+      break;
+    case 2:
+      uni.setStorageSync("lang", "zh-Hant");
+      break;
+    case 3:
+      uni.setStorageSync("lang", "en");
+      break;
+  }
+  locale.value = uni.getStorageSync("lang");
+  notify.message = t("成功设置语言提示");
+  notify.type = "success";
+  Notify.value.show(notify);
+  showChooseLangualge.value = false;
+};
+
+const cancelLang = () => {
+  uni.setStorageSync("lang", uni.getLocale());
+  notify.message = t("取消设置语言提示");
+  Notify.value.show(notify);
+  showChooseLangualge.value = false;
+};
+
+let lang = uni.getStorageSync("lang");
 </script>
 
 <style scoped lang="scss">

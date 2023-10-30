@@ -79,34 +79,40 @@ const RouteConfig = {
     myItemList: [
       {
         icon: "custom-icon custom-icon-biaodan",
-        text: i18n.global.t("hello"),
+        text: i18n.global.t("占位"),
         // text:"功能1",
         url: "sub/uploadAvator",
+        func:""
       },
       {
         icon: "custom-icon custom-icon-biaodan",
-        text: i18n.global.t("loading"),
+        text: i18n.global.t("占位"),
         url: "sub/introduction",
+        func:"",
       },
       {
         icon: "custom-icon custom-icon-biaodan",
-        text: i18n.global.t("loading"),
+        text: i18n.global.t("占位"),
         url: "sub/introduction",
+        func:"",
       },
       {
         icon: "custom-icon custom-icon-biaodan",
-        text: i18n.global.t("loading"),
+        text: i18n.global.t("占位"),
         url: "sub/introduction",
+        func:""
       },
       {
         icon:"custom-icon custom-icon-tuwen",
         text: i18n.global.t("theme"),
         url: "sub/introduction",
+        func:"",
       },
       {
         icon: "custom-icon custom-icon-yuyanqiehuan",
         text: i18n.global.t("language"),
         url: "sub/introduction",
+        func:"languageSetting"
       },
     ],
   },

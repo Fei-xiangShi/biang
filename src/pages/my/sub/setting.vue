@@ -10,7 +10,6 @@
         <u-cell-group>
           <view v-for="item in itemList" class="funtion">
             <u-cell
-            :icon="item.icon"
               :title="item.text"
               :isLink="true"
               :url="item.url"
@@ -29,7 +28,6 @@
         <u-cell-group>
           <view v-for="item in itemList">
             <u-cell
-              :icon="item.icon"
               :title="item.text"
               :isLink="true"
               :url="item.url"
@@ -48,7 +46,7 @@
 <script setup lang="ts">
 import navbar from "@/components/navbar.vue";
 import RouteConfig from "@/config/routes";
-const itemList = RouteConfig.myItemList
+const itemList = RouteConfig.my.myItemList
 </script>
 
 <style scoped lang="scss">
