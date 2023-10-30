@@ -8,6 +8,68 @@
     @cancel="cancelLang"
     @confirm="confirmLang"
   >
+    <view class="languages">
+      <view
+        class="language-item"
+        :class="{ choose: check == 0 }"
+        id="0"
+        @tap="changeLang"
+      >
+        <view class="icon" :class="{ 'choose-icon-animation': check == 0 }">
+          <u-icon
+            :name="check == 0 ? 'checkmark-circle' : 'minus-circle'"
+            size="20"
+            color="#606266"
+          />
+        </view>
+        <view class="language-item-text">跟随系统</view>
+      </view>
+      <view
+        class="language-item"
+        :class="{ choose: check == 1 }"
+        id="1"
+        @tap="changeLang"
+      >
+        <view class="icon" :class="{ 'choose-icon-animation': check == 1 }">
+          <u-icon
+            :name="check == 1 ? 'checkmark-circle' : 'minus-circle'"
+            size="20"
+            color="#606266"
+          />
+        </view>
+        <view class="language-item-text">简体中文</view>
+      </view>
+      <view
+        class="language-item"
+        :class="{ choose: check == 2 }"
+        id="2"
+        @tap="changeLang"
+      >
+        <view class="icon" :class="{ 'choose-icon-animation': check == 2 }">
+          <u-icon
+            :name="check == 2 ? 'checkmark-circle' : 'minus-circle'"
+            size="20"
+            color="#606266"
+          />
+        </view>
+        <view class="language-item-text">繁体中文</view>
+      </view>
+      <view
+        class="language-item"
+        :class="{ choose: check == 3 }"
+        id="3"
+        @tap="changeLang"
+      >
+        <view class="icon" :class="{ 'choose-icon-animation': check == 3 }">
+          <u-icon
+            :name="check == 3 ? 'checkmark-circle' : 'minus-circle'"
+            size="20"
+            color="#606266"
+          />
+        </view>
+        <view class="language-item-text">English</view>
+      </view>
+    </view>
   </modal>
   <view class="container">
     <view class="navbar">
@@ -119,7 +181,9 @@
         </view>
       </view>
     </view>
-    <view class="tail"> <view class="pic" />结尾放一张图, 完美 </view>
+    <view class="tail"> 
+      <view class="pic"/>
+    </view>
   </view>
 </template>
 
@@ -128,6 +192,11 @@ import navbar from "@/components/navbar.vue";
 import RouteConfig from "@/config/routes";
 import { onMounted, ref } from "vue";
 import modal from "@/components/modal.vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
+
+const check = ref(0);
 
 const todoList = [
   "今日待办1",
@@ -278,6 +347,10 @@ const popularFunctions = [
   },
 ];
 
+const changeLang = (e: any) => {
+  check.value = e.currentTarget.id;
+};
+
 const redirectToClassTable = () => {
   uni.reLaunch({
     url: RouteConfig.classTablePage.url,
@@ -295,9 +368,23 @@ let notify = {
 
 const confirmLang = () => {
   notify.message = "语言已经成功设置";
-  notify.type = "success"
+  notify.type = "success";
   Notify.value.show(notify);
   showChooseLangualge.value = false;
+  switch (Number(check.value)) {
+    case 0:
+      uni.setStorageSync("lang", uni.getLocale());
+      break;
+    case 1:
+      uni.setStorageSync("lang", "zh-Hans");
+      break;
+    case 2:
+      uni.setStorageSync("lang", "zh-Hant");
+      break;
+    case 3:
+      uni.setStorageSync("lang", "en");
+      break;
+  }
 };
 
 const cancelLang = () => {
@@ -326,6 +413,32 @@ onMounted(() => {
     #ecb4ee52 40%,
     #e9f8f883 60%
   );
+}
+
+.languages {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .language-item {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+    width: 80%;
+    height: 50px;
+    background: rgba(234, 234, 234, 0.5);
+    border-radius: var(--borderRadius-medium, 0.375rem);
+    margin: 10px 0px;
+    .language-item-text {
+      margin-left: 10px;
+      font-size: 1rem;
+      color: #606266;
+    }
+  }
+  .choose {
+    background: rgba(23, 198, 52, 0.52);
+  }
 }
 
 .toolbox {
@@ -554,5 +667,29 @@ onMounted(() => {
   margin-top: 1rem;
   height: 30px;
   width: auto;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  .pic {
+    height: 30px;
+    width: 100%;
+    background: url("https://th.bing.com/th/id/R.79ecb19a8f95736b29ee62eef2b9c255?rik=eagmh0omAjx0Qg&riu=http%3a%2f%2fpic1.16xx8.com%2fallimg%2fhiobi2%2f4-1ZGGG61HB.jpg&ehk=ZGBYCjbRWAm6ZRlLqaV1QUS1CBA4x%2bg220TcJL%2b53Yg%3d&risl=&pid=ImgRaw&r=0");
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+  }
+}
+
+@keyframes scaleAnimation {
+  from {
+    transform: rotate(0deg) scale(0.5);
+  }
+  to {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+.choose-icon-animation {
+  animation: scaleAnimation 0.8s cubic-bezier(0.2, -0.2, 0.27, 1.55) forwards;
 }
 </style>
