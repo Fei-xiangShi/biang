@@ -1,76 +1,12 @@
 <template>
   <u-notify ref="Notify" />
-  <modal
-    :title="t('选择语言提示')"
-    :show="showChooseLangualge"
-    :closeOnClickOverlay="true"
-    @close="cancelLang"
-    @cancel="cancelLang"
-    @confirm="confirmLang"
-  >
-    <view class="languages">
-      <view
-        class="language-item"
-        :class="{ choose: check == 0 }"
-        id="0"
-        @tap="changeLang"
-      >
-        <view class="icon" :class="{ 'choose-icon-animation': check == 0 }">
-          <u-icon
-            :name="check == 0 ? 'checkmark-circle' : 'minus-circle'"
-            size="20"
-            color="#606266"
-          />
-        </view>
-        <view class="language-item-text">{{ $t("语言跟随系统提示") }}</view>
-      </view>
-      <view
-        class="language-item"
-        :class="{ choose: check == 1 }"
-        id="1"
-        @tap="changeLang"
-      >
-        <view class="icon" :class="{ 'choose-icon-animation': check == 1 }">
-          <u-icon
-            :name="check == 1 ? 'checkmark-circle' : 'minus-circle'"
-            size="20"
-            color="#606266"
-          />
-        </view>
-        <view class="language-item-text">简体中文</view>
-      </view>
-      <view
-        class="language-item"
-        :class="{ choose: check == 2 }"
-        id="2"
-        @tap="changeLang"
-      >
-        <view class="icon" :class="{ 'choose-icon-animation': check == 2 }">
-          <u-icon
-            :name="check == 2 ? 'checkmark-circle' : 'minus-circle'"
-            size="20"
-            color="#606266"
-          />
-        </view>
-        <view class="language-item-text">繁体中文</view>
-      </view>
-      <view
-        class="language-item"
-        :class="{ choose: check == 3 }"
-        id="3"
-        @tap="changeLang"
-      >
-        <view class="icon" :class="{ 'choose-icon-animation': check == 3 }">
-          <u-icon
-            :name="check == 3 ? 'checkmark-circle' : 'minus-circle'"
-            size="20"
-            color="#606266"
-          />
-        </view>
-        <view class="language-item-text">English</view>
-      </view>
-    </view>
-  </modal>
+  <view class="changeLanguageModal">
+    <changeLanguageModal
+      :show="showChooseLangualge"
+      @confirm="confirmLang"
+      @cancel="cancelLang"
+    />
+  </view>
   <view class="container">
     <view class="navbar">
       <navbar :showChangeSchoolButton="true" />
@@ -142,7 +78,7 @@
         </view>
         <view class="column-two">
           <view class="todo">
-            <view class="todo-title">{{$t('待办按钮标题')}}</view>
+            <view class="todo-title">{{ $t("待办按钮标题") }}</view>
             <view class="todo-content">
               <u-notice-bar
                 :text="todoList"
@@ -154,8 +90,8 @@
             </view>
           </view>
           <view class="kit">
-            <view class="kit-title">{{$t('校园好礼按钮标题')}}</view>
-            <view class="kit-content">{{ $t('校园好礼按钮内容') }}</view>
+            <view class="kit-title">{{ $t("校园好礼按钮标题") }}</view>
+            <view class="kit-content">{{ $t("校园好礼按钮内容") }}</view>
           </view>
         </view>
       </view>
@@ -163,19 +99,19 @@
       <view class="two-cards">
         <view class="purchase-card">
           <view class="title">
-            <view class="title-text">{{$t('特惠按钮标题')}}</view>
+            <view class="title-text">{{ $t("特惠按钮标题") }}</view>
           </view>
           <view class="content">
-            <view class="content-text">{{ $t('特惠按钮内容') }}</view>
+            <view class="content-text">{{ $t("特惠按钮内容") }}</view>
             <u-icon name="arrow-right" :size="8" color="black" />
           </view>
         </view>
         <view class="store-card">
           <view class="title">
-            <view class="title-text">{{ $t('商店按钮标题') }}</view>
+            <view class="title-text">{{ $t("商店按钮标题") }}</view>
           </view>
           <view class="content">
-            <view class="content-text">{{ $t('商店按钮内容') }}</view>
+            <view class="content-text">{{ $t("商店按钮内容") }}</view>
             <u-icon name="arrow-right" :size="8" color="black" />
           </view>
         </view>
@@ -191,12 +127,10 @@
 import navbar from "@/components/navbar.vue";
 import RouteConfig from "@/config/routes";
 import { onMounted, ref } from "vue";
-import modal from "@/components/modal.vue";
 import { useI18n } from "vue-i18n";
+import changeLanguageModal from "@/components/changeLanguageModal.vue";
 
 const { t, locale } = useI18n();
-
-const check = ref(0);
 
 const todoList = [
   "今日待办1",
@@ -285,10 +219,6 @@ const swiperList = [
   },
 ];
 
-const changeLang = (e: any) => {
-  check.value = e.currentTarget.id;
-};
-
 const redirectToClassTable = () => {
   uni.reLaunch({
     url: RouteConfig.classTablePage.url,
@@ -301,15 +231,11 @@ let notify = {
   message: "",
   type: "primary",
   color: "#ffffff",
-  safeAreaInsetTop: true,
+  top: 85,
 };
 
-const confirmLang = () => {
-  notify.message = t("成功设置语言提示");
-  notify.type = "success";
-  Notify.value.show(notify);
-  showChooseLangualge.value = false;
-  switch (Number(check.value)) {
+const confirmLang = (id: any) => {
+  switch (Number(id)) {
     case 0:
       uni.setStorageSync("lang", uni.getLocale());
       break;
@@ -324,6 +250,10 @@ const confirmLang = () => {
       break;
   }
   locale.value = uni.getStorageSync("lang");
+  notify.message = t("成功设置语言提示");
+  notify.type = "success";
+  Notify.value.show(notify);
+  showChooseLangualge.value = false;
 };
 
 const cancelLang = () => {
@@ -332,6 +262,7 @@ const cancelLang = () => {
   Notify.value.show(notify);
   showChooseLangualge.value = false;
 };
+
 let lang = uni.getStorageSync("lang");
 onMounted(() => {
   if (!lang || lang.length == 0 || lang == null || lang == undefined) {
@@ -352,32 +283,6 @@ onMounted(() => {
     #ecb4ee52 40%,
     #e9f8f883 60%
   );
-}
-
-.languages {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  .language-item {
-    display: flex;
-    flex-direction: row;
-    justify-content: center;
-    align-items: center;
-    width: 80%;
-    height: 50px;
-    background: rgba(234, 234, 234, 0.5);
-    border-radius: var(--borderRadius-medium, 0.375rem);
-    margin: 10px 0px;
-    .language-item-text {
-      margin-left: 10px;
-      font-size: 1rem;
-      color: #606266;
-    }
-  }
-  .choose {
-    background: rgba(23, 198, 52, 0.52);
-  }
 }
 
 .toolbox {
@@ -615,18 +520,5 @@ onMounted(() => {
     background-repeat: no-repeat;
     background-position: center;
   }
-}
-
-@keyframes scaleAnimation {
-  from {
-    transform: rotate(0deg) scale(0.5);
-  }
-  to {
-    transform: rotate(360deg) scale(1);
-  }
-}
-
-.choose-icon-animation {
-  animation: scaleAnimation 0.8s cubic-bezier(0.2, -0.2, 0.27, 1.55) forwards;
 }
 </style>
