@@ -21,10 +21,9 @@
       </view>
     </view>
     <view class="myFunction">
-      <view class="myFunctionItem" v-for="(item, index) in itemList">
-        <view class="myFunctionItemBorder" @tap="functionMethod(item.func)">
+      <view class="myFunctionItem" v-for="(item, index) in itemList" @tap="functionMethod(item.func)">
+        <view class="myFunctionItemBorder">
           <i :class="item.icon"></i>
-          <!-- <u-icon :name="item.icon" size="30"></u-icon> -->
           <view class="myFunctionItemText">
             {{ item.text }}
           </view>
@@ -121,9 +120,6 @@ const confirmLang = (id: any) => {
 };
 
 const cancelLang = () => {
-  uni.setStorageSync("lang", uni.getLocale());
-  notify.message = t("取消设置语言提示");
-  Notify.value.show(notify);
   showChooseLangualge.value = false;
 };
 
