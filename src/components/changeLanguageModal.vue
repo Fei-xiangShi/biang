@@ -1,5 +1,5 @@
 <template>
-  <view class="container" v-if="show">
+  <view class="container" :class="{'visible': show}">
     <modal
       :title="t('选择语言提示')"
       :show="true"
@@ -69,6 +69,12 @@ const languageList = ref([
   left: 0;
   width: 100%;
   height: 100%;
+  opacity: 0;
+  transition: 0.15s ease-in;
+  z-index: -1;
+  ::before{
+    clip-path: polygon(0 90%, 100% 90%, 100% 100%, 0 100%);
+  }
 }
 
 .languages {
@@ -108,5 +114,13 @@ const languageList = ref([
 
 .choose-icon-animation {
   animation: scaleAnimation 0.8s cubic-bezier(0.2, -0.2, 0.27, 1.55) forwards;
+}
+
+.visible {
+  opacity: 1;
+  z-index: 9999;
+  &::before {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
 }
 </style>
