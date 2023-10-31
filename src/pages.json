@@ -46,6 +46,12 @@
             "navigationBarTitleText": "设置",
             "navigationStyle": "custom"
           }
+        },
+        {
+          "path":"login",
+          "style":{
+            "navigationBarTitleText": "登录"
+          }
         }
       ]
     }

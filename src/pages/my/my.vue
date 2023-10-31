@@ -9,7 +9,18 @@
         @cancel="cancelLang"
       />
     </view>
-    <view class="head" @tap="navToChangeAvatar">
+    <view class="head" @tap="navToLogin" v-if="!isLogin">
+      <view class="avatar">
+        <u-avatar icon="star-fill" />
+      </view>
+      <view class="username">
+        <view class="username-text">{{ $t('未登录提示') }}</view>
+        <view class="username-arrow">
+          <u-icon name="arrow-right" :size="20"/>
+        </view>
+      </view>
+    </view>
+    <view class="head" @tap="navToChangeAvatar" v-else>
       <view class="avatar">
         <u-avatar icon="star-fill" />
       </view>
@@ -55,6 +66,9 @@ import RouteConfig from "@/config/routes";
 import changeLanguageModal from "@/components/changeLanguageModal.vue";
 import { useI18n } from "vue-i18n";
 import { ref } from "vue";
+
+const isLogin = ref(false)
+
 const { t, locale } = useI18n();
 
 const itemList = RouteConfig.my.myItemList;
@@ -68,7 +82,13 @@ const functionMethod = (index: any) => {
 
 const navToChangeAvatar = () => {
   uni.navigateTo({
-    url: RouteConfig.setting.url,
+    url: RouteConfig.my.setting.url,
+  });
+};
+
+const navToLogin = () => {
+  uni.navigateTo({
+    url: RouteConfig.my.login.url,
   });
 };
 

@@ -4,6 +4,8 @@ const baseUrl = "http://34.151.82.148:8000/api"
 const apiUrl = {
     // 日历
     ics: `${baseUrl}/ics`,
+    // 微信登录
+    wxLogin: `${baseUrl}/wxLogin`
 }
 
 export default apiUrl

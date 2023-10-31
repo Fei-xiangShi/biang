@@ -71,9 +71,6 @@ const RouteConfig = {
   schoolList: {
     url: "/pages/schools/index",
   },
-  setting: {
-    url: "sub/setting",
-  },
   my: {
     url: "/pages/my/my",
     myItemList: [
@@ -82,39 +79,45 @@ const RouteConfig = {
         text: i18n.global.t("占位"),
         // text:"功能1",
         url: "sub/uploadAvator",
-        func:""
+        func: "",
       },
       {
         icon: "custom-icon custom-icon-biaodan",
         text: i18n.global.t("占位"),
         url: "sub/introduction",
-        func:"",
+        func: "",
       },
       {
         icon: "custom-icon custom-icon-biaodan",
         text: i18n.global.t("占位"),
         url: "sub/introduction",
-        func:"",
+        func: "",
       },
       {
         icon: "custom-icon custom-icon-biaodan",
         text: i18n.global.t("占位"),
         url: "sub/introduction",
-        func:""
+        func: "",
       },
       {
-        icon:"custom-icon custom-icon-tuwen",
-        text: i18n.global.t("theme"),
+        icon: "custom-icon custom-icon-tuwen",
+        text: i18n.global.t("主题"),
         url: "sub/introduction",
-        func:"",
+        func: "",
       },
       {
         icon: "custom-icon custom-icon-yuyanqiehuan",
-        text: i18n.global.t("language"),
-        url: "sub/introduction",
-        func:"languageSetting"
+        text: i18n.global.t("更改语言"),
+        url: "",
+        func: "languageSetting",
       },
     ],
+    setting: {
+      url: "sub/setting",
+    },
+    login: {
+      url: "sub/login",
+    },
   },
 };
 

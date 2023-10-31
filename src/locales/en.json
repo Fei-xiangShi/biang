@@ -53,5 +53,8 @@
   "课程详情标题": "COURSE DETAILS",
   "教室": "Classroom",
   "课程号": "Course ID",
-  "单元号": "Unit ID"
+  "单元号": "Unit ID",
+  "主题": "Theme",
+  "更改语言": "Language",
+  "未登录提示": "Please log in first"
 }
