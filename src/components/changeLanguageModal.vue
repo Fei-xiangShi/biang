@@ -1,36 +1,31 @@
 <template>
-  <view class="container" :class="{'visible': show}">
-    <modal
-      :title="t('选择语言提示')"
-      :show="true"
-      :closeOnClickOverlay="true"
-      @close="emit('cancel')"
-      @cancel="emit('cancel')"
-      @confirm="emit('confirm', check)"
-    >
-      <view class="languages">
-        <view
-          class="language-item"
-          :class="{ choose: check == index }"
-          :id="String(index)"
-          @tap="changeLang"
-          v-for="(item, index) in languageList"
-        >
-          <view
-            class="icon"
-            :class="{ 'choose-icon-animation': check == index }"
-          >
-            <u-icon
-              :name="check == index ? 'checkmark-circle' : 'minus-circle'"
-              size="20"
-              color="#606266"
-            />
-          </view>
-          <view class="language-item-text">{{ item }}</view>
+  <modal
+    :title="t('选择语言提示')"
+    :show="show"
+    :closeOnClickOverlay="true"
+    @close="emit('cancel')"
+    @cancel="emit('cancel')"
+    @confirm="emit('confirm', check)"
+  >
+    <view class="languages">
+      <view
+        class="language-item"
+        :class="{ choose: check == index }"
+        :id="String(index)"
+        @tap="changeLang"
+        v-for="(item, index) in languageList"
+      >
+        <view class="icon" :class="{ 'choose-icon-animation': check == index }">
+          <u-icon
+            :name="check == index ? 'checkmark-circle' : 'minus-circle'"
+            size="20"
+            color="#606266"
+          />
         </view>
+        <view class="language-item-text">{{ item }}</view>
       </view>
-    </modal>
-  </view>
+    </view>
+  </modal>
 </template>
 
 <script setup lang="ts">
@@ -63,19 +58,6 @@ const languageList = ref([
 </script>
 
 <style scoped lang="scss">
-.container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  opacity: 0;
-  transition: 0.15s ease-in;
-  z-index: -1;
-  ::before{
-    clip-path: polygon(0 90%, 100% 90%, 100% 100%, 0 100%);
-  }
-}
 
 .languages {
   display: flex;
@@ -114,13 +96,5 @@ const languageList = ref([
 
 .choose-icon-animation {
   animation: scaleAnimation 0.8s cubic-bezier(0.2, -0.2, 0.27, 1.55) forwards;
-}
-
-.visible {
-  opacity: 1;
-  z-index: 9999;
-  &::before {
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
-  }
 }
 </style>

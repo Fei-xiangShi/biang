@@ -77,6 +77,7 @@
           :class="[dayItem.weekday == weekdays[today] ? 'today' : '']"
           v-for="(dayItem, index) in dayItems"
           :key="index"
+          @tap="show"
         >
           <view class="weekday">{{ dayItem.weekday }}</view>
           <view class="date">{{ dayItem.date }}</view>
@@ -119,6 +120,15 @@
         </view>
       </view>
     </view>
+    <view class="details">
+      <modal
+        :show="showDetail"
+        @close="hide"
+        :showConfirmButton="false"
+        :showCancelButton="false"
+        :closeOnClickOverlay="true"
+        />
+    </view>
   </view>
 </template>
 
@@ -128,6 +138,7 @@ import semester from "@/config/semester";
 import timeTable from "@/config/timeTable";
 import { onMounted, ref } from "vue";
 import type Course from "@/models/course";
+import modal from "@/components/modal.vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
@@ -140,6 +151,15 @@ const today = date.getDay();
 const nameTime = `${year}/${month}/${todayDate}`;
 const showPop = ref(false);
 const courses = ref<any>([]);
+const showDetail = ref(false);
+
+const show = () => {
+  showDetail.value = true;
+};
+
+const hide = () => {
+  showDetail.value = false;
+};
 
 const close = () => {
   showPop.value = false;
