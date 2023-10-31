@@ -53,22 +53,16 @@
 <script setup lang="ts">
 import classTableItem from "@/components/classTableItem.vue";
 import Api from "@/api/api";
-import { onMounted, ref } from "vue";
+import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
 
 const classTableUrl = ref("");
 const classTableContent = ref("");
-const haveClassTable = ref(true);
+const content = ref(uni.getStorageSync("classTableContent"))
+const haveClassTable = ref(!(content.value == "" || content.value == null || content.value == undefined));
 const isLoading = ref(false);
-
-onMounted(() => {
-  let content = uni.getStorageSync("classTableContent");
-  if (content == "" || content == null) {
-    haveClassTable.value = false;
-  }
-});
 
 const getNewClassTable = () => {
   isLoading.value = true;
