@@ -21,10 +21,9 @@
       </view>
     </view>
     <view class="myFunction">
-      <view class="myFunctionItem" v-for="(item, index) in itemList">
-        <view class="myFunctionItemBorder" @tap="functionMethod(item.func)">
+      <view class="myFunctionItem" v-for="(item, index) in itemList" @tap="functionMethod(item.func)">
+        <view class="myFunctionItemBorder">
           <i :class="item.icon"></i>
-          <!-- <u-icon :name="item.icon" size="30"></u-icon> -->
           <view class="myFunctionItemText">
             {{ item.text }}
           </view>
