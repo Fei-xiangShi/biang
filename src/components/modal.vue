@@ -28,6 +28,9 @@
 
 <script setup lang="ts">
 import overlay from "@/components/overlay.vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const props = defineProps({
   show: {
@@ -48,11 +51,11 @@ const props = defineProps({
   },
   confirmText: {
     type: String,
-    default: "确认",
+    default: t("确认"),
   },
   cancelText: {
     type: String,
-    default: "取消",
+    default: t("取消"),
   },
   showConfirmButton: {
     type: Boolean,
