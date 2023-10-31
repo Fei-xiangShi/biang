@@ -122,7 +122,6 @@ const getNewClassTable = () => {
       height: 40vh;
       width: 35vh;
       box-shadow: rgba(0, 0, 0, 0.34) 0px 9px 20px;
-      margin-top: 20vh;
 
       .acrylic-content {
         position: absolute;
@@ -155,8 +154,9 @@ const getNewClassTable = () => {
   }
   .submit-btn {
     position: absolute;
-    right: 3rem;
-    bottom: 3rem;
+    right: 5.5rem;
+    bottom: 15.5rem;
+    z-index: 999;
     .confirm-btn {
       width: 50px;
       height: 50px;
