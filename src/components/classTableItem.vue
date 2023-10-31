@@ -128,8 +128,28 @@
         :showCancelButton="false"
         :closeOnClickOverlay="true"
       >
-        <view slot="header" class="modal-header">
-          <view class="modal-title">{{ showCourse.summary }}</view>
+        <view class="modal-header">
+          <view class="modal-title">{{ $t("课程详情标题") }}</view>
+          <view class="class-name">{{ showCourse.summary }}</view>
+        </view>
+        <view class="block-line" />
+        <view class="modal-body">
+          <view class="course-id">
+            <view class="course-id-title">{{ $t("课程号") }}</view>
+            <view class="course-id-content">
+              {{ showCourse.description.slice(0, 8) }}
+            </view>
+          </view>
+          <view class="unit-id">
+            <view class="unit-id-title">{{ $t("单元号") }}</view>
+            <view class="unit-id-content">
+              {{ showCourse.description.split(",")[0].slice(9) }}
+            </view>
+          </view>
+          <view class="classroom">
+            <view class="classroom-title">{{ $t("教室") }}</view>
+            <view class="classroom-content">{{ showCourse.location }}</view>
+          </view>
         </view>
       </modal>
     </view>
@@ -161,7 +181,7 @@ const showCourse = ref(new Course());
 const show = (course: any) => {
   showDetail.value = true;
   showCourse.value = course;
-  console.log(showCourse.value)
+  console.log(showCourse.value);
 };
 
 const hide = () => {
@@ -551,6 +571,91 @@ const touchEnd = (e: any) => {
           }
         }
       }
+    }
+  }
+}
+
+.modal-header {
+  display: flex;
+  flex-direction: column;
+  align-items: normal;
+  .modal-title {
+    font-size: 1rem;
+    font-weight: lighter;
+    color: grey;
+    text-align: left;
+  }
+  .class-name {
+    font-size: 1rem;
+    font-weight: bold;
+    color: black;
+    text-align: left;
+  }
+}
+
+.block-line {
+  width: 100%;
+  height: 1px;
+  background: rgba($color: #000, $alpha: 0.2);
+  margin: 10px 0;
+}
+
+.modal-body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  .classroom {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    margin-top: 10px;
+    .classroom-title {
+      font-size: 1rem;
+      font-weight: bold;
+      color: black;
+    }
+    .classroom-content {
+      font-size: 1rem;
+      font-weight: bold;
+      color: black;
+      text-align: right;
+      max-width: 80%;
+    }
+  }
+  .course-id {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    .course-id-title {
+      font-size: 1rem;
+      font-weight: bold;
+      color: black;
+    }
+    .course-id-content {
+      font-size: 1rem;
+      font-weight: bold;
+      color: black;
+    }
+  }
+  .unit-id {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    .unit-id-title {
+      font-size: 1rem;
+      font-weight: bold;
+      color: black;
+    }
+    .unit-id-content {
+      font-size: 1rem;
+      font-weight: bold;
+      color: black;
     }
   }
 }
