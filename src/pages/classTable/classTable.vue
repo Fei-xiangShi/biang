@@ -17,7 +17,7 @@
           </view>
 
           <view class="acrylic-content">
-            <view class="acrylic-content-Title">导入课表</view>
+            <view class="acrylic-content-Title">{{$t('导入课表')}}</view>
             <view class="input">
               <input
                 class="url"
@@ -54,6 +54,9 @@
 import classTableItem from "@/components/classTableItem.vue";
 import Api from "@/api/api";
 import { onMounted, ref } from "vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const classTableUrl = ref("");
 const classTableContent = ref("");
@@ -77,7 +80,7 @@ const getNewClassTable = () => {
         uni.setStorageSync("classTableUrl", classTableUrl.value);
         haveClassTable.value = true;
       } else {
-        throw new Error("获取失败");
+        throw new Error(t('课表获取失败'));
       }
       isLoading.value = false;
     })

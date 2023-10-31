@@ -1,36 +1,31 @@
 <template>
-  <view class="container" v-if="show">
-    <modal
-      :title="t('选择语言提示')"
-      :show="true"
-      :closeOnClickOverlay="true"
-      @close="emit('cancel')"
-      @cancel="emit('cancel')"
-      @confirm="emit('confirm', check)"
-    >
-      <view class="languages">
-        <view
-          class="language-item"
-          :class="{ choose: check == index }"
-          :id="String(index)"
-          @tap="changeLang"
-          v-for="(item, index) in languageList"
-        >
-          <view
-            class="icon"
-            :class="{ 'choose-icon-animation': check == index }"
-          >
-            <u-icon
-              :name="check == index ? 'checkmark-circle' : 'minus-circle'"
-              size="20"
-              color="#606266"
-            />
-          </view>
-          <view class="language-item-text">{{ item }}</view>
+  <modal
+    :title="t('选择语言提示')"
+    :show="show"
+    :closeOnClickOverlay="true"
+    @close="emit('cancel')"
+    @cancel="emit('cancel')"
+    @confirm="emit('confirm', check)"
+  >
+    <view class="languages">
+      <view
+        class="language-item"
+        :class="{ choose: check == index }"
+        :id="String(index)"
+        @tap="changeLang"
+        v-for="(item, index) in languageList"
+      >
+        <view class="icon" :class="{ 'choose-icon-animation': check == index }">
+          <u-icon
+            :name="check == index ? 'checkmark-circle' : 'minus-circle'"
+            size="20"
+            color="#606266"
+          />
         </view>
+        <view class="language-item-text">{{ item }}</view>
       </view>
-    </modal>
-  </view>
+    </view>
+  </modal>
 </template>
 
 <script setup lang="ts">
@@ -63,13 +58,6 @@ const languageList = ref([
 </script>
 
 <style scoped lang="scss">
-.container {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-}
 
 .languages {
   display: flex;

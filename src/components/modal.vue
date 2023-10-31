@@ -1,5 +1,5 @@
 <template>
-  <view class="modalbox" v-if="show" >
+  <view class="container" :class="{'visible': show}">
     <overlay :show="true" @tap="onClickOverlay"/>
     
     <view class="modal">
@@ -48,11 +48,11 @@ const props = defineProps({
   },
   confirmText: {
     type: String,
-    default: "确认",
+    default: "Confirm",
   },
   cancelText: {
     type: String,
-    default: "取消",
+    default: "Cancel",
   },
   showConfirmButton: {
     type: Boolean,
@@ -74,6 +74,28 @@ const onClickOverlay = () => {
 </script>
 
 <style scoped lang="scss">
+.container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0;
+  transition: 0.15s ease-in;
+  z-index: -1;
+  ::before {
+    clip-path: polygon(0 90%, 100% 90%, 100% 100%, 0 100%);
+  }
+}
+
+.visible {
+  opacity: 1;
+  z-index: 9999;
+  &::before {
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+  }
+}
+
 .modal {
   display: flex;
   flex-direction: column;

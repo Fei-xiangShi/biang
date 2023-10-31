@@ -101,6 +101,7 @@
               maxHeight: (course.duration * 100) / 14 + '%',
               height: (course.duration * 100) / 14 + '%',
             }"
+            @tap="show(course)"
           >
             <view
               class="course-item"
@@ -119,6 +120,19 @@
         </view>
       </view>
     </view>
+    <view class="details">
+      <modal
+        :show="showDetail"
+        @close="hide"
+        :showConfirmButton="false"
+        :showCancelButton="false"
+        :closeOnClickOverlay="true"
+      >
+        <view slot="header" class="modal-header">
+          <view class="modal-title">{{ showCourse.summary }}</view>
+        </view>
+      </modal>
+    </view>
   </view>
 </template>
 
@@ -127,7 +141,11 @@ import navbar from "@/components/navbar.vue";
 import semester from "@/config/semester";
 import timeTable from "@/config/timeTable";
 import { onMounted, ref } from "vue";
-import type Course from "@/models/course";
+import Course from "@/models/course";
+import modal from "@/components/modal.vue";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const date = new Date();
 const year = date.getFullYear();
@@ -137,6 +155,18 @@ const today = date.getDay();
 const nameTime = `${year}/${month}/${todayDate}`;
 const showPop = ref(false);
 const courses = ref<any>([]);
+const showDetail = ref(false);
+const showCourse = ref(new Course());
+
+const show = (course: any) => {
+  showDetail.value = true;
+  showCourse.value = course;
+  console.log(showCourse.value)
+};
+
+const hide = () => {
+  showDetail.value = false;
+};
 
 const close = () => {
   showPop.value = false;
@@ -169,7 +199,15 @@ const calcMonthNum = () => {
 
 const curretWeekNum = ref(calcWeekNum(date));
 const dayItems = ref([{ date: 0, weekday: "", data: new Date() }]);
-const weekdays = ["Sun", "Mon", "Tue", "Wed", "Thu", "Fri", "Sat"];
+const weekdays = [
+  t("星期日"),
+  t("星期一"),
+  t("星期二"),
+  t("星期三"),
+  t("星期四"),
+  t("星期五"),
+  t("星期六"),
+];
 var weeks: any = [];
 
 const calcWeekList = () => {
@@ -181,32 +219,32 @@ const calcWeekList = () => {
   for (let i = 1, j = 1; i <= 20; i++) {
     if (i === orientationWeek1) {
       weeks.push({
-        name: "迎新第一周",
+        name: t("迎新第一周"),
         id: i,
       });
     } else if (i === orientationWeek2) {
       weeks.push({
-        name: "迎新第二周",
+        name: t("迎新第二周"),
         id: i,
       });
     } else if (i === mosVactionWeek) {
       weeks.push({
-        name: "期中假期",
+        name: t("期中假期"),
         id: i,
       });
     } else if (i === exam1) {
       weeks.push({
-        name: "期末第一周",
+        name: t("期末第一周"),
         id: i,
       });
     } else if (i === exam2) {
       weeks.push({
-        name: "期末第二周",
+        name: t("期末第二周"),
         id: i,
       });
     } else {
       weeks.push({
-        name: `第${j}周`,
+        name: t(`第${j}周`),
         id: i,
       });
       j++;
