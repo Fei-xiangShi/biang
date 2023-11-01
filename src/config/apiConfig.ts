@@ -1,4 +1,4 @@
-const baseUrl = "https://auproj.3li.top:8000";
+const baseUrl = "https://auproj.3li.top";
 // api 文档 https://apifox.com/apidoc/shared-4267f6f3-67b7-4f56-8049-a157c20a428a
 
 const apiUrl = {
