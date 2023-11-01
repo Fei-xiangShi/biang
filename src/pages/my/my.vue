@@ -23,13 +23,14 @@
               class="avatar-wrapper"
               open-type="chooseAvatar"
               @chooseavatar="onChooseAvatar"
-              style="padding: 0;"
+              style="padding: 0"
             >
               <view class="avatarShow">
-                <image class="avatar" :src="userAvatarUrl" style="
-                width: 100%;
-                height: 100%;
-                "/>
+                <image
+                  class="avatar"
+                  :src="userAvatarUrl"
+                  style="width: 100%; height: 100%"
+                />
               </view>
             </button>
           </view>
@@ -50,7 +51,7 @@
         <u-avatar icon="star-fill" />
       </view>
       <view class="username">
-        <view class="username-text">{{ $t("未登录提示") }}</view>
+        <view class="username-text">{{ $t("未登录提示")}}</view>
         <view class="username-arrow">
           <u-icon name="arrow-right" :size="20" />
         </view>
@@ -58,10 +59,10 @@
     </view>
     <view class="head" @tap="navToChangeAvatar" v-else>
       <view class="avatar">
-        <u-avatar icon="star-fill" />
+        <up-avatar :src="userAvatarUrl" />
       </view>
       <view class="username">
-        <view class="username-text">User_name</view>
+        <view class="username-text">{{ nickname }}</view>
         <view class="username-arrow">
           <u-icon name="arrow-right" :size="20"></u-icon>
         </view>
@@ -105,21 +106,20 @@ import navbar from "@/components/navbar.vue";
 import RouteConfig from "@/config/routes";
 import changeLanguageModal from "@/components/changeLanguageModal.vue";
 import { useI18n } from "vue-i18n";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import modal from "@/components/modal.vue";
 import Api from "@/api/api";
 
-const isLogin = ref(false);
+const session = uni.getStorageSync("aueduSession")
+const isLogin = ref(!(session == "" || session.length == 0 || session == null || session == undefined));
 const isAvatarChoosing = ref(false);
 const userAvatarUrl = ref(
   "https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0"
 );
 const nickname = ref("");
-const onChooseAvatar = (e: any) => {
-  userAvatarUrl.value = e.detail.avatarUrl;
-};
 const code = ref("");
-const username = ref();
+const showChooseLangualge = ref(false);
+const Notify = ref();
 
 const { t, locale } = useI18n();
 
@@ -129,7 +129,10 @@ const functionMethod = (index: any) => {
   if (index === "languageSetting") {
     showChooseLangualge.value = true;
   }
-  console.log(index);
+};
+
+const onChooseAvatar = (e: any) => {
+  userAvatarUrl.value = e.detail.avatarUrl;
 };
 
 const navToChangeAvatar = () => {
@@ -139,9 +142,6 @@ const navToChangeAvatar = () => {
 };
 
 const navToLogin = () => {
-  // uni.navigateTo({
-  //   url: RouteConfig.my.login.url,
-  // });
   isAvatarChoosing.value = true;
 };
 
@@ -160,8 +160,6 @@ const swiperList = [
   },
 ];
 
-const showChooseLangualge = ref(false);
-const Notify = ref();
 let notify = {
   message: "",
   type: "primary",
@@ -199,12 +197,31 @@ const cancelAvatar = () => {
   isAvatarChoosing.value = false;
 };
 
-let lang = uni.getStorageSync("lang");
-
-const onLogin = () => {
-  console.log(username.value);
+const onLogin = async () => {
   uni.setStorageSync("userAvatarUrl", userAvatarUrl.value);
   uni.setStorageSync("nickname", nickname.value);
+  userAvatarUrl.value=uni.getStorageSync("userAvatarUrl");
+  nickname.value=uni.getStorageSync("nickname");
+  try {
+    Api.wxLogin(code.value, nickname.value, userAvatarUrl.value).then(
+      (res: any) => {
+        const responseSuccess = res.data.success;
+        console.log(res.data);
+        if (responseSuccess === "登录成功") {
+          isLogin.value = true;
+          uni.setStorageSync("aueduSession", res.data.auedu_session);
+          uni.setStorageSync("isLogin",isLogin.value);
+          console.log(isLogin.value);
+        }
+      }
+    );
+  } catch (error) {
+    console.error("登录出错", error);
+  }
+  isAvatarChoosing.value = false;
+};
+
+onMounted(() => {
   uni.login({
     provider: "weixin",
     success: (res) => {
@@ -218,11 +235,9 @@ const onLogin = () => {
       });
     },
   });
-  uni.setStorageSync("isLogin", true);
-  Api.wxLogin(code.value, nickname.value, userAvatarUrl.value);
-  console.log("success");
-  isAvatarChoosing.value = false;
-};
+  nickname.value=uni.getStorageSync("nickname");
+  userAvatarUrl.value=uni.getStorageSync("userAvatarUrl");
+});
 </script>
 
 <style scoped lang="scss">
