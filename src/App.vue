@@ -1,10 +1,12 @@
 <script setup lang="ts">
 import { onLaunch, onShow, onHide } from "@dcloudio/uni-app";
 import { useI18n } from "vue-i18n";
+import Api from "./api/api";
 
 const { locale } = useI18n();
 
 onLaunch(() => {
+  uni.setStorageSync("ProgramList", Api.getProgramList());
   let safetop = uni.getStorageSync("menuButtonBoundingClientRect");
   if (
     !safetop ||
@@ -29,5 +31,3 @@ onHide(() => {
 <style lang="scss">
 @import "../node_modules/uview-plus/index.scss";
 </style>
-
-
