@@ -9,14 +9,44 @@
         @cancel="cancelLang"
       />
     </view>
+    <view class="chooseAvatorModal">
+      <modal
+        :title="t('选择头像')"
+        :show="isAvatarChoose"
+        :closeOnClickOverlay="true"
+        @confirm="onLogin"
+        @cancel="cancelAvator"
+      >
+        <view class="AvatorContainer">
+          <view class="uploadAvator">
+            <button
+              class="avatar-wrapper"
+              open-type="chooseAvatar"
+              @chooseavatar="onChooseAvatar"
+            >
+              <image class="avatar" :src="userAvatarUrl"></image>
+            </button>
+          </view>
+          <view class="inputName">
+            <input
+              class="username"
+              type="nickname"
+              placeholder="请输入昵称"
+              v-model="nickname"
+            />
+          </view>
+          <view class="avatorFill"></view>
+        </view>
+      </modal>
+    </view>
     <view class="head" @tap="navToLogin" v-if="!isLogin">
       <view class="avatar">
         <u-avatar icon="star-fill" />
       </view>
       <view class="username">
-        <view class="username-text">{{ $t('未登录提示') }}</view>
+        <view class="username-text">{{ $t("未登录提示") }}</view>
         <view class="username-arrow">
-          <u-icon name="arrow-right" :size="20"/>
+          <u-icon name="arrow-right" :size="20" />
         </view>
       </view>
     </view>
@@ -32,7 +62,11 @@
       </view>
     </view>
     <view class="myFunction">
-      <view class="myFunctionItem" v-for="(item, index) in itemList" @tap="functionMethod(item.func)">
+      <view
+        class="myFunctionItem"
+        v-for="item in itemList"
+        @tap="functionMethod(item.func)"
+      >
         <view class="myFunctionItemBorder">
           <i :class="item.icon"></i>
           <view class="myFunctionItemText">
@@ -66,8 +100,20 @@ import RouteConfig from "@/config/routes";
 import changeLanguageModal from "@/components/changeLanguageModal.vue";
 import { useI18n } from "vue-i18n";
 import { ref } from "vue";
+import modal from "@/components/modal.vue";
+import Api from "@/api/api";
 
-const isLogin = ref(false)
+const isLogin = ref(false);
+const isAvatarChoose = ref(false);
+const userAvatarUrl = ref(
+  "https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0"
+);
+const nickname = ref("");
+const onChooseAvatar = (e: any) => {
+  userAvatarUrl.value = e.detail.avatarUrl;
+};
+const code = ref("");
+const username = ref();
 
 const { t, locale } = useI18n();
 
@@ -75,7 +121,7 @@ const itemList = RouteConfig.my.myItemList;
 
 const functionMethod = (index: any) => {
   if (index === "languageSetting") {
-      showChooseLangualge.value = true;
+    showChooseLangualge.value = true;
   }
   console.log(index);
 };
@@ -87,9 +133,10 @@ const navToChangeAvatar = () => {
 };
 
 const navToLogin = () => {
-  uni.navigateTo({
-    url: RouteConfig.my.login.url,
-  });
+  // uni.navigateTo({
+  //   url: RouteConfig.my.login.url,
+  // });
+  isAvatarChoose.value = true;
 };
 
 const swiperList = [
@@ -115,7 +162,6 @@ let notify = {
   color: "#ffffff",
   top: 85,
 };
-
 
 const confirmLang = (id: any) => {
   switch (Number(id)) {
@@ -143,7 +189,34 @@ const cancelLang = () => {
   showChooseLangualge.value = false;
 };
 
+const cancelAvator = () => {
+  isAvatarChoose.value = false;
+};
+
 let lang = uni.getStorageSync("lang");
+
+const onLogin = () => {
+  uni.login({
+    provider: "weixin",
+    success: (res) => {
+      console.log("微信登录成功" + JSON.stringify(res));
+      uni.getUserInfo({
+        provider: "weixin",
+        success: (infoRes) => {
+          console.log("获取用户信息成功" + JSON.stringify(infoRes));
+          code.value = JSON.parse(JSON.stringify(res)).code;
+        },
+      });
+    },
+  });
+  console.log(username.value);
+  uni.setStorageSync("userAvatarUrl", userAvatarUrl.value);
+  uni.setStorageSync("nickname", nickname.value);
+  uni.setStorageSync("isLogin", true);
+  Api.wxLogin(code.value, nickname.value, userAvatarUrl.value);
+  console.log("success");
+  isAvatarChoose.value = false;
+};
 </script>
 
 <style scoped lang="scss">
@@ -228,6 +301,30 @@ let lang = uni.getStorageSync("lang");
     width: 350px;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
       rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  }
+}
+
+.AvatorContainer{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  .uploadAvator{
+    margin-top: 20px;
+    display: flex;
+    height: 10vh;
+    width: 10vh;
+  }
+  .inputName{
+    margin-top: 10px;
+    background: rgba(128, 128, 128, 0.123);
+    border: 1px solid;
+    border-color: white;
+    margin-top: 25px;
+    border-radius: 10px;
+  }
+  .avatorFill{
+    height: 3vh;
   }
 }
 </style>
