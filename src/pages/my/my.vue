@@ -195,7 +195,11 @@ const cancelAvator = () => {
 
 let lang = uni.getStorageSync("lang");
 
+
 const onLogin = () => {
+  console.log(username.value);
+  uni.setStorageSync("userAvatarUrl", userAvatarUrl.value);
+  uni.setStorageSync("nickname", nickname.value);
   uni.login({
     provider: "weixin",
     success: (res) => {
@@ -209,9 +213,6 @@ const onLogin = () => {
       });
     },
   });
-  console.log(username.value);
-  uni.setStorageSync("userAvatarUrl", userAvatarUrl.value);
-  uni.setStorageSync("nickname", nickname.value);
   uni.setStorageSync("isLogin", true);
   Api.wxLogin(code.value, nickname.value, userAvatarUrl.value);
   console.log("success");
