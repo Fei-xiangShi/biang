@@ -51,7 +51,7 @@
         <u-avatar icon="star-fill" />
       </view>
       <view class="username">
-        <view class="username-text">{{ $t("未登录提示")}}</view>
+        <view class="username-text">{{ $t("未登录提示") }}</view>
         <view class="username-arrow">
           <u-icon name="arrow-right" :size="20" />
         </view>
@@ -110,8 +110,15 @@ import { ref, onMounted } from "vue";
 import modal from "@/components/modal.vue";
 import Api from "@/api/api";
 
-const session = uni.getStorageSync("aueduSession")
-const isLogin = ref(!(session == "" || session.length == 0 || session == null || session == undefined));
+const session = uni.getStorageSync("aueduSession");
+const isLogin = ref(
+  !(
+    session == "" ||
+    session.length == 0 ||
+    session == null ||
+    session == undefined
+  )
+);
 const isAvatarChoosing = ref(false);
 const userAvatarUrl = ref(
   "https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0"
@@ -200,24 +207,28 @@ const cancelAvatar = () => {
 const onLogin = async () => {
   uni.setStorageSync("userAvatarUrl", userAvatarUrl.value);
   uni.setStorageSync("nickname", nickname.value);
-  userAvatarUrl.value=uni.getStorageSync("userAvatarUrl");
-  nickname.value=uni.getStorageSync("nickname");
-  try {
-    Api.wxLogin(code.value, nickname.value, userAvatarUrl.value).then(
-      (res: any) => {
-        const responseSuccess = res.data.success;
-        console.log(res.data);
-        if (responseSuccess === "登录成功") {
-          isLogin.value = true;
-          uni.setStorageSync("aueduSession", res.data.auedu_session);
-          uni.setStorageSync("isLogin",isLogin.value);
-          console.log(isLogin.value);
-        }
+  userAvatarUrl.value = uni.getStorageSync("userAvatarUrl");
+  nickname.value = uni.getStorageSync("nickname");
+  Api.wxLogin(code.value, nickname.value).then(
+    (res: any) => {
+      const responseSuccess = res.data.success;
+      console.log(res.data);
+      if (responseSuccess === "登录成功") {
+        isLogin.value = true;
+        uni.setStorageSync("aueduSession", res.data.auedu_session);
+        uni.setStorageSync("isLogin", isLogin.value);
+        console.log(isLogin.value);
+        uni.uploadFile({
+          url: "https://auproj.3li.top/api/uploadAvatar",
+          filePath: userAvatarUrl.value,
+          name: "avatar",
+          formData: {
+            aueduSession: res.data.auedu_session,
+          },
+        });
       }
-    );
-  } catch (error) {
-    console.error("登录出错", error);
-  }
+    }
+  );
   isAvatarChoosing.value = false;
 };
 
@@ -235,8 +246,8 @@ onMounted(() => {
       });
     },
   });
-  nickname.value=uni.getStorageSync("nickname");
-  userAvatarUrl.value=uni.getStorageSync("userAvatarUrl");
+  nickname.value = uni.getStorageSync("nickname");
+  userAvatarUrl.value = uni.getStorageSync("userAvatarUrl");
 });
 </script>
 

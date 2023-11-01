@@ -36,7 +36,7 @@ const onLogin = () => {
   uni.setStorageSync("userAvatarUrl", userAvatarUrl.value);
   uni.setStorageSync("nickname", nickname.value);
   uni.setStorageSync("isLogin", true);
-  Api.wxLogin(code.value, nickname.value, userAvatarUrl.value);
+  Api.wxLogin(code.value, nickname.value);
   console.log("success");
 };
 
