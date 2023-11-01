@@ -11,7 +11,7 @@
     </view>
     <view class="chooseAvatorModal">
       <modal
-        :title="t('选择头像')"
+        :title="t('补全登录信息')"
         :show="isAvatarChoose"
         :closeOnClickOverlay="true"
         @confirm="onLogin"
