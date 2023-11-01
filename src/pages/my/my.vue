@@ -9,22 +9,28 @@
         @cancel="cancelLang"
       />
     </view>
-    <view class="chooseAvatorModal">
+    <view class="chooseAvatarModal">
       <modal
         :title="t('补全登录信息')"
-        :show="isAvatarChoose"
+        :show="isAvatarChoosing"
         :closeOnClickOverlay="true"
         @confirm="onLogin"
-        @cancel="cancelAvator"
+        @cancel="cancelAvatar"
       >
-        <view class="AvatorContainer">
-          <view class="uploadAvator">
+        <view class="AvatarContainer">
+          <view class="uploadAvatar">
             <button
               class="avatar-wrapper"
               open-type="chooseAvatar"
               @chooseavatar="onChooseAvatar"
+              style="padding: 0;"
             >
-              <image class="avatar" :src="userAvatarUrl"></image>
+              <view class="avatarShow">
+                <image class="avatar" :src="userAvatarUrl" style="
+                width: 100%;
+                height: 100%;
+                "/>
+              </view>
             </button>
           </view>
           <view class="inputName">
@@ -35,7 +41,7 @@
               v-model="nickname"
             />
           </view>
-          <view class="avatorFill"></view>
+          <view class="avatarFill"></view>
         </view>
       </modal>
     </view>
@@ -104,7 +110,7 @@ import modal from "@/components/modal.vue";
 import Api from "@/api/api";
 
 const isLogin = ref(false);
-const isAvatarChoose = ref(false);
+const isAvatarChoosing = ref(false);
 const userAvatarUrl = ref(
   "https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0"
 );
@@ -136,7 +142,7 @@ const navToLogin = () => {
   // uni.navigateTo({
   //   url: RouteConfig.my.login.url,
   // });
-  isAvatarChoose.value = true;
+  isAvatarChoosing.value = true;
 };
 
 const swiperList = [
@@ -189,12 +195,11 @@ const cancelLang = () => {
   showChooseLangualge.value = false;
 };
 
-const cancelAvator = () => {
-  isAvatarChoose.value = false;
+const cancelAvatar = () => {
+  isAvatarChoosing.value = false;
 };
 
 let lang = uni.getStorageSync("lang");
-
 
 const onLogin = () => {
   console.log(username.value);
@@ -216,7 +221,7 @@ const onLogin = () => {
   uni.setStorageSync("isLogin", true);
   Api.wxLogin(code.value, nickname.value, userAvatarUrl.value);
   console.log("success");
-  isAvatarChoose.value = false;
+  isAvatarChoosing.value = false;
 };
 </script>
 
@@ -305,18 +310,22 @@ const onLogin = () => {
   }
 }
 
-.AvatorContainer{
+.AvatarContainer {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  .uploadAvator{
+  .uploadAvatar {
     margin-top: 20px;
     display: flex;
     height: 10vh;
     width: 10vh;
+    .avatarShow {
+      width: 10vh;
+      height: 10vh;
+    }
   }
-  .inputName{
+  .inputName {
     margin-top: 10px;
     background: rgba(128, 128, 128, 0.123);
     border: 1px solid;
@@ -324,7 +333,7 @@ const onLogin = () => {
     margin-top: 25px;
     border-radius: 10px;
   }
-  .avatorFill{
+  .avatarFill {
     height: 3vh;
   }
 }
