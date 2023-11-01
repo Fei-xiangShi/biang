@@ -30,7 +30,7 @@
     <view class="toolbox">
       <view class="toolbox-item" v-for="tool in RouteConfig.indexPage.toolbox">
         <u-icon :name="tool.icon" size="20" color="#606266" />
-        <view class="toolbox-item-text">{{ tool.text }}</view>
+        <view class="toolbox-item-text">{{ $t(tool.text) }}</view>
       </view>
     </view>
     <view class="popular-functions">
@@ -40,7 +40,7 @@
       >
         <u-icon :name="popularFunction.icon" size="20" color="#606266" />
         <view class="popular-functions-item-text">{{
-          popularFunction.text
+          $t(popularFunction.text)
         }}</view>
       </view>
     </view>

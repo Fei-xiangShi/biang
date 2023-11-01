@@ -12,14 +12,14 @@
           v-if="showCancelButton"
           @tap="emit('cancel')"
         >
-          {{ cancelText }}
+          {{ $t(cancelText) }}
         </view>
         <view
           class="modal-button confirm"
           v-if="showConfirmButton"
           @tap="emit('confirm')"
         >
-          {{ confirmText }}
+          {{ $t(confirmText) }}
         </view>
       </view>
     </view>
@@ -48,11 +48,11 @@ const props = defineProps({
   },
   confirmText: {
     type: String,
-    default: "Confirm",
+    default: "确认",
   },
   cancelText: {
     type: String,
-    default: "Cancel",
+    default: "取消",
   },
   showConfirmButton: {
     type: Boolean,

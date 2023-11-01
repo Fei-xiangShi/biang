@@ -70,7 +70,7 @@
         <view class="myFunctionItemBorder">
           <i :class="item.icon"></i>
           <view class="myFunctionItemText">
-            {{ item.text }}
+            {{ $t(item.text) }}
           </view>
         </view>
       </view>
