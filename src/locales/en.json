@@ -56,5 +56,6 @@
   "单元号": "Unit ID",
   "主题": "Theme",
   "更改语言": "Language",
-  "未登录提示": "Please log in first"
+  "未登录提示": "Please log in first",
+  "补全登录信息":"Completing login information"
 }
