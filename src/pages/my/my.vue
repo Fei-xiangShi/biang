@@ -214,7 +214,7 @@ const onLogin = async () => {
     }
     if(!nickname.value){
       uni.showToast({
-          title: t("请填入姓名"),
+          title: t("请输入昵称"),
           icon: "none",
         });
       return 0;
