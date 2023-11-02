@@ -57,7 +57,7 @@
         </view>
       </view>
     </view>
-    <view class="head" @tap="navToChangeAvatar" v-else>
+    <view class="head" @tap="navToSettings" v-else>
       <view class="avatar">
         <up-avatar :src="userAvatarUrl" />
       </view>
@@ -142,9 +142,9 @@ const onChooseAvatar = (e: any) => {
   userAvatarUrl.value = e.detail.avatarUrl;
 };
 
-const navToChangeAvatar = () => {
+const navToSettings = () => {
   uni.navigateTo({
-    url: RouteConfig.my.setting.url,
+    url: RouteConfig.my.settings.url,
   });
 };
 
@@ -207,25 +207,14 @@ const cancelAvatar = () => {
 const onLogin = async () => {
   uni.setStorageSync("userAvatarUrl", userAvatarUrl.value);
   uni.setStorageSync("nickname", nickname.value);
-  userAvatarUrl.value = uni.getStorageSync("userAvatarUrl");
-  nickname.value = uni.getStorageSync("nickname");
   Api.wxLogin(code.value, nickname.value).then(
     (res: any) => {
       const responseSuccess = res.data.success;
-      console.log(res.data);
       if (responseSuccess === "登录成功") {
         isLogin.value = true;
         uni.setStorageSync("aueduSession", res.data.auedu_session);
         uni.setStorageSync("isLogin", isLogin.value);
-        console.log(isLogin.value);
-        uni.uploadFile({
-          url: "https://auproj.3li.top/api/uploadAvatar",
-          filePath: userAvatarUrl.value,
-          name: "avatar",
-          formData: {
-            aueduSession: res.data.auedu_session,
-          },
-        });
+        Api.uploadAvatar(userAvatarUrl.value, res.data.auedu_session)
       }
     }
   );

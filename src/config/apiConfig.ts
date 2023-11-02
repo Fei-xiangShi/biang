@@ -8,6 +8,8 @@ const apiUrl = {
   wxLogin: `${baseUrl}/wxLogin`,
   // 获取项目列表
   getProgramList: `${baseUrl}/getProgramList`,
+  // 上传头像
+  uploadAvatar: `${baseUrl}/uploadAvatar`,
 };
 
 export default apiUrl;

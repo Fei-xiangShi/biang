@@ -41,7 +41,7 @@
           }
         },
         {
-          "path":"setting",
+          "path":"settings",
           "style":{
             "navigationBarTitleText": "设置",
             "navigationStyle": "custom"
