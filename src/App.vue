@@ -6,7 +6,9 @@ import Api from "./api/api";
 const { locale } = useI18n();
 
 onLaunch(() => {
-  uni.setStorageSync("ProgramList", Api.getProgramList());
+  Api.getProgramList().then((res: any) => {
+    uni.setStorageSync("programList", res.data);
+  });
   let safetop = uni.getStorageSync("menuButtonBoundingClientRect");
   if (
     !safetop ||

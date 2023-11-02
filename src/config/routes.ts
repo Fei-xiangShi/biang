@@ -110,8 +110,8 @@ const RouteConfig = {
         func: "languageSetting",
       },
     ],
-    setting: {
-      url: "sub/setting",
+    settings: {
+      url: "sub/settings",
     },
     login: {
       url: "sub/login",
