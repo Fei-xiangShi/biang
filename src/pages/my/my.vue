@@ -205,6 +205,20 @@ const cancelAvatar = () => {
 };
 
 const onLogin = async () => {
+  if(!userAvatarUrl.value){
+    uni.showToast({
+        title: t("请填入头像"),
+        icon: "none",
+      });
+      return 0;
+    }
+    if(!nickname.value){
+      uni.showToast({
+          title: t("请填入姓名"),
+          icon: "none",
+        });
+      return 0;
+  }
   uni.setStorageSync("userAvatarUrl", userAvatarUrl.value);
   uni.setStorageSync("nickname", nickname.value);
   userAvatarUrl.value = uni.getStorageSync("userAvatarUrl");
