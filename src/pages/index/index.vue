@@ -27,21 +27,36 @@
         bgColor="rgba(0,0,0,0)"
       />
     </view>
-    <view class="toolbox">
-      <view class="toolbox-item" v-for="tool in RouteConfig.indexPage.toolbox">
-        <u-icon :name="tool.icon" size="20" color="#606266" />
-        <view class="toolbox-item-text">{{ $t(tool.text) }}</view>
+    <view class="search-class">
+      <view class="search-title">
+        {{ $t("课程查找标题") }}
       </view>
-    </view>
-    <view class="popular-functions">
-      <view
-        class="popular-functions-item"
-        v-for="popularFunction in RouteConfig.indexPage.popularFunctions"
-      >
-        <u-icon :name="popularFunction.icon" size="20" color="#606266" />
-        <view class="popular-functions-item-text">{{
-          $t(popularFunction.text)
-        }}</view>
+      <view class="search-input-area">
+        <view class="course_code">
+          <u-input
+            placeholder="{{ $t('课程代码输入框提示') }}"
+            border="bottom"
+            clearable
+            v-model="courseCode"
+          />
+        </view>
+        <view class="unit_code">
+          <u-input
+            placeholder="{{ $t('单元号输入框提示') }}"
+            clearable
+            border="bottom"
+            v-model="unitCode"
+          />
+        </view>
+        <view class="search-button" @tap="searchClass">
+          {{ $t("课表查询按钮") }}
+        </view>
+      </view>
+      <view class="search-text">
+        <view class="search-text-title">{{ $t("课程逐层查找提示") }}</view>
+        <view class="search-nav-icon">
+          <u-icon name="arrow-right" :size="8" color="black" />
+        </view>
       </view>
     </view>
     <view class="roll-notice">
@@ -219,6 +234,27 @@ const swiperList = [
   },
 ];
 
+const courseCode = ref("");
+const unitCode = ref("");
+
+const searchClass = () => {
+  if (courseCode.value == "" || courseCode.value == null) {
+    notify.message = t("课程代码为空提示");
+    notify.type = "warning";
+    Notify.value.show(notify);
+    return;
+  }
+  if (unitCode.value == "" || unitCode.value == null) {
+    notify.message = t("单元号为空提示");
+    notify.type = "warning";
+    Notify.value.show(notify);
+    return;
+  }
+  uni.navigateTo({
+    url: RouteConfig.classDetail.url,
+  });
+};
+
 const redirectToClassTable = () => {
   uni.reLaunch({
     url: RouteConfig.classTablePage.url,
@@ -323,6 +359,63 @@ onMounted(() => {
       font-size: 12px;
       color: #606266;
       margin-top: 5px;
+    }
+  }
+}
+
+.search-class{
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin: 0px 20px;
+  border-radius: var(--borderRadius-medium, 0.375rem);
+  .search-title {
+    display: flex;
+    align-items: center;
+    margin: 10px 0px;
+    font-size: 1.5rem;
+    color: cornflowerblue;
+    font-family: "LXGW WenKai";
+  }
+  .search-input-area {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 0px 0px;
+    .course_code {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 40%;
+      border-radius: var(--borderRadius-medium, 0.375rem);
+    }
+    .unit_code {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 40%;
+      border-radius: var(--borderRadius-medium, 0.375rem);
+    }
+    .search-button {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      width: 15%;
+      border-radius: var(--borderRadius-medium, 0.375rem);
+      background: linear-gradient(
+        90deg,
+        rgba(220, 71, 228, 0.442) 40%,
+        rgba(220, 71, 228, 0.316) 95%
+      );
+      box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
+      .search-button-text {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1rem;
+        color: black;
+        font-family: "LXGW WenKai";
+      }
     }
   }
 }

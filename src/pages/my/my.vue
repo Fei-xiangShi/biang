@@ -38,7 +38,7 @@
             <input
               class="username"
               type="nickname"
-              placeholder="请输入昵称"
+              :placeholder="t('请输入昵称')"
               v-model="nickname"
             />
           </view>
@@ -70,11 +70,11 @@
     </view>
     <view class="myFunction">
       <view
-        class="myFunctionItem"
+        class="myFunctionItems"
         v-for="item in itemList"
         @tap="functionMethod(item.func)"
       >
-        <view class="myFunctionItemBorder">
+        <view class="myFunctionItem">
           <i :class="item.icon"></i>
           <view class="myFunctionItemText">
             {{ $t(item.text) }}
@@ -132,8 +132,8 @@ const { t, locale } = useI18n();
 
 const itemList = RouteConfig.my.myItemList;
 
-const functionMethod = (index: any) => {
-  if (index === "languageSetting") {
+const functionMethod = (func: any) => {
+  if (func === "languageSetting") {
     showChooseLangualge.value = true;
   }
 };
@@ -205,33 +205,31 @@ const cancelAvatar = () => {
 };
 
 const onLogin = async () => {
-  if(!userAvatarUrl.value){
+  if (!userAvatarUrl.value) {
     uni.showToast({
-        title: t("请填入头像"),
-        icon: "none",
-      });
-      return 0;
-    }
-    if(!nickname.value){
-      uni.showToast({
-          title: t("请输入昵称"),
-          icon: "none",
-        });
-      return 0;
+      title: t("请填入头像"),
+      icon: "none",
+    });
+    return 0;
+  }
+  if (!nickname.value) {
+    uni.showToast({
+      title: t("请输入昵称"),
+      icon: "none",
+    });
+    return 0;
   }
   uni.setStorageSync("userAvatarUrl", userAvatarUrl.value);
   uni.setStorageSync("nickname", nickname.value);
-  Api.wxLogin(code.value, nickname.value).then(
-    (res: any) => {
-      const responseSuccess = res.data.success;
-      if (responseSuccess === "登录成功") {
-        isLogin.value = true;
-        uni.setStorageSync("aueduSession", res.data.auedu_session);
-        uni.setStorageSync("isLogin", isLogin.value);
-        Api.uploadAvatar(userAvatarUrl.value, res.data.auedu_session)
-      }
+  Api.wxLogin(code.value, nickname.value).then((res: any) => {
+    const responseSuccess = res.data.success;
+    if (responseSuccess === "登录成功") {
+      isLogin.value = true;
+      uni.setStorageSync("aueduSession", res.data.auedu_session);
+      uni.setStorageSync("isLogin", isLogin.value);
+      Api.uploadAvatar(userAvatarUrl.value, res.data.auedu_session);
     }
-  );
+  });
   isAvatarChoosing.value = false;
 };
 
@@ -293,33 +291,28 @@ onMounted(() => {
 }
 
 .myFunction {
-  margin-left: 30px;
-  margin-right: 30px;
+  margin: 0 30px;
   display: flex;
-  flex-direction: row;
   flex-wrap: wrap;
-  justify-content: space-between;
-  .myFunctionItem {
-    z-index: 100;
-    background-color: rgba(255, 255, 255, 0.324); /* 透明度设置以提高效果 */
-    border: 1px solid;
-    border-color: white;
+  .myFunctionItems {
     margin-top: 25px;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    width: 30%;
-    height: 50px;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 6px 0px,
-      rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
-    border-radius: 10px;
-    .myFunctionItemBorder {
+    .myFunctionItem {
+      border-radius: 10px;
       display: flex;
-      flex-direction: column;
+      flex-direction: row;
       align-items: center;
-      justify-content: center;
+      justify-content: space-between;
       padding: 5px;
+      height: 50px;
+      background-color: rgba(255, 255, 255, 0.324); /* 透明度设置以提高效果 */
+      border: 1px solid;
+      border-color: white;
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 6px 0px,
+        rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
       .myFunctionItemText {
         font-size: 0.7rem;
       }

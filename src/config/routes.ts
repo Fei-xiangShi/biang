@@ -1,67 +1,6 @@
 const RouteConfig = {
   indexPage: {
     url: "/pages/index/index",
-    toolbox: [
-      {
-        icon: "home",
-        text: "占位",
-      },
-      {
-        icon: "search",
-        text: "占位",
-      },
-      {
-        icon: "cart",
-        text: "占位",
-      },
-      {
-        icon: "account",
-        text: "占位",
-      },
-    ],
-
-    popularFunctions: [
-      {
-        icon: "home",
-        text: "占位",
-      },
-      {
-        icon: "search",
-        text: "占位",
-      },
-      {
-        icon: "cart",
-        text: "占位",
-      },
-      {
-        icon: "account",
-        text: "占位",
-      },
-      {
-        icon: "home",
-        text: "占位",
-      },
-      {
-        icon: "search",
-        text: "占位",
-      },
-      {
-        icon: "cart",
-        text: "占位",
-      },
-      {
-        icon: "account",
-        text: "占位",
-      },
-      {
-        icon: "account",
-        text: "占位",
-      },
-      {
-        icon: "account",
-        text: "占位",
-      },
-    ],
   },
   classTablePage: {
     url: "/pages/classTable/classTable",
@@ -74,34 +13,13 @@ const RouteConfig = {
     myItemList: [
       {
         icon: "custom-icon custom-icon-biaodan",
-        text: "占位",
-        // text:"功能1",
-        url: "sub/uploadAvator",
-        func: "",
-      },
-      {
-        icon: "custom-icon custom-icon-biaodan",
-        text: "占位",
-        url: "sub/introduction",
-        func: "",
-      },
-      {
-        icon: "custom-icon custom-icon-biaodan",
-        text: "占位",
-        url: "sub/introduction",
-        func: "",
-      },
-      {
-        icon: "custom-icon custom-icon-biaodan",
-        text: "占位",
-        url: "sub/introduction",
-        func: "",
+        text: "课表绑定",
+        url: "sub/changeClassTableUrl",
       },
       {
         icon: "custom-icon custom-icon-tuwen",
-        text: "主题",
-        url: "sub/introduction",
-        func: "",
+        text: "邮箱验证",
+        url: "sub/emailVerify",
       },
       {
         icon: "custom-icon custom-icon-yuyanqiehuan",
@@ -116,6 +34,9 @@ const RouteConfig = {
     login: {
       url: "sub/login",
     },
+  },
+  classDetail: {
+    url: "/pages/classDetail/classDetail",
   },
 };
 

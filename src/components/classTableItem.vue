@@ -150,6 +150,11 @@
             <view class="classroom-title">{{ $t("教室") }}</view>
             <view class="classroom-content">{{ showCourse.location }}</view>
           </view>
+          <view class="nav-to-discuss">
+            <view class="nav-content">
+              {{ $t("点击跳转课程讨论页面") }}
+            </view>
+          </view>
         </view>
       </modal>
     </view>
@@ -622,6 +627,7 @@ const touchEnd = (e: any) => {
       color: black;
       text-align: right;
       max-width: 80%;
+      color: cornflowerblue;
     }
   }
   .course-id {
@@ -656,6 +662,18 @@ const touchEnd = (e: any) => {
       font-size: 1rem;
       font-weight: bold;
       color: black;
+    }
+  }
+  .nav-to-discuss {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    width: 100%;
+    .nav-content{
+      display: flex;
+      font-size: 0.8rem;
+      justify-content: center;
+      color: gray;
     }
   }
 }
