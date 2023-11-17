@@ -27,6 +27,13 @@
         "navigationBarTitleText": "课表",
         "navigationStyle":"custom"
       }
+    },
+    {
+      "path" : "pages/classDetail/classDetail",
+      "style": {
+        "navigationBarTitleText": "课程详情",
+        "navigationStyle":"custom"
+      }
     }
   ],
   "subPackages":[

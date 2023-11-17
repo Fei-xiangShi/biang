@@ -251,7 +251,7 @@ const searchClass = () => {
     return;
   }
   uni.navigateTo({
-    url: RouteConfig.classDetail.url,
+    url: `${RouteConfig.classDetail.url}?courseCode=${courseCode}&unitCode=${unitCode}`,
   });
 };
 
@@ -423,7 +423,7 @@ onMounted(() => {
       font-family: "LXGW WenKai";
     }
   }
-  .search-text{
+  .search-text {
     display: flex;
     flex-direction: row;
     align-items: center;

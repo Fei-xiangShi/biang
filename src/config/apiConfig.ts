@@ -10,6 +10,8 @@ const apiUrl = {
   getProgramList: `${baseUrl}/getProgramList`,
   // 上传头像
   uploadAvatar: `${baseUrl}/uploadAvatar`,
+  // 课程详情
+  getCourseDetail: `${baseUrl}/getCourseDetail`
 };
 
 export default apiUrl;

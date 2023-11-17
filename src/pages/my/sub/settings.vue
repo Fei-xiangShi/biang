@@ -95,8 +95,6 @@ const logout = () => {
     border-radius: var(--borderRadius-medium, 0.375rem);
     box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
     background: rgba(255, 243, 243, 0.23);
-    .funtion {
-    }
   }
   .gap {
     display: flex;

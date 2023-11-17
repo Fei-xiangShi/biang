@@ -186,7 +186,6 @@ const showCourse = ref(new Course());
 const show = (course: any) => {
   showDetail.value = true;
   showCourse.value = course;
-  console.log(showCourse.value);
 };
 
 const hide = () => {

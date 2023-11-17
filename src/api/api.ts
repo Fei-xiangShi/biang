@@ -19,6 +19,12 @@ const Api = {
         aueduSession: aueduSession,
       },
     }),
+  getCourseDetail: (course_code: string, unit_code: string, lang: string) =>
+    http.post(apiUrl.getCourseDetail, {
+      course_code: course_code,
+      unit_code: unit_code,
+      lang: lang,
+    }),
 };
 
 export default Api;
