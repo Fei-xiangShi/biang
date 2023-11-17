@@ -27,14 +27,14 @@
         bgColor="rgba(0,0,0,0)"
       />
     </view>
-    <view class="search-class">
+    <view class="search-class white-blur">
       <view class="search-title">
         {{ $t("课程查找标题") }}
       </view>
       <view class="search-input-area">
         <view class="course_code">
           <u-input
-            placeholder="{{ $t('课程代码输入框提示') }}"
+            :placeholder="t('课程代码输入框提示')"
             border="bottom"
             clearable
             v-model="courseCode"
@@ -42,20 +42,20 @@
         </view>
         <view class="unit_code">
           <u-input
-            placeholder="{{ $t('单元号输入框提示') }}"
+            :placeholder="t('单元号输入框提示')"
             clearable
             border="bottom"
             v-model="unitCode"
           />
         </view>
-        <view class="search-button" @tap="searchClass">
-          {{ $t("课表查询按钮") }}
-        </view>
+      </view>
+      <view class="search-button" @tap="searchClass">
+        {{ $t("课表查询按钮") }}
       </view>
       <view class="search-text">
         <view class="search-text-title">{{ $t("课程逐层查找提示") }}</view>
         <view class="search-nav-icon">
-          <u-icon name="arrow-right" :size="8" color="black" />
+          <u-icon name="arrow-right" :size="14" color="black" />
         </view>
       </view>
     </view>
@@ -341,7 +341,7 @@ onMounted(() => {
   }
 }
 
-.popular-functions {
+.white-blur {
   display: flex;
   flex-wrap: wrap;
   padding: 10px;
@@ -349,13 +349,13 @@ onMounted(() => {
   background: rgba(255, 255, 255, 0.5);
   border-radius: var(--borderRadius-medium, 0.375rem);
   box-shadow: rgba(0, 0, 0, 0.1) 2.4px 2.4px 3.2px;
-  .popular-functions-item {
+  .white-blur-item {
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
     width: 20%;
-    .popular-functions-item-text {
+    .white-blur-item-text {
       font-size: 12px;
       color: #606266;
       margin-top: 5px;
@@ -363,11 +363,12 @@ onMounted(() => {
   }
 }
 
-.search-class{
+.search-class {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 0px 20px;
+  align-items: center;
+  margin: 10px 20px 0;
   border-radius: var(--borderRadius-medium, 0.375rem);
   .search-title {
     display: flex;
@@ -396,27 +397,37 @@ onMounted(() => {
       width: 40%;
       border-radius: var(--borderRadius-medium, 0.375rem);
     }
-    .search-button {
+  }
+  .search-button {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
+    margin: 10px 0;
+    height: 2rem;
+    width: 65%;
+    border-radius: var(--borderRadius-medium, 0.375rem);
+    background: linear-gradient(
+      90deg,
+      rgba(220, 71, 228, 0.442) 40%,
+      rgba(220, 71, 228, 0.316) 95%
+    );
+    box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
+    .search-button-text {
       display: flex;
-      flex-direction: column;
+      align-items: center;
       justify-content: center;
-      width: 15%;
-      border-radius: var(--borderRadius-medium, 0.375rem);
-      background: linear-gradient(
-        90deg,
-        rgba(220, 71, 228, 0.442) 40%,
-        rgba(220, 71, 228, 0.316) 95%
-      );
-      box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
-      .search-button-text {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1rem;
-        color: black;
-        font-family: "LXGW WenKai";
-      }
+      font-size: 1rem;
+      color: black;
+      font-family: "LXGW WenKai";
     }
+  }
+  .search-text{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
   }
 }
 

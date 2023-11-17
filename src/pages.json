@@ -34,9 +34,9 @@
       "root":"pages/my/sub",
       "pages":[
         {
-          "path":"introduction",
+          "path":"changeClassTableUrl",
           "style":{
-            "navigationBarTitleText": "介绍",
+            "navigationBarTitleText": "绑定课表",
             "navigationStyle": "custom"
           }
         },
@@ -48,9 +48,10 @@
           }
         },
         {
-          "path":"login",
+          "path":"verifyEmail",
           "style":{
-            "navigationBarTitleText": "登录"
+            "navigationBarTitleText": "邮箱验证",
+            "navigationStyle": "custom"
           }
         }
       ]

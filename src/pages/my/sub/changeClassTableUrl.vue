@@ -1,7 +1,7 @@
 <template>
     <view class="container">
       <view class="await">
-        <navbar :show-change-school-button="true" />
+        <navbar :show-change-school-button="true" returnButtonIconColor='white'/>
         <image src="../../static/images/4k.jpg" class="background" />
         <view class="beautiful-sence">
           <view class="acrylic">
@@ -52,6 +52,7 @@
   import Api from "@/api/api";
   import { ref } from "vue";
   import { useI18n } from "vue-i18n";
+  import navbar from "@/components/navbar.vue";
   
   const { t } = useI18n();
   
@@ -106,7 +107,7 @@
     .beautiful-sence {
       position: relative;
       width: 100%;
-      height: 100%;
+      height: 80%;
       display: flex;
       justify-content: center;
       align-items: center;

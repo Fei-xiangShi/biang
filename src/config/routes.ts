@@ -19,13 +19,12 @@ const RouteConfig = {
       {
         icon: "custom-icon custom-icon-tuwen",
         text: "邮箱验证",
-        url: "sub/emailVerify",
+        url: "sub/verifyEmail",
       },
       {
         icon: "custom-icon custom-icon-yuyanqiehuan",
         text: "更改语言",
-        url: "",
-        func: "languageSetting",
+        url: "languageSetting",
       },
     ],
     settings: {

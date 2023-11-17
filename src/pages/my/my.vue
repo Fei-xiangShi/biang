@@ -71,8 +71,8 @@
     <view class="myFunction">
       <view
         class="myFunctionItems"
-        v-for="item in itemList"
-        @tap="functionMethod(item.func)"
+        v-for="item in RouteConfig.my.myItemList"
+        @tap="navTo(item.url)"
       >
         <view class="myFunctionItem">
           <i :class="item.icon"></i>
@@ -130,11 +130,14 @@ const Notify = ref();
 
 const { t, locale } = useI18n();
 
-const itemList = RouteConfig.my.myItemList;
-
-const functionMethod = (func: any) => {
-  if (func === "languageSetting") {
+const navTo = (url: any) => {
+  if (url === "languageSetting") {
     showChooseLangualge.value = true;
+  }
+  else{
+    uni.navigateTo({
+      url: url
+    })
   }
 };
 
@@ -292,29 +295,29 @@ onMounted(() => {
 
 .myFunction {
   margin: 0 30px;
+  margin-top: 25px;
   display: flex;
-  flex-wrap: wrap;
+  flex-direction: column;
   .myFunctionItems {
-    margin-top: 25px;
     display: flex;
-    flex-direction: column;
     align-items: center;
     justify-content: center;
-    .myFunctionItem {
+    background-color: rgba(255, 255, 255, 0.324); /* 透明度设置以提高效果 */
+    border: 1px solid;
+    border-color: white;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 6px 0px,
+      rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
       border-radius: 10px;
+      margin: 10px 0;
+    .myFunctionItem {
       display: flex;
-      flex-direction: row;
       align-items: center;
+      width: 80%;
       justify-content: space-between;
       padding: 5px;
       height: 50px;
-      background-color: rgba(255, 255, 255, 0.324); /* 透明度设置以提高效果 */
-      border: 1px solid;
-      border-color: white;
-      box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 6px 0px,
-        rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
       .myFunctionItemText {
-        font-size: 0.7rem;
+        font-size: 1.2rem;
       }
     }
   }
