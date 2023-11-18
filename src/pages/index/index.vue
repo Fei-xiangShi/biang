@@ -50,7 +50,6 @@
                 loadUnits();
                 hideKeyboard();
               "
-              ref="item1"
             >
               <u-input
                 v-model="unitCode"
@@ -58,8 +57,8 @@
                 disabledColor="rgb(0,0,0,0)"
                 :placeholder="t('单元号选择框提示')"
                 border="none"
-              ></u-input>
-              <u-icon slot="right" name="arrow-right"></u-icon>
+              />
+              <u-icon slot="right" name="arrow-right"/>
             </u-form-item>
           </u-form>
           <u-picker

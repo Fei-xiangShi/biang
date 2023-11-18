@@ -41,6 +41,42 @@ const Api = {
       course_code: course_code,
     }),
   notices: () => http.get(apiUrl.notices),
+  addNotice: (
+    zh_Hans: string,
+    zh_Hant: string,
+    en: string,
+    auedu_session: string,
+    date: string
+  ) =>
+    http.post(apiUrl.notices, {
+      zh_Hans: zh_Hans,
+      zh_Hant: zh_Hant,
+      en: en,
+      auedu_session: auedu_session,
+      fxsd6: "1235d6",
+      date: date,
+    }),
+  deleteNotice: (id: number, auedu_session: string) =>
+    http.del(apiUrl.notices + id + "/", {
+      auedu_session: auedu_session,
+      fxsd6: "1235d6",
+    }),
+  modifyNotice: (
+    zh_Hans: string,
+    zh_Hant: string,
+    en: string,
+    auedu_session: string,
+    date: string,
+    id: number
+  ) =>
+    http.put(apiUrl.notices + id + "/", {
+      zh_Hans: zh_Hans,
+      zh_Hant: zh_Hant,
+      en: en,
+      auedu_session: auedu_session,
+      fxsd6: "1235d6",
+      date: date,
+    }),
 };
 
 export default Api;

@@ -42,7 +42,10 @@ const RouteConfig = {
   },
   admin: {
     notices: {
-      url: "/pages/admin/notices",
+      url: "/pages/admin/notices/notices",
+      add: {
+        url: "/pages/admin/notices/add",
+      },
     },
   },
 };
