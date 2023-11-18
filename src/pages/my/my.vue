@@ -71,8 +71,9 @@
     <view class="myFunction">
       <view
         class="myFunctionItems"
-        v-for="item in RouteConfig.my.myItemList"
+        v-for="(item, index) in RouteConfig.my.myItemList"
         @tap="navTo(item.url)"
+        :key="index"
       >
         <view class="myFunctionItem">
           <i :class="item.icon" />
@@ -399,7 +400,6 @@ onMounted(() => {
       font-size: 1.2rem;
     }
     .notices-funtion-arrow {
-      margin-top: 5px;
       margin-left: 10px;
     }
   }

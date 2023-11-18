@@ -6,7 +6,7 @@
       <view class="functions">
         <view class="first-area area">
           <u-cell-group>
-            <view v-for="item in itemList" class="funtion">
+            <view v-for="(item, index) in itemList" class="funtion" :key="index">
               <u-cell :title="item.text" :isLink="true" :url="item.url" />
             </view>
           </u-cell-group>
@@ -20,7 +20,7 @@
         </view>
         <view class="second-area area">
           <u-cell-group>
-            <view v-for="item in itemList">
+            <view v-for="(item, index) in itemList" :key="index">
               <u-cell :title="item.text" :isLink="true" :url="item.url" />
             </view>
           </u-cell-group>

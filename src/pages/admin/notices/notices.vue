@@ -82,8 +82,8 @@
                 ? `启用时间: ${new Date(text).toLocaleString()}`
                 : `${key}: ${text}`
             "
-            v-for="(text, key, index_lang) in contents"
-            :key="index_lang"
+            v-for="(text, key, langIndex) in contents"
+            :key="langIndex"
           />
         </view>
       </u-list-item>

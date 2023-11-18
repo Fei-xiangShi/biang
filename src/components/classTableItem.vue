@@ -94,7 +94,7 @@
         <view class="courses">
           <view
             class="course"
-            v-for="course in courses"
+            v-for="(course, index) in courses"
             :style="{
               left: ((course.weekday - 1) * 100) / 7 + '%',
               top: ((course.startTime - 8) * 100) / 14 + '%',
@@ -102,6 +102,7 @@
               height: (course.duration * 100) / 14 + '%',
             }"
             @tap="show(course)"
+            :key="index"
           >
             <view
               class="course-item"
