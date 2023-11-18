@@ -20,6 +20,8 @@ const apiUrl = {
   getUnits: `${baseUrl}/getUnits`,
   // 获得滚动公告
   notices: `${baseUrl}/notices/`,
+  // 获得用户信息
+  user: `${baseUrl}/user`,
 };
 
 export default apiUrl;

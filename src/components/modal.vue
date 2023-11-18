@@ -117,7 +117,7 @@ const onClickOverlay = () => {
   }
   .modal-content {
     font-size: 16px;
-    margin-bottom: 20px;
+    margin: 20px 0;
   }
   .modal-buttons {
     display: flex;

@@ -125,9 +125,8 @@ import { useI18n } from "vue-i18n";
 import { ref, onMounted } from "vue";
 import modal from "@/components/modal.vue";
 import Api from "@/api/api";
-import { AdminIds } from "@/config/admin";
 
-const isAdmin = AdminIds.includes(uni.getStorageSync("aueduSession"));
+const isAdmin = ref(false);
 const session = uni.getStorageSync("aueduSession");
 const isLogin = ref(
   !(
@@ -262,6 +261,13 @@ onMounted(() => {
   });
   nickname.value = uni.getStorageSync("nickname");
   userAvatarUrl.value = uni.getStorageSync("userAvatarUrl");
+  Api.getUser(session).then((res: any) => {
+    if (res.statusCode === 200) {
+      if (res.data.is_admin === true) {
+        isAdmin.value = true;
+      }
+    }
+  });
 });
 </script>
 
@@ -297,7 +303,6 @@ onMounted(() => {
       font-size: 1.5rem;
     }
     .username-arrow {
-      margin-top: 5px;
       margin-left: 10px;
     }
   }
