@@ -20,9 +20,9 @@
       <view class="confirm-button">
         <view class="button-text" @tap="confirm">{{ $t("确认") }}</view>
       </view>
-      <view class="bottom">
-        <text class="bottom-text">{{ $t("邮箱验证底部提示") }}</text>
-      </view>
+        <view class="bottom">
+          <text class="bottom-text">{{ $t("邮箱验证底部提示") }}</text>
+        </view>
     </view>
   </view>
 </template>

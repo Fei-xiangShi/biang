@@ -1,7 +1,7 @@
 <template>
   <view class="container">
     <navbar />
-    <view class="verifyCode" :style="{display: success? 'none':''}">
+    <view class="verifyCode" :style="{ display: success ? 'none' : '' }">
       <view class="notice">
         <text class="notice-text">{{ $t("请输入验证码提示") }}</text>
       </view>
@@ -119,12 +119,19 @@
         <text class="bottom-text">{{ $t("验证码底部提示") }}</text>
       </view>
     </view>
-    <view class="successPage" :style="{display: success? '':'none'}">
+    <view class="successPage" :style="{ display: success ? '' : 'none' }">
       <view class="successPage-title">
         <text class="successPage-title-text">{{ $t("验证成功") }}</text>
       </view>
       <view class="successPage-notice">
-        <text class="successPage-notice-text">{{ $t("验证成功提示") }}</text>
+        <view class="icon" :class="{ 'choose-icon-animation': animeShow }">
+          <u-icon
+            :name="animeShow ? 'checkmark-circle' : ''"
+            size="30"
+            color="#606266"
+          />
+        </view>
+        <text :class="['successPage-notice-text', 'textFadeInRight']">{{ $t("验证成功提示") }}</text>
       </view>
       <view class="successPage-button">
         <view class="successPage-button-text" @tap="goToMy">{{
@@ -157,6 +164,7 @@ const warning = ref(false);
 const disabled = ref(false);
 const timeleft = ref(60);
 const success = ref(false);
+const animeShow = ref(false);
 
 const timeChange = () => {
   timeleft.value -= 1;
@@ -185,6 +193,9 @@ const confirm = () => {
     if (res.statusCode === 200) {
       success.value = true;
       uni.setStorageSync("emailVerified", true);
+      setTimeout(() => {
+        animeShow.value = true;
+      }, 100);
     } else {
       warning.value = true;
     }
@@ -447,4 +458,33 @@ const sixChange = () => {
     color: white;
   }
 }
+
+.choose-icon-animation {
+  animation: scaleAnimation 0.8s cubic-bezier(0.2, -0.2, 0.27, 1.55) forwards;
+}
+
+@keyframes scaleAnimation {
+  from {
+    transform: rotate(0deg) scale(0.5);
+  }
+  to {
+    transform: rotate(360deg) scale(1);
+  }
+}
+
+@keyframes fadeInRight {
+  from {
+    opacity: 0;
+    transform: translateX(-50px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.textFadeInRight {
+  animation: fadeInRight 1s ease forwards;
+}
+
 </style>
