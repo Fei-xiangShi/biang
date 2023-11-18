@@ -57,7 +57,7 @@
         </view>
       </view>
     </view>
-    <view class="head" @tap="navToSettings" v-else>
+    <view class="head" @tap="navTo(RouteConfig.my.settings.url)" v-else>
       <view class="avatar">
         <up-avatar :src="userAvatarUrl" />
       </view>
@@ -145,12 +145,6 @@ const onChooseAvatar = (e: any) => {
   userAvatarUrl.value = e.detail.avatarUrl;
 };
 
-const navToSettings = () => {
-  uni.navigateTo({
-    url: RouteConfig.my.settings.url,
-  });
-};
-
 const navToLogin = () => {
   isAvatarChoosing.value = true;
 };
@@ -229,7 +223,6 @@ const onLogin = async () => {
     if (responseSuccess === "登录成功") {
       isLogin.value = true;
       uni.setStorageSync("aueduSession", res.data.auedu_session);
-      uni.setStorageSync("isLogin", isLogin.value);
       Api.uploadAvatar(userAvatarUrl.value, res.data.auedu_session);
     }
   });

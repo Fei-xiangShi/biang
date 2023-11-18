@@ -57,7 +57,14 @@
         {
           "path":"verifyEmail",
           "style":{
-            "navigationBarTitleText": "邮箱验证",
+            "navigationBarTitleText": "邮箱绑定",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path":"verifyCode",
+          "style":{
+            "navigationBarTitleText": "验证码输入",
             "navigationStyle": "custom"
           }
         }

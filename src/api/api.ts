@@ -25,6 +25,17 @@ const Api = {
       unit_code: unit_code,
       lang: lang,
     }),
+  sendEmail: (to_address: string, auedu_session: string, lang: string) =>
+    http.post(apiUrl.sendEmail, {
+      to_address: to_address,
+      auedu_session: auedu_session,
+      lang: lang,
+    }),
+  verifyEmail: (auedu_session: string, email_verification_code: string) =>
+    http.post(apiUrl.verifyEmail, {
+      auedu_session: auedu_session,
+      email_verification_code: email_verification_code,
+    }),
 };
 
 export default Api;

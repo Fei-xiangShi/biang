@@ -33,6 +33,9 @@ const RouteConfig = {
     login: {
       url: "sub/login",
     },
+    verifyCode: {
+      url: "verifyCode",
+    },
   },
   classDetail: {
     url: "/pages/classDetail/classDetail",

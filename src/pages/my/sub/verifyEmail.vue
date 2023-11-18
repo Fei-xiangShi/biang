@@ -1,120 +1,160 @@
 <template>
-    <view class="container">
-      <view class="background">
-        <navbar />
-        <view class="head" enable-background=""> </view>
-        <view class="functions">
-          <view class="first-area area">
-            <u-cell-group>
-              <view v-for="item in itemList" class="funtion">
-                <u-cell :title="item.text" :isLink="true" :url="item.url" />
-              </view>
-            </u-cell-group>
-          </view>
-          <view class="first-gap">
-            <view class="gap">
-              <view class="gap-line-top" />
-              <view class="gap-text">个人工具</view>
-              <view class="gap-line-bottom" />
-            </view>
-          </view>
-          <view class="second-area area">
-            <u-cell-group>
-              <view v-for="item in itemList">
-                <u-cell :title="item.text" :isLink="true" :url="item.url" />
-              </view>
-            </u-cell-group>
-          </view>
-        </view>
-        <view class="logoutButton">
-          <u-button type="primary" text="logout" color="red" @tap="logout" />
-        </view>
+  <view class="container">
+    <navbar />
+    <view class="verifyEmail">
+      <view class="notice">
+        <text class="notice-text">{{ $t("请输入邮箱提示") }}</text>
+      </view>
+      <view class="title">
+        <text class="title-text">{{ $t("验证您的身份") }}</text>
+      </view>
+      <view class="email-input">
+        <u-input v-model="email" clearable />
+      </view>
+      <view class="warning" v-if="warning">
+        <text class="warning-text">{{ $t("邮箱格式错误提示") }}</text>
+      </view>
+      <view class="tab-notice">
+        <text class="tab-notice-text">{{ $t("邮箱验证详细信息") }}</text>
+      </view>
+      <view class="confirm-button">
+        <view class="button-text" @tap="confirm">{{ $t("确认") }}</view>
+      </view>
+      <view class="bottom">
+        <text class="bottom-text">{{ $t("邮箱验证底部提示") }}</text>
       </view>
     </view>
-  </template>
-  
-  <script setup lang="ts">
-  import navbar from "@/components/navbar.vue";
-  import RouteConfig from "@/config/routes";
-  const itemList = RouteConfig.my.myItemList;
-  
-  const logout = () => {
-    uni.showModal({
-      title: "提示",
-      content: "确定要退出登录吗？",
-      success: (res) => {
-        if (res.confirm) {
-          uni.removeStorageSync("classTableUrl");
-          uni.removeStorageSync("aueduSession");
-          uni.removeStorageSync("classTableContent");
-          uni.removeStorageSync("nickname");
-          uni.removeStorageSync("userAvatarUrl");
-          uni.removeStorageSync("isLogin");
-          uni.reLaunch({
-            url: "/pages/index/index",
-          });
-        }
-      },
-    });
-  };
-  </script>
-  
-  <style scoped lang="scss">
-  .container {
-    display: flex;
-    flex-direction: column;
-    .background {
-      height: auto;
-      width: 100%;
-      min-height: 100vh;
-      background: linear-gradient(
-        135deg,
-        #a6eeee7a 10%,
-        #91d8c84d 40%,
-        #fcfcd491 60%
-      );
-    }
+  </view>
+</template>
+
+<script setup lang="ts">
+import { ref } from "vue";
+import Api from "@/api/api";
+import navbar from "@/components/navbar.vue";
+import RouteConfig from "@/config/routes";
+
+const email = ref("");
+const warning = ref(false);
+
+const validateEmail = (email: string): boolean => {
+  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
+  return emailRegex.test(email);
+};
+
+const confirm = () => {
+  if (!validateEmail(email.value)) {
+    warning.value = true;
+    return;
   }
-  
-  .head {
-    margin-top: 5px;
+  Api.sendEmail(
+    email.value,
+    uni.getStorageSync("aueduSession"),
+    uni.getStorageSync("lang")
+  ).then((res: any) => {
+    if (res.statusCode === 200) {
+      uni.setStorageSync("email", email.value);
+      uni.navigateTo({
+        url: RouteConfig.my.verifyCode.url,
+      });
+    } else {
+      uni.showToast({
+        title: res.data.error,
+        icon: "none",
+      });
+    }
+  });
+};
+</script>
+
+<style scoped lang="scss">
+.container {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  overflow: hidden;
+  flex-direction: column;
+  background: rgb(243, 147, 147);
+}
+
+.verifyEmail {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 70%;
+  height: 40%;
+  padding: 5%;
+  background: white;
+  .title {
+    width: 100%;
+    height: 10%;
     display: flex;
-    flex-direction: row;
     align-items: center;
-    padding: 20px;
+    margin-bottom: 1.5rem;
+    .title-text {
+      font-size: 20px;
+      font-weight: bold;
+    }
   }
-  
-  .functions {
-    margin: 0 20px;
+  .notice {
+    width: 100%;
+    height: 10%;
     display: flex;
-    flex-direction: column;
-    .area {
-      display: flex;
-      flex-direction: column;
-      border: 1px solid #b6b6b690;
-      border-radius: var(--borderRadius-medium, 0.375rem);
-      box-shadow: rgba(17, 12, 46, 0.15) 0px 48px 100px 0px;
-      background: rgba(255, 243, 243, 0.23);
-      .funtion {
-      }
-    }
-    .gap {
-      display: flex;
-      flex-direction: column;
-      margin: 10px;
-      .gap-line-bottom {
-        height: 1px;
-        background-color: #00000016;
-        margin-top: 10px;
-      }
-      .gap-text {
-        margin: 0 10px;
-      }
+    align-items: center;
+    margin-bottom: 1rem;
+    .notice-text {
+      font-size: 15px;
+      color: #666;
     }
   }
-  .logoutButton {
-    margin-top: 10px;
-    padding: 30px;
+  .email-input {
+    width: 100%;
+    height: 10%;
+    display: flex;
+    align-items: center;
   }
-  </style>
-  
+  .warning {
+    width: 100%;
+    height: 10%;
+    display: flex;
+    align-items: center;
+    .warning-text {
+      font-size: 15px;
+      color: rgb(255, 16, 68);
+    }
+  }
+  .tab-notice {
+    width: 100%;
+    height: 10%;
+    display: flex;
+    align-items: center;
+    margin-bottom: 2rem;
+    margin-top: 1rem;
+    .tab-notice-text {
+      font-size: 15px;
+      color: rgb(16, 163, 255);
+    }
+  }
+  .confirm-button {
+    width: 80px;
+    height: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    float: right;
+    background: rgb(177, 177, 177);
+  }
+  .bottom {
+    width: 100%;
+    height: 10%;
+    display: flex;
+    align-items: center;
+    margin-top: 1rem;
+    .bottom-text {
+      font-size: 15px;
+      color: #666;
+    }
+  }
+}
+</style>

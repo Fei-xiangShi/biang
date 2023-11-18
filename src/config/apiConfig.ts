@@ -11,7 +11,11 @@ const apiUrl = {
   // 上传头像
   uploadAvatar: `${baseUrl}/uploadAvatar`,
   // 课程详情
-  getCourseDetail: `${baseUrl}/getCourseDetail`
+  getCourseDetail: `${baseUrl}/getCourseDetail`,
+  // 发送邮箱验证码
+  sendEmail: `${baseUrl}/sendEmail`,
+  // 验证邮箱验证码
+  verifyEmail: `${baseUrl}/verifyEmail`,
 };
 
 export default apiUrl;

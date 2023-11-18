@@ -1,7 +1,7 @@
 <template>
     <navbar/>
     <view>
-
+        123
     </view>
 </template>
 
