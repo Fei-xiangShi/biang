@@ -77,13 +77,21 @@
           "path":"notices",
           "style":{
             "navigationBarTitleText": "通知管理",
-            "navigationStyle": "custom"
+            "navigationStyle": "custom",
+            "enablePullDownRefresh": true
           }
         },
         {
           "path":"add",
           "style":{
             "navigationBarTitleText": "添加通知",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path":"modify",
+          "style":{
+            "navigationBarTitleText": "修改通知",
             "navigationStyle": "custom"
           }
         }

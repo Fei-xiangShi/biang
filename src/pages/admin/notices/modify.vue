@@ -2,7 +2,7 @@
   <navbar />
   <view class="add">
     <view class="title">
-      <view class="title-text">添加公告</view>
+      <view class="title-text">修改公告</view>
     </view>
     <view class="form">
       <u-form>
@@ -34,7 +34,7 @@
     </view>
     <view class="buttons">
       <view class="button">
-        <u-button type="primary" @tap="addNotice">添加</u-button>
+        <u-button type="primary" @tap="modifyNotice">修改</u-button>
       </view>
     </view>
   </view>
@@ -43,7 +43,14 @@
 <script setup lang="ts">
 import navbar from "@/components/navbar.vue";
 import Api from "@/api/api";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
+
+const props = defineProps({
+  id: {
+    type: Number,
+    default: 0,
+  },
+});
 
 const hans = ref("");
 const en = ref("");
@@ -66,18 +73,19 @@ const openDatePicker = () => {
   showDatePicker.value = true;
 };
 
-const addNotice = () => {
-  Api.addNotice(
+const modifyNotice = () => {
+  Api.modifyNotice(
     hans.value,
     hant.value,
     en.value,
     session,
-    new Date(date.value).toISOString().slice(0, 16)
+    new Date(date.value).toISOString().slice(0, 16),
+    props.id
   )
     .then((res: any) => {
-      if (res.statusCode === 201) {
+      if (res.statusCode === 200) {
         uni.showToast({
-          title: "添加成功",
+          title: "修改成功",
           icon: "success",
           duration: 2000,
         });
@@ -88,6 +96,21 @@ const addNotice = () => {
       console.log(err);
     });
 };
+
+onMounted(() => {
+  Api.notice(props.id)
+    .then((res: any) => {
+      if (res.statusCode === 200) {
+        hans.value = res.data["zh-Hans"];
+        hant.value = res.data["zh-Hant"];
+        en.value = res.data.en;
+        date.value = Number(new Date(res.data.date));
+      }
+    })
+    .catch((err: any) => {
+      console.log(err);
+    });
+});
 </script>
 
 <style scoped lang="scss">

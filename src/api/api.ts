@@ -40,7 +40,7 @@ const Api = {
     http.post(apiUrl.getUnits, {
       course_code: course_code,
     }),
-  notices: () => http.get(apiUrl.notices),
+  notices: () => http.get(apiUrl.notices+'?mode=current'),
   addNotice: (
     zh_Hans: string,
     zh_Hant: string,
@@ -77,6 +77,9 @@ const Api = {
       fxsd6: "1235d6",
       date: date,
     }),
+  notice: (id: number) => http.get(apiUrl.notices + id + "/"),
+  allNotices: () => http.get(apiUrl.notices + "?mode=all"),
+  getUser: (auedu_session: string) => http.post(apiUrl.user, { auedu_session }),
 };
 
 export default Api;

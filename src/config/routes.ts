@@ -46,6 +46,9 @@ const RouteConfig = {
       add: {
         url: "/pages/admin/notices/add",
       },
+      modify:{
+        url: "/pages/admin/notices/modify",
+      }
     },
   },
 };
