@@ -114,7 +114,6 @@
       </view>
     </view>
   </view>
-  <view class="dev test">{{ session }}</view>
 </template>
 
 <script setup lang="ts">
