@@ -4,9 +4,9 @@
     <view class="title">
       <view class="title-text">公告列表</view>
       <view class="funtions">
-        <view class="delete" v-if="selecting" @tap="reconfrimDelete">
-          <view class="delete-text">删除</view>
-          <view class="delete-icon">
+        <view class="delete" v-if="selecting">
+          <view class="delete-text" @tap="reconfrimDelete">删除</view>
+          <view class="delete-icon" @tap="reconfrimDelete">
             <u-icon name="trash" :size="20" color="red" />
           </view>
           <modal
@@ -22,6 +22,7 @@
             :closeOnClickOverlay="true"
             @confirm="confirmDelete"
             @cancel="cancelDelete"
+            @close="cancelDelete"
           >
           </modal>
         </view>
