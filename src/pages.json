@@ -69,6 +69,18 @@
           }
         }
       ]
+    },
+    {
+      "root":"pages/admin",
+      "pages":[
+        {
+          "path":"notices",
+          "style":{
+            "navigationBarTitleText": "通知管理",
+            "navigationStyle": "custom"
+          }
+        }
+      ]
     }
   ],
   "globalStyle": {

@@ -36,6 +36,11 @@ const Api = {
       auedu_session: auedu_session,
       email_verification_code: email_verification_code,
     }),
+  getUnits: (course_code: string) =>
+    http.post(apiUrl.getUnits, {
+      course_code: course_code,
+    }),
+  notices: () => http.get(apiUrl.notices),
 };
 
 export default Api;

@@ -41,12 +41,38 @@
           />
         </view>
         <view class="unit_code">
-          <u-input
-            :placeholder="t('单元号输入框提示')"
-            clearable
-            border="bottom"
-            v-model="unitCode"
-          />
+          <u-form>
+            <u-form-item
+              :label="t('单元')"
+              prop="userInfo.sex"
+              borderBottom
+              @click="
+                loadUnits();
+                hideKeyboard();
+              "
+              ref="item1"
+            >
+              <u-input
+                v-model="unitCode"
+                disabled
+                disabledColor="rgb(0,0,0,0)"
+                :placeholder="t('单元号选择框提示')"
+                border="none"
+              ></u-input>
+              <u-icon slot="right" name="arrow-right"></u-icon>
+            </u-form-item>
+          </u-form>
+          <u-picker
+            :show="showUnitsPicker"
+            :columns="unitCodes"
+            closeOnClickOverlay
+            @cancel="cancelPick"
+            @confirm="confirmPick"
+            @close="closePick"
+            @change="changePick"
+            :loading="pickerLoading"
+            :title="pickerTitle"
+          ></u-picker>
         </view>
       </view>
       <view class="search-button" @tap="searchClass">
@@ -61,9 +87,8 @@
     </view>
     <view class="roll-notice">
       <u-notice-bar
-        :text="notice.text"
+        :text="notices.text"
         mode="link"
-        :url="notice.url"
         direction="row"
         :step="true"
       />
@@ -144,6 +169,7 @@ import RouteConfig from "@/config/routes";
 import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import changeLanguageModal from "@/components/changeLanguageModal.vue";
+import Api from "@/api/api";
 
 const { t, locale } = useI18n();
 
@@ -209,15 +235,7 @@ const swipeCard = [
   },
 ];
 
-const notice = {
-  text: [
-    "浔阳江头夜送客",
-    "枫叶荻花秋瑟瑟",
-    "主人下马客在船",
-    "举酒欲饮无管弦",
-  ],
-  url: "/pages/index/index",
-};
+const notices = ref({ text: [] as string[] });
 
 const swiperList = [
   {
@@ -235,7 +253,48 @@ const swiperList = [
 ];
 
 const courseCode = ref("");
+const unitCodes = ref();
 const unitCode = ref("");
+const showUnitsPicker = ref(false);
+const pickerLoading = ref(false);
+const pickerTitle = ref("");
+
+const cancelPick = () => {
+  showUnitsPicker.value = false;
+};
+
+const confirmPick = (e: any) => {
+  unitCode.value = e.value;
+  showUnitsPicker.value = false;
+};
+
+const closePick = () => {
+  showUnitsPicker.value = false;
+};
+
+const changePick = (e: any) => {
+  unitCode.value = e.value;
+};
+
+const loadUnits = () => {
+  if (courseCode.value == "" || courseCode.value == null) {
+    notify.message = t("课程代码为空提示");
+    notify.type = "warning";
+    Notify.value.show(notify);
+    return;
+  }
+  showUnitsPicker.value = true;
+  pickerLoading.value = true;
+  Api.getUnits(courseCode.value).then((res: any) => {
+    if (res.statusCode == 200) {
+      pickerTitle.value = t("单元号选择框提示");
+      unitCodes.value = [res.data.units];
+    } else {
+      pickerTitle.value = t("无单元号提示");
+    }
+    pickerLoading.value = false;
+  });
+};
 
 const searchClass = () => {
   if (courseCode.value == "" || courseCode.value == null) {
@@ -251,7 +310,7 @@ const searchClass = () => {
     return;
   }
   uni.navigateTo({
-    url: `${RouteConfig.classDetail.url}?courseCode=${courseCode}&unitCode=${unitCode}`,
+    url: `${RouteConfig.classDetail.url}?courseCode=${courseCode.value}&unitCode=${unitCode.value}`,
   });
 };
 
@@ -305,7 +364,24 @@ onMounted(() => {
   if (!lang || lang.length == 0 || lang == null || lang == undefined) {
     showChooseLangualge.value = true;
   }
+  Api.notices().then((res: any) => {
+    if (res.statusCode === 200) {
+      let noticeList = { text: [] as string[] };
+      for (let i = 0; i < res.data.length; i++) {
+        const language = uni.getStorageSync("lang");
+        const noticeItem = res.data[i][language];
+        if (typeof noticeItem === "string" && noticeItem !== "") {
+          noticeList.text.push(noticeItem);
+        }
+      }
+      notices.value = noticeList;
+    }
+  });
 });
+
+const hideKeyboard = () => {
+  uni.hideKeyboard();
+};
 </script>
 
 <style scoped lang="scss">

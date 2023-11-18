@@ -16,6 +16,10 @@ const apiUrl = {
   sendEmail: `${baseUrl}/sendEmail`,
   // 验证邮箱验证码
   verifyEmail: `${baseUrl}/verifyEmail`,
+  // 根据课程号获得单元号
+  getUnits: `${baseUrl}/getUnits`,
+  // 获得滚动公告
+  notices: `${baseUrl}/notices/`,
 };
 
 export default apiUrl;

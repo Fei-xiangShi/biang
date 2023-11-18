@@ -40,6 +40,11 @@ const RouteConfig = {
   classDetail: {
     url: "/pages/classDetail/classDetail",
   },
+  admin: {
+    notices: {
+      url: "/pages/admin/notices",
+    },
+  },
 };
 
 export default RouteConfig;
