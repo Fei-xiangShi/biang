@@ -64,7 +64,7 @@
       <view class="username">
         <view class="username-text">{{ nickname }}</view>
         <view class="username-arrow">
-          <u-icon name="arrow-right" :size="20"></u-icon>
+          <u-icon name="arrow-right" :size="20" />
         </view>
       </view>
     </view>
@@ -75,10 +75,25 @@
         @tap="navTo(item.url)"
       >
         <view class="myFunctionItem">
-          <i :class="item.icon"></i>
+          <i :class="item.icon" />
           <view class="myFunctionItemText">
             {{ $t(item.text) }}
           </view>
+        </view>
+      </view>
+    </view>
+    <view class="admin-funtions" v-if="isAdmin">
+      <u-loadmore
+        loadmoreText="管理面板"
+        color="#1CD29B"
+        lineColor="#1CD29B"
+        dashed
+        :line="true"
+      />
+      <view class="notices-funtion" @tap="navTo(RouteConfig.admin.notices.url)">
+        <view class="notices-funtion-text"> 公告管理 </view>
+        <view class="notices-funtion-arrow">
+          <u-icon name="arrow-right" :size="20" />
         </view>
       </view>
     </view>
@@ -99,6 +114,7 @@
       </view>
     </view>
   </view>
+  <view class="dev test">{{ session }}</view>
 </template>
 
 <script setup lang="ts">
@@ -109,7 +125,9 @@ import { useI18n } from "vue-i18n";
 import { ref, onMounted } from "vue";
 import modal from "@/components/modal.vue";
 import Api from "@/api/api";
+import { AdminIds } from "@/config/admin";
 
+const isAdmin = AdminIds.includes(uni.getStorageSync("aueduSession"));
 const session = uni.getStorageSync("aueduSession");
 const isLogin = ref(
   !(
@@ -133,11 +151,10 @@ const { t, locale } = useI18n();
 const navTo = (url: any) => {
   if (url === "languageSetting") {
     showChooseLangualge.value = true;
-  }
-  else{
+  } else {
     uni.navigateTo({
-      url: url
-    })
+      url: url,
+    });
   }
 };
 
@@ -300,8 +317,8 @@ onMounted(() => {
     border-color: white;
     box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 6px 0px,
       rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
-      border-radius: 10px;
-      margin: 10px 0;
+    border-radius: 10px;
+    margin: 10px 0;
     .myFunctionItem {
       display: flex;
       align-items: center;
@@ -353,6 +370,34 @@ onMounted(() => {
   }
   .avatarFill {
     height: 3vh;
+  }
+}
+
+.admin-funtions {
+  margin: 0 30px;
+  margin-top: 25px;
+  display: flex;
+  flex-direction: column;
+  .notices-funtion {
+    height: 3rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: rgba(255, 255, 255, 0.324);
+    border: 1px solid;
+    border-color: white;
+    box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 6px 0px,
+      rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+    border-radius: 10px;
+    margin: 10px 0;
+    padding: 0 10px;
+    .notices-funtion-text {
+      font-size: 1.2rem;
+    }
+    .notices-funtion-arrow {
+      margin-top: 5px;
+      margin-left: 10px;
+    }
   }
 }
 </style>

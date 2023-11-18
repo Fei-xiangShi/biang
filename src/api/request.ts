@@ -1,4 +1,8 @@
-const request = (url: string, method: "GET" | "POST", data: object) => {
+const request = (
+  url: string,
+  method: "GET" | "POST" | "DELETE" | "PUT",
+  data: object
+) => {
   return new Promise((resolve, reject) => {
     uni.request({
       url: url,
@@ -22,9 +26,19 @@ const post = (url: string, data: object) => {
   return request(url, "POST", data);
 };
 
-const http = {
-    get,
-    post
+const put = (url: string, data: object) => {
+  return request(url, "PUT", data);
 }
 
-export default http
+const del = (url: string, data: object) => {
+  return request(url, "DELETE", data);
+}
+
+const http = {
+  get,
+  post,
+  put,
+  del,
+};
+
+export default http;

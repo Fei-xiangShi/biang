@@ -69,6 +69,25 @@
           }
         }
       ]
+    },
+    {
+      "root":"pages/admin/notices",
+      "pages":[
+        {
+          "path":"notices",
+          "style":{
+            "navigationBarTitleText": "通知管理",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path":"add",
+          "style":{
+            "navigationBarTitleText": "添加通知",
+            "navigationStyle": "custom"
+          }
+        }
+      ]
     }
   ],
   "globalStyle": {
