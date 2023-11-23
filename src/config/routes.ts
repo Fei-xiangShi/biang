@@ -5,9 +5,6 @@ const RouteConfig = {
   classTablePage: {
     url: "/pages/classTable/classTable",
   },
-  schoolList: {
-    url: "/pages/schools/index",
-  },
   my: {
     url: "/pages/my/my",
     myItemList: [
@@ -31,8 +28,15 @@ const RouteConfig = {
       url: "sub/settings",
     },
     login: {
-      url: "sub/login",
+      url: "login/login",
+      welcome: {
+        url: "welcome",
+      },
+      register: {
+        url: "register",
+      },
     },
+
     verifyCode: {
       url: "verifyCode",
     },
@@ -46,9 +50,12 @@ const RouteConfig = {
       add: {
         url: "/pages/admin/notices/add",
       },
-      modify:{
+      modify: {
         url: "/pages/admin/notices/modify",
-      }
+      },
+    },
+    test: {
+      url: "/pages/admin/test/test",
     },
   },
 };

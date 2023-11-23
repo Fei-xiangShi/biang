@@ -46,7 +46,7 @@
         </view>
       </modal>
     </view>
-    <view class="head" @tap="navToLogin" v-if="!isLogin">
+    <view class="head" @tap="navTo(RouteConfig.my.login.url)" v-if="!isLogin">
       <view class="avatar">
         <u-avatar icon="star-fill" />
       </view>
@@ -93,6 +93,12 @@
       />
       <view class="notices-funtion" @tap="navTo(RouteConfig.admin.notices.url)">
         <view class="notices-funtion-text"> 公告管理 </view>
+        <view class="notices-funtion-arrow">
+          <u-icon name="arrow-right" :size="20" />
+        </view>
+      </view>
+      <view class="notices-funtion" @tap="navTo(RouteConfig.admin.test.url)">
+        <view class="notices-funtion-text"> 测试 </view>
         <view class="notices-funtion-arrow">
           <u-icon name="arrow-right" :size="20" />
         </view>

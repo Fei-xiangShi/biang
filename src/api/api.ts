@@ -19,11 +19,17 @@ const Api = {
         aueduSession: aueduSession,
       },
     }),
-  getCourseDetail: (course_code: string, unit_code: string, lang: string) =>
+  getCourseDetail: (
+    course_code: string,
+    unit_code: string,
+    lang: string,
+    university_id: number
+  ) =>
     http.post(apiUrl.getCourseDetail, {
       course_code: course_code,
       unit_code: unit_code,
       lang: lang,
+      university_id: university_id,
     }),
   sendEmail: (to_address: string, auedu_session: string, lang: string) =>
     http.post(apiUrl.sendEmail, {
@@ -36,11 +42,12 @@ const Api = {
       auedu_session: auedu_session,
       email_verification_code: email_verification_code,
     }),
-  getUnits: (course_code: string) =>
+  getUnits: (course_code: string, university_id: number) =>
     http.post(apiUrl.getUnits, {
       course_code: course_code,
+      university_id: university_id,
     }),
-  notices: () => http.get(apiUrl.notices+'?mode=current'),
+  notices: () => http.get(apiUrl.notices + "?mode=current"),
   addNotice: (
     zh_Hans: string,
     zh_Hant: string,
@@ -80,6 +87,20 @@ const Api = {
   notice: (id: number) => http.get(apiUrl.notices + id + "/"),
   allNotices: () => http.get(apiUrl.notices + "?mode=all"),
   getUser: (auedu_session: string) => http.post(apiUrl.user, { auedu_session }),
+  getComments: (university_id: number, course_code: string, page: number) =>
+    http.get(`${apiUrl.comments}/${university_id}/${course_code}/?page=${page}`),
+  postComment: (
+    auedu_session: string,
+    course_code: string,
+    content: object
+  ) => http.post(apiUrl.comments, {
+    auedu_session: auedu_session,
+    course: course_code,
+    content: content
+  }),
+  deleteComment: (id: number, auedu_session: string) =>
+    http.del(`${apiUrl.comments}/${id}/`, { auedu_session: auedu_session }),
+
 };
 
 export default Api;

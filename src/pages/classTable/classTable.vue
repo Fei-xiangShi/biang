@@ -73,7 +73,9 @@ const getNewClassTable = () => {
         uni.setStorageSync("classTableContent", classTableContent.value);
         uni.setStorageSync("classTableUrl", classTableUrl.value);
         haveClassTable.value = true;
-      } else {
+      } else if (res.statusCode === 403){
+        throw new Error(t('未登录提示'));
+      }else {
         throw new Error(t('课表获取失败'));
       }
       isLoading.value = false;

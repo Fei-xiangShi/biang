@@ -6,31 +6,34 @@
     <view class="navBar">
       <slot></slot>
       <view class="return-button" @tap="goBack" v-if="!isRootPage()">
-        <u-icon
-          name="arrow-left"
-          :size="20"
-          :color="returnButtonIconColor"
-        />
+        <u-icon name="arrow-left" :size="20" :color="returnButtonIconColor" />
       </view>
       <view v-else-if="showChangeSchoolButton">
         <view class="brand" @tap="changeSchool">
-          <view class="brand-content">{{ schoolname }}</view>
+          <view class="brand-content">{{ $t(schoolname) }}</view>
           <view class="change-school">
-            <u-icon name="arrow-right" :size="10" color="black"/>
+            <u-icon name="arrow-right" :size="10" color="black" />
           </view>
         </view>
       </view>
     </view>
+    <u-picker
+      :show="showChangeSchool"
+      :columns="schools"
+      closeOnClickOverlay
+      @cancel="cancelChangeSchool"
+      @confirm="confirmChangeSchool"
+      @close="closeChangeSchool"
+    />
   </view>
 </template>
 
 <script setup lang="ts">
-import RouteConfig from '@/config/routes';
-import { useI18n } from "vue-i18n";
-
-const { t } = useI18n();
-uni.setStorageSync('school', t('悉尼大学'))
-const schoolname = t(uni.getStorageSync('school'))
+import { ref } from "vue";
+import universities from "@/config/universities";
+const schoolname = ref(uni.getStorageSync("school"));
+const showChangeSchool = ref(false);
+const schools = [Object.keys(universities)];
 
 defineProps({
   returnButtonIconColor: {
@@ -57,14 +60,29 @@ const goBack = () => {
 };
 
 const changeSchool = () => {
-  uni.navigateTo({
-    url: RouteConfig.schoolList.url
-  });
+  showChangeSchool.value = true;
+};
+
+const cancelChangeSchool = () => {
+  showChangeSchool.value = false;
+};
+
+const confirmChangeSchool = (e: any) => {
+  uni.setStorageSync("school", e.value[0]);
+  showChangeSchool.value = false;
+  schoolname.value = e.value[0];
+  uni.setStorageSync(
+    "schoolId",
+    universities[e.value[0] as keyof typeof universities]
+  );
+};
+
+const closeChangeSchool = () => {
+  showChangeSchool.value = false;
 };
 </script>
 
-<style lang="scss">
-
+<style lang="scss" scoped>
 .statusBar {
   width: 100%;
   height: 0;
@@ -89,7 +107,7 @@ const changeSchool = () => {
 
 .brand {
   margin-left: 1rem;
-  width: 6rem;
+  width: 6rem auto;
   flex: 1;
   display: flex;
   align-items: center;

@@ -3,29 +3,29 @@
   <view class="class-detail">
     <u-read-more :toggle="true">
       <view class="class-name">
-        <view class="class-name-title"></view>
-        <view class="class-name-content"></view>
+        <view class="class-name-title">1{{ details["Academic unit"] }}</view>
+        <view class="class-name-content">2{{ details["AdditionalInformation"] }}</view>
       </view>
       <view class="class-details">
-        <view class="contactDetails-coordinator"></view>
-        <view class="course-code"></view>
-        <view class="unit-name"></view>
-        <view class="session"></view>
-        <view class="academic-unit"></view>
-        <view class="overview"></view>
-        <view class="assessment-summary-notes"></view>
-        <view class="assessment-details"></view>
+        <view class="contactDetails-coordinator">3{{ details["ContactDetails"]["Coordinator"] }}</view>
+        <view class="course-code">4{{ courseCode }}</view>
+        <view class="unit-name">5{{ unitCode }}</view>
+        <view class="session">6{{ details["Session"] }}</view>
+        <view class="academic-unit">7{{ details["Academic unit"] }}</view>
+        <view class="overview">8{{ details["Overview"] }}</view>
+        <view class="assessment-summary-notes">9{{ details["AssessmentSummary"]["Notes"] }}</view>
+        <view class="assessment-details">0{{ details["AssessmentDetails"] }}</view>
       </view>
     </u-read-more>
   </view>
   <view class="class-discussion">
-    <ReplyItem
+    <!-- <ReplyItem
       v-for="(reply, index) in replyList.list"
       :key="reply.id"
       :reply="reply"
       :articleId="Number(articleId)"
       :index="index"
-    />
+    /> -->
   </view>
   <view class="comment">
     <form>
@@ -48,9 +48,11 @@ import { onMounted, reactive, ref } from "vue";
 import ReplyList from "@/models/replyList";
 import ReplyItem from "@/components/replyItem.vue";
 import Reply from "@/models/reply";
+import { onReachBottom } from "@dcloudio/uni-app";
 
 const replyList = reactive(new ReplyList());
 const reply = ref(new Reply());
+const details = ref();
 
 const props = defineProps({
   courseCode: {
@@ -64,7 +66,11 @@ const props = defineProps({
 });
 
 const getReplyList = () => {
-  let res = Api.getReplyList(articleId, replyList.page);
+  let res = Api.getComments(
+    uni.getStorageSync("schoolId"),
+    props.courseCode,
+    replyList.page
+  );
   concatenatingReplyList(res);
 };
 
@@ -85,7 +91,11 @@ const concatenatingReplyList = (response: any) => {
 };
 
 const commitReply = () => {
-  Api.reply(articleId, reply.value).then((res: any) => {
+  Api.postComment(
+    uni.getStorageSync("aueduSession"),
+    props.courseCode,
+    reply.value
+  ).then((res: any) => {
     if (res.statusCode === 200) {
       uni.showToast({
         title: "评论成功",
@@ -108,14 +118,20 @@ onMounted(() => {
   Api.getCourseDetail(
     props.courseCode,
     props.unitCode,
-    uni.getStorageSync("lang")
+    uni.getStorageSync("lang"),
+    uni.getStorageSync("schoolId")
   )
-    .then((res) => {
-      console.log(res);
+    .then((res: any) => {
+      details.value = res.data;
     })
     .catch((err) => {
       console.log(err);
     });
+    getReplyList()
+});
+
+onReachBottom(() => {
+  // getReplyList();
 });
 </script>
 

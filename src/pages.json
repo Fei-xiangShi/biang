@@ -27,13 +27,6 @@
         "navigationBarTitleText": "课表",
         "navigationStyle":"custom"
       }
-    },
-    {
-      "path" : "pages/classDetail/classDetail",
-      "style": {
-        "navigationBarTitleText": "课程详情",
-        "navigationStyle":"custom"
-      }
     }
   ],
   "subPackages":[
@@ -71,6 +64,44 @@
       ]
     },
     {
+      "root":"pages/my/login",
+      "pages":[
+        {
+          "path":"login",
+          "style":{
+            "navigationBarTitleText": "登录",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path":"welcome",
+          "style":{
+            "navigationBarTitleText": "欢迎",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path":"register",
+          "style":{
+            "navigationBarTitleText": "注册",
+            "navigationStyle": "custom"
+          }
+        }
+      ]
+    },
+    {
+      "root":"pages/classDetail",
+      "pages":[
+        {
+          "path" : "classDetail",
+          "style": {
+            "navigationBarTitleText": "课程详情",
+            "navigationStyle":"custom"
+          }
+        }
+      ]
+    },
+    {
       "root":"pages/admin/notices",
       "pages":[
         {
@@ -93,6 +124,17 @@
           "style":{
             "navigationBarTitleText": "修改通知",
             "navigationStyle": "custom"
+          }
+        }
+      ]
+    },
+    {
+      "root":"pages/admin/test",
+      "pages":[
+        {
+          "path":"test",
+          "style":{
+            "navigationBarTitleText": "测试"
           }
         }
       ]

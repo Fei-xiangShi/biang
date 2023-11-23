@@ -13,8 +13,8 @@
         <view class="name">{{ reply.author.name }}</view>
       </view>
       <view class="content">
-        <view class="alt" v-if="reply.rootReplyId !== reply.parentReplyId"
-          >@ {{ reply.parentReplyId }}
+        <view class="alt" v-if="reply.rootReplyId !== reply.parentReplyId">
+          @ {{ reply.parentReplyId }}
         </view>
         <uaMarkdown :source="reply.content" />
       </view>

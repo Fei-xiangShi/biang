@@ -22,6 +22,8 @@ const apiUrl = {
   notices: `${baseUrl}/notices/`,
   // 获得用户信息
   user: `${baseUrl}/user`,
+  // 评论相关
+  comments: `${baseUrl}/comments`,
 };
 
 export default apiUrl;

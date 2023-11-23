@@ -44,7 +44,6 @@
           <u-form>
             <u-form-item
               :label="t('单元')"
-              prop="userInfo.sex"
               borderBottom
               @click="
                 loadUnits();
@@ -71,7 +70,7 @@
             @change="changePick"
             :loading="pickerLoading"
             :title="pickerTitle"
-          ></u-picker>
+          />
         </view>
       </view>
       <view class="search-button" @tap="searchClass">
@@ -284,7 +283,7 @@ const loadUnits = () => {
   }
   showUnitsPicker.value = true;
   pickerLoading.value = true;
-  Api.getUnits(courseCode.value).then((res: any) => {
+  Api.getUnits(courseCode.value, uni.getStorageSync("schoolId")).then((res: any) => {
     if (res.statusCode == 200) {
       pickerTitle.value = t("单元号选择框提示");
       unitCodes.value = [res.data.units];
