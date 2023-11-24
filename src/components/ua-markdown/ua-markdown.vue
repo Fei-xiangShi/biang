@@ -1,12 +1,12 @@
 <!-- uniapp vue3 markdown解析 -->
 <template>
-  <view class="ua__markdown"
-    ><rich-text
+  <view class="ua__markdown">
+    <rich-text
       space="nbsp"
       :nodes="parseNodes(source)"
       @itemclick="handleItemClick"
-    ></rich-text
-  ></view>
+    />
+  </view>
 </template>
 
 <script setup>

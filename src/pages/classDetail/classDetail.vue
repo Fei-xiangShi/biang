@@ -64,16 +64,19 @@
       :reply="reply"
       :index="index"
       replyType="root"
+      @onReply="inputReply"
     />
   </view>
   <view class="comment">
     <form>
       <u-textarea
-        placeholder="请输入评论内容"
+        :placeholder="placeholder"
         v-model="replyContent"
         count
         autoHeight
         maxlength="1000"
+        :focus="inputingReply"
+        @blur="cancelReply"
       />
       <view class="submit" @tap="commitReply">提交</view>
     </form>
@@ -94,6 +97,8 @@ const reply = ref(new Reply());
 const details = ref();
 const noMore = ref(false);
 const replyContent = ref("");
+const inputingReply = ref(false);
+const placeholder = ref("请输入评论内容");
 
 const props = defineProps({
   courseCode: {
@@ -118,6 +123,18 @@ const getReplyList = () => {
   concatenatingReplyList(res);
 };
 
+const inputReply = (parentReplyId: number, parentReplyName: string) => {
+  inputingReply.value = true;
+  reply.value.parentReplyId = parentReplyId;
+  placeholder.value = "回复 " + parentReplyName + ": ";
+};
+
+const cancelReply = () => {
+  inputingReply.value = false;
+  reply.value.parentReplyId = 0;
+  placeholder.value = "请输入评论内容";
+}
+
 const concatenatingReplyList = (response: any) => {
   response.then((res: any) => {
     uni.stopPullDownRefresh();
@@ -131,7 +148,6 @@ const concatenatingReplyList = (response: any) => {
       replyList.value.count = res.data.count;
       replyList.value.previous = res.data.previous;
       replyList.value.next = res.data.next;
-      console.log(replyList.value.results);
       return;
     }
     noMore.value = true;

@@ -13,20 +13,27 @@
         <view class="name">{{ reply.user.username }}</view>
       </view>
       <view class="content">
-        <view class="alt" v-if="replyType !== 'root'">
-          @ {{ parentName }}
+        <view class="reply-content">
+          <view class="raw-text">
+            <span class="alt" v-if="replyType !== 'root'">
+              @ {{ reply.parentReplyName }}:
+            </span>
+            {{ reply?.content[language] }}
+          </view>
+          <!-- <uaMarkdown :source="reply?.content[language]" /> -->
         </view>
-        <uaMarkdown :source="reply?.content[language]" />
       </view>
       <view class="tab">
         <view class="floor">{{ index + 1 }}楼</view>
-        <view class="open-reply-box" @tap="onReply">回复</view>
+        <view
+          class="open-reply-box"
+          @tap="emit('onReply', reply.id, reply.user.username)"
+        >
+          回复
+        </view>
       </view>
     </view>
-    <view
-      class="block"
-      v-if="reply.replies && reply.replies.length != 0 && replyType === 'root'"
-    />
+    <view class="block" v-if="sons.length > 0" />
     <view
       class="sencondary-reply"
       v-for="(sonReply, index) in sons"
@@ -34,22 +41,18 @@
     >
       <Comment
         :reply="sonReply"
-        :parentReply="reply"
         :index="index"
         replyType="son"
-        :parentName="sonReply.parentReplyName"
+        @onReply="emit('onReply', reply.id, reply.user.username)"
       />
     </view>
   </view>
 </template>
 
 <script setup lang="ts">
-import Api from "@/api/api";
-import { reactive, ref } from "vue";
-import Reply from "@/models/reply";
-import uaMarkdown from "@/components/ua-markdown/ua-markdown.vue";
+import { ref, onMounted } from "vue";
+// import uaMarkdown from "@/components/ua-markdown/ua-markdown.vue";
 import Comment from "@/components/comment.vue";
-import { onMounted } from "vue";
 
 const props = defineProps({
   reply: {
@@ -64,48 +67,12 @@ const props = defineProps({
     type: Number,
     required: true,
   },
-  parentName: {
-    type: String,
-    required: false,
-  },
 });
 
-// const replyContent = ref("");
+const emit = defineEmits(["onReply"]);
+
 const language = uni.getStorageSync("lang");
 const sons = ref<any>([]);
-
-// let newSecondaryReply = reactive(new Reply());
-
-// const replyToReply = () => {
-//   if (replyContent.value === "") {
-//     uni.showToast({
-//       title: "回复内容不能为空",
-//       icon: "none",
-//     });
-//     return;
-//   }
-//   newSecondaryReply.content[
-//     uni.getStorageSync("lang") as keyof typeof newSecondaryReply.content
-//   ] = replyContent.value;
-//   newSecondaryReply.parentReplyId = props.reply.id;
-//   newSecondaryReply.course = props.reply.course;
-
-//   Api.postComment(uni.getStorageSync("aueduSession"), newSecondaryReply).then(
-//     (res: any) => {
-//       if (res.statusCode === 200) {
-//         uni.showToast({
-//           title: "回复成功",
-//           icon: "none",
-//         });
-//       } else {
-//         uni.showToast({
-//           title: "回复失败: " + res.errMsg,
-//           icon: "none",
-//         });
-//       }
-//     }
-//   );
-// };
 
 const extractSons = (reply: any) => {
   if (reply.replies && reply.replies.length != 0) {
@@ -129,11 +96,11 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .reply-item {
+  width: -webkit-fill-available;
   display: flex;
   flex-direction: column;
   align-items: center;
   padding: 10px;
-  box-sizing: border-box;
   margin: 10px;
   border: 1px solid #ccc;
   border-radius: 10px;
@@ -160,12 +127,23 @@ onMounted(() => {
       }
     }
     .content {
+      display: flex;
+      flex-direction: row;
       width: 100%;
       margin-top: 10px;
       margin-bottom: 10px;
-      .alt {
-        font-size: 12px;
-        color: #999;
+      flex-wrap: nowrap;
+      align-items: center;
+      .reply-content {
+        font-size: 14px;
+        color: #303133;
+        .alt {
+          display: inline-block;
+          width: fit-content;
+          font-size: 12px;
+          color: rgb(100, 172, 230);
+          margin-right: 0.5rem;
+        }
       }
     }
     .tab {
@@ -185,49 +163,7 @@ onMounted(() => {
   }
 }
 
-.SecondaryReply {
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  .son {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    .reply-avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      overflow: hidden;
-      margin-right: 10px;
-    }
-    .name {
-      font-size: 14px;
-      font-weight: bold;
-    }
-  }
-  .commit-reply-to-reply {
-    width: 100%;
-    display: flex;
-    flex-direction: row;
-    justify-content: flex-end;
-    .reply-avatar {
-      width: 50px;
-      height: 50px;
-      border-radius: 50%;
-      overflow: hidden;
-      margin-right: 10px;
-    }
-    .name {
-      font-size: 14px;
-      font-weight: bold;
-    }
-  }
-}
-
 .son-reply {
-  width: 100%;
   border-radius: 0;
   border: none;
   border-bottom: 1px solid #ccc;
@@ -237,9 +173,14 @@ onMounted(() => {
 }
 
 .block {
+  width: 100%;
   height: 1px;
   background-color: #ccc;
   margin-top: 10px;
   margin-bottom: 10px;
+}
+
+.sencondary-reply {
+  width: -webkit-fill-available;
 }
 </style>
