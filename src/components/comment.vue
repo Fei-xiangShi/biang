@@ -3,8 +3,8 @@
     <view class="root">
       <view class="author">
         <view class="reply-avatar">
-          <u-image
-            :src="reply.user.avatarUrl"
+          <u-avatar
+            :src="reply.user.avatar_url"
             width="50px"
             height="50px"
             mode="aspectFill"
@@ -39,6 +39,7 @@
       v-for="(sonReply, index) in sons"
       :key="sonReply.id"
     >
+      <view class="block" v-if="index > 0" />
       <Comment
         :reply="sonReply"
         :index="index"
@@ -115,8 +116,6 @@ onMounted(() => {
       flex-direction: row;
       align-items: center;
       .reply-avatar {
-        width: 50px;
-        height: 50px;
         border-radius: 50%;
         overflow: hidden;
         margin-right: 10px;
@@ -166,7 +165,6 @@ onMounted(() => {
 .son-reply {
   border-radius: 0;
   border: none;
-  border-bottom: 1px solid #ccc;
   display: inline-block;
   padding: 0;
   padding-bottom: 10px;

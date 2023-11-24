@@ -88,16 +88,16 @@ const Api = {
   allNotices: () => http.get(apiUrl.notices + "?mode=all"),
   getUser: (auedu_session: string) => http.post(apiUrl.user, { auedu_session }),
   getComments: (university_id: number, course_code: string, page: number) =>
-    http.get(`${apiUrl.comments}/${university_id}/${course_code}/?page=${page}`),
+    http.get(`${apiUrl.comments}${university_id}/${course_code}/?page=${page}`),
   postComment: (
     auedu_session: string,
-    content: object
+    comment: object
   ) => http.post(apiUrl.comments, {
     auedu_session: auedu_session,
-    content: content
+    comment: comment
   }),
   deleteComment: (id: number, auedu_session: string) =>
-    http.del(`${apiUrl.comments}/${id}/`, { auedu_session: auedu_session }),
+    http.del(`${apiUrl.comments}${id}/`, { auedu_session: auedu_session }),
 
 };
 

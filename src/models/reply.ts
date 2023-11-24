@@ -17,7 +17,6 @@ export default class Reply {
   likes: number = 0;
   createAt: string = "";
   updateAt: string = "";
-  rootReplyId: number | null = null;
-  parentReplyId: number | null = null;
+  parent: number | null = null;
   replies: Reply[] = [];
 }

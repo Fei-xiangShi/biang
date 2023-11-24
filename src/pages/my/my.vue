@@ -37,9 +37,9 @@
           <view class="inputName">
             <input
               class="username"
-              type="nickname"
+              type="username"
               :placeholder="t('请输入昵称')"
-              v-model="nickname"
+              v-model="username"
             />
           </view>
           <view class="avatarFill"></view>
@@ -62,7 +62,7 @@
         <up-avatar :src="userAvatarUrl" />
       </view>
       <view class="username">
-        <view class="username-text">{{ nickname }}</view>
+        <view class="username-text">{{ username }}</view>
         <view class="username-arrow">
           <u-icon name="arrow-right" :size="20" />
         </view>
@@ -146,7 +146,7 @@ const isAvatarChoosing = ref(false);
 const userAvatarUrl = ref(
   "https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0"
 );
-const nickname = ref("");
+const username = ref("");
 const code = ref("");
 const showChooseLangualge = ref(false);
 const Notify = ref();
@@ -231,7 +231,7 @@ const onLogin = async () => {
     });
     return 0;
   }
-  if (!nickname.value) {
+  if (!username.value) {
     uni.showToast({
       title: t("请输入昵称"),
       icon: "none",
@@ -239,8 +239,8 @@ const onLogin = async () => {
     return 0;
   }
   uni.setStorageSync("userAvatarUrl", userAvatarUrl.value);
-  uni.setStorageSync("nickname", nickname.value);
-  Api.wxLogin(code.value, nickname.value).then((res: any) => {
+  uni.setStorageSync("username", username.value);
+  Api.wxLogin(code.value, username.value).then((res: any) => {
     const responseSuccess = res.data.success;
     if (responseSuccess === "登录成功") {
       isLogin.value = true;
@@ -265,13 +265,15 @@ onMounted(() => {
       });
     },
   });
-  nickname.value = uni.getStorageSync("nickname");
+  username.value = uni.getStorageSync("username");
   userAvatarUrl.value = uni.getStorageSync("userAvatarUrl");
   Api.getUser(session).then((res: any) => {
     if (res.statusCode === 200) {
-      if (res.data.is_admin === true) {
+      if (res.data.is_staff === true) {
         isAdmin.value = true;
       }
+      username.value = res.data.username;
+      userAvatarUrl.value = res.data.avatar_url;
     }
   });
 });

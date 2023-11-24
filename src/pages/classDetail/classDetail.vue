@@ -56,7 +56,7 @@
       </view>
     </view>
   </view>
-  
+
   <view class="class-discussion">
     <Comment
       v-for="(reply, index) in replyList.results"
@@ -125,15 +125,15 @@ const getReplyList = () => {
 
 const inputReply = (parentReplyId: number, parentReplyName: string) => {
   inputingReply.value = true;
-  reply.value.parentReplyId = parentReplyId;
+  reply.value.parent = parentReplyId;
   placeholder.value = "回复 " + parentReplyName + ": ";
 };
 
 const cancelReply = () => {
   inputingReply.value = false;
-  reply.value.parentReplyId = 0;
+  reply.value.parent = null;
   placeholder.value = "请输入评论内容";
-}
+};
 
 const concatenatingReplyList = (response: any) => {
   response.then((res: any) => {
@@ -148,6 +148,11 @@ const concatenatingReplyList = (response: any) => {
       replyList.value.count = res.data.count;
       replyList.value.previous = res.data.previous;
       replyList.value.next = res.data.next;
+      if (replyList.value.results.length < replyList.value.count) {
+        noMore.value = false;
+      } else {
+        noMore.value = true;
+      }
       return;
     }
     noMore.value = true;
@@ -159,19 +164,28 @@ const concatenatingReplyList = (response: any) => {
 };
 
 const commitReply = () => {
+  if (replyContent.value.length < 10) {
+    uni.showToast({
+      title: "评论内容不得小于10个字符",
+      icon: "none",
+    });
+    return;
+  }
   reply.value.content[
     uni.getStorageSync("lang") as keyof typeof reply.value.content
   ] = replyContent.value;
   reply.value.course = props.courseCode;
+  reply.value.lang = uni.getStorageSync("lang");
   Api.postComment(uni.getStorageSync("aueduSession"), reply.value).then(
     (res: any) => {
-      if (res.statusCode === 200) {
+      if (res.statusCode === 201) {
         uni.showToast({
           title: "评论成功",
           icon: "none",
         });
         replyList.value.results = [];
         replyList.value.page = 1;
+        noMore.value = false;
         getReplyList();
         replyContent.value = "";
       } else {
