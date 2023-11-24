@@ -88,7 +88,7 @@ const Api = {
   allNotices: () => http.get(apiUrl.notices + "?mode=all"),
   getUser: (auedu_session: string) => http.post(apiUrl.user, { auedu_session }),
   getComments: (university_id: number, course_code: string, page: number) =>
-    http.get(`${apiUrl.comments}${university_id}/${course_code}/?page=${page}`),
+    http.get(`${apiUrl.comments}university/${university_id}/${course_code}/?page=${page}`),
   postComment: (
     auedu_session: string,
     comment: object

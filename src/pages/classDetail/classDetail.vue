@@ -6,54 +6,64 @@
       <view class="class-name-content">{{ details["Attendance mode"] }}</view>
     </view>
     <view class="read-more-details">
-      <view class="class-details">
-        <view class="contactDetails-coordinator">
-          <view class="contactDetails-coordinator-title">
-            {{ $t("contactDetails-coordinator") }}
+      <textfolder :load="loadFolder">
+        <view class="class-details">
+          <view class="contactDetails-coordinator">
+            <view class="contactDetails-coordinator-content">
+              <span class="contactDetails-coordinator-title">
+                {{ $t("contactDetails-coordinator") }}:
+              </span>
+              {{ details["ContactDetails"]["Coordinator"] }}
+            </view>
           </view>
-          <view class="contactDetails-coordinator-content">
-            {{ details["ContactDetails"]["Coordinator"] }}
+          <view class="course-code">
+            <view class="course-code-content">
+              <span class="course-code-title">{{ $t("courseCode") }}:</span>
+              {{ details["CourseCode"] }}
+            </view>
+          </view>
+          <view class="unit-name">
+            <view class="unit-name-content">
+              <span class="unit-name-title">{{ $t("unitName") }}:</span>
+              {{ details["Unit name"] }}
+            </view>
+          </view>
+          <view class="session">
+            <view class="session-content">
+              <span class="session-title">{{ $t("session") }}:</span>
+              {{ details["Session"] }}
+            </view>
+          </view>
+          <view class="academic-unit">
+            <view class="academic-unit-content">
+              <span class="academic-unit-title">{{ $t("academicUnit") }}:</span>
+              {{ details["Academic unit"] }}
+            </view>
+          </view>
+          <view class="overview">
+            <view class="overview-content">
+              <span class="overview-title">{{ $t("overview") }}:</span>
+              {{ details["Overview"] }}
+            </view>
+          </view>
+          <view class="assessment-summary-notes">
+            <view class="assessment-summary-notes-content">
+              <span class="assessment-summary-notes-title">
+                {{ $t("AssessmentSummaryNotes") }}:
+              </span>
+              {{ details["AssessmentSummaryNotes"] }}
+            </view>
+          </view>
+          <view class="assessment-details">
+            <view class="assessment-details-content">
+              <span class="assessment-details-title">
+                {{ $t("AssessmentDetails") }}:
+              </span>
+              {{ details["AssessmentDetails"] }}
+            </view>
           </view>
         </view>
-        <view class="course-code">
-          <view class="course-code-title">{{ $t("courseCode") }}:</view>
-          <view class="course-code-content">{{ details["Course code"] }}</view>
-        </view>
-        <view class="unit-name">
-          <view class="unit-name-title">{{ $t("unitName") }}:</view>
-          <view class="unit-name-content">{{ details["Unit name"] }}</view>
-        </view>
-        <view class="session">
-          <view class="session-title">{{ $t("session") }}:</view>
-          <view class="session-content">{{ details["Session"] }}</view>
-        </view>
-        <view class="academic-unit">
-          <view class="academic-unit-title">{{ $t("academicUnit") }}:</view>
-          <view class="academic-unit-content">
-            {{ details["Academic unit"] }}
-          </view>
-        </view>
-        <view class="overview">
-          <view class="overview-title">{{ $t("overview") }}:</view>
-          <view class="overview-content">{{ details["Overview"] }}</view>
-        </view>
-        <view class="assessment-summary-notes">
-          <view class="assessment-summary-notes-title">
-            {{ $t("AssessmentSummaryNotes") }}:
-          </view>
-          <view class="assessment-summary-notes-content">
-            {{ details["AssessmentSummaryNotes"] }}
-          </view>
-        </view>
-        <view class="assessment-details">
-          <view class="assessment-details-title">
-            {{ $t("AssessmentDetails") }}:
-          </view>
-          <view class="assessment-details-content">
-            {{ details["AssessmentDetails"] }}
-          </view>
-        </view>
-      </view>
+      </textfolder>
     </view>
   </view>
 
@@ -91,6 +101,7 @@ import { onMounted, ref } from "vue";
 import ReplyList from "@/models/replyList";
 import Reply from "@/models/reply";
 import { onReachBottom } from "@dcloudio/uni-app";
+import textfolder from "@/components/textfolder.vue";
 
 const replyList = ref(new ReplyList());
 const reply = ref(new Reply());
@@ -99,6 +110,7 @@ const noMore = ref(false);
 const replyContent = ref("");
 const inputingReply = ref(false);
 const placeholder = ref("请输入评论内容");
+const loadFolder = ref(false);
 
 const props = defineProps({
   courseCode: {
@@ -208,6 +220,7 @@ onMounted(() => {
     .then((res: any) => {
       console.log(res.data);
       details.value = res.data;
+      loadFolder.value = true;
     })
     .catch((err) => {
       console.log(err);
@@ -283,11 +296,61 @@ onReachBottom(() => {
   }
 }
 
+.class-details {
+  /* 内容块样式 */
+  .class-details,
+  .contactDetails-coordinator,
+  .course-code,
+  .unit-name,
+  .session,
+  .academic-unit,
+  .overview,
+  .assessment-summary-notes,
+  .assessment-details {
+    border-bottom: 1px solid #ddd;
+    padding: 15px;
+    margin-bottom: 10px;
+    background-color: #f9f9f9;
+  }
+
+  /* 标题样式 */
+  .contactDetails-coordinator-title,
+  .course-code-title,
+  .unit-name-title,
+  .session-title,
+  .academic-unit-title,
+  .overview-title,
+  .assessment-summary-notes-title,
+  .assessment-details-title {
+    font-weight: bold;
+    line-height: 1.6;
+    color: #000;
+  }
+
+  /* 内容细节样式 */
+  .contactDetails-coordinator-content,
+  .course-code-content,
+  .unit-name-content,
+  .session-content,
+  .academic-unit-content,
+  .overview-content,
+  .assessment-summary-notes-content,
+  .assessment-details-content {
+    font-family: "Arial", sans-serif;
+    color: #333;
+    line-height: 1.6;
+    padding: 10px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+}
+
 .class-discussion {
   margin: 1rem;
 }
 
 .comment {
+  z-index: 233;
   position: sticky;
   bottom: 0;
   padding: 1rem;
