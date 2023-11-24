@@ -91,11 +91,9 @@ const Api = {
     http.get(`${apiUrl.comments}/${university_id}/${course_code}/?page=${page}`),
   postComment: (
     auedu_session: string,
-    course_code: string,
     content: object
   ) => http.post(apiUrl.comments, {
     auedu_session: auedu_session,
-    course: course_code,
     content: content
   }),
   deleteComment: (id: number, auedu_session: string) =>

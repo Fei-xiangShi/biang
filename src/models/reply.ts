@@ -1,12 +1,23 @@
 import User from "./userInfo";
 
+interface ReplyContent {
+  "zh-Hans": string;
+  en: string;
+}
+
 export default class Reply {
   id: number = 0;
-  passageId: number = 0;
-  author: User = new User();
-  content: string = "";
-  gmtCreate: number = 0;
-  isDelete: boolean = false;
+  user: User = new User();
+  course: string = "";
+  lang: string = "";
+  content: ReplyContent = {
+    "zh-Hans": "",
+    en: "",
+  };
+  likes: number = 0;
+  createAt: string = "";
+  updateAt: string = "";
   rootReplyId: number | null = null;
   parentReplyId: number | null = null;
+  replies: Reply[] = [];
 }

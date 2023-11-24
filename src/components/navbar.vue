@@ -31,6 +31,9 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import universities from "@/config/universities";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 const schoolname = ref(uni.getStorageSync("school"));
 const showChangeSchool = ref(false);
 const schools = [Object.keys(universities)];

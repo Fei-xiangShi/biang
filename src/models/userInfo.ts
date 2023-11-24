@@ -1,11 +1,15 @@
 export default class User {
   id = 0;
-  name = "";
+  firstName = "";
+  lastName = "";
+  phone = "";
+  university = 0;
+  username = "";
   accountId = "";
   studentId = "";
   gmtCreate = 0;
   gmtModified = 0;
-  siteAdmin = false;
+  isStaff = false;
   avatarUrl = "";
   bio = "";
   email = "";
