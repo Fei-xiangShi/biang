@@ -70,7 +70,7 @@
     >
       <view class="date-list">
         <view class="month-and-monthname">
-          <view class="month">{{ calcMonthNum() }}月</view>
+          <view class="month">{{ $t(`${calcMonthNum()}月`) }}</view>
         </view>
         <view
           class="weekday-and-date"
@@ -111,7 +111,7 @@
                   colorList[course.location.length % colorList.length],
               }"
             >
-              <view class="course-name">{{ course.summary }}</view>
+              <view class="course-name">{{ course.summary[language] }}</view>
               <view class="course-location">{{ course.location }}</view>
               <view class="course-time">
                 {{ course.start }}
@@ -131,7 +131,7 @@
       >
         <view class="modal-header">
           <view class="modal-title">{{ $t("课程详情标题") }}</view>
-          <view class="class-name">{{ showCourse.summary }}</view>
+          <view class="class-name">{{ showCourse.summary[language] }}</view>
         </view>
         <view class="block-line" />
         <view class="modal-body">
@@ -151,7 +151,15 @@
             <view class="classroom-title">{{ $t("教室") }}</view>
             <view class="classroom-content">{{ showCourse.location }}</view>
           </view>
-          <view class="nav-to-discuss">
+          <view
+            class="nav-to-discuss"
+            @tap="
+              navToDiscussionPage(
+                showCourse.description.slice(0, 8),
+                showCourse.description.split(',')[0].slice(9)
+              )
+            "
+          >
             <view class="nav-content">
               {{ $t("点击跳转课程讨论页面") }}
             </view>
@@ -170,6 +178,7 @@ import { onMounted, ref } from "vue";
 import Course from "@/models/course";
 import modal from "@/components/modal.vue";
 import { useI18n } from "vue-i18n";
+import RouteConfig from "@/config/routes";
 
 const { t } = useI18n();
 
@@ -183,6 +192,13 @@ const showPop = ref(false);
 const courses = ref<any>([]);
 const showDetail = ref(false);
 const showCourse = ref(new Course());
+const language = uni.getStorageSync("lang");
+
+const navToDiscussionPage = (courseCode: string, unitCode: string) => {
+  uni.navigateTo({
+    url: `${RouteConfig.classDetail.url}?courseCode=${courseCode}&unitCode=2023-${unitCode}`,
+  });
+};
 
 const show = (course: any) => {
   showDetail.value = true;
@@ -560,7 +576,7 @@ const touchEnd = (e: any) => {
           overflow: hidden;
           border: 3px solid #f0e8e8;
           .course-name {
-            font-size: 0.8rem;
+            font-size: 0.7rem;
             font-weight: bold;
             color: black;
           }
@@ -669,7 +685,7 @@ const touchEnd = (e: any) => {
     flex-direction: row;
     justify-content: center;
     width: 100%;
-    .nav-content{
+    .nav-content {
       display: flex;
       font-size: 0.8rem;
       justify-content: center;

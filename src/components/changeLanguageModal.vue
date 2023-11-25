@@ -14,6 +14,7 @@
         :id="String(index)"
         @tap="changeLang"
         v-for="(item, index) in languageList"
+        :key="index"
       >
         <view class="icon" :class="{ 'choose-icon-animation': check == index }">
           <u-icon

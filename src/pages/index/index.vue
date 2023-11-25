@@ -70,6 +70,8 @@
             @change="changePick"
             :loading="pickerLoading"
             :title="pickerTitle"
+            :confirmText="t('确认')"
+            :cancelText="t('取消')"
           />
         </view>
       </view>

@@ -64,7 +64,7 @@
   
   const getNewClassTable = () => {
     isLoading.value = true;
-    Api.receiveCalendar(classTableUrl.value)
+    Api.receiveCalendar(classTableUrl.value, uni.getStorageSync("aueduSession"))
       .then((res: any) => {
         if (res.statusCode === 200) {
           classTableContent.value = res.data;

@@ -47,19 +47,68 @@
             </view>
           </view>
           <view class="assessment-summary-notes">
-            <view class="assessment-summary-notes-content">
-              <span class="assessment-summary-notes-title">
-                {{ $t("AssessmentSummaryNotes") }}:
-              </span>
-              {{ details["AssessmentSummaryNotes"] }}
+            <view class="assessment-summary-notes-title">
+              {{ $t("AssessmentSummaryNotes") }}:
+            </view>
+            <view
+              class="assessment-summary-notes-content"
+              v-for="(notes, index) in details['AssessmentSummary']['Notes']"
+              :key="index"
+            >
+              <view class="assessment-summary-note">
+                {{ notes }}
+              </view>
             </view>
           </view>
           <view class="assessment-details">
-            <view class="assessment-details-content">
-              <span class="assessment-details-title">
-                {{ $t("AssessmentDetails") }}:
-              </span>
-              {{ details["AssessmentDetails"] }}
+            <view class="assessment-details-title">
+              {{ $t("AssessmentDetails") }}:
+            </view>
+            <view
+              class="assessment-details-content"
+              v-for="(assessment, index) in details['AssessmentDetails']"
+              :key="index"
+            >
+              <view class="assessment-detail-type">
+                <view class="assessment-detail-type-title">
+                  {{ $t("Assessment Type") }}
+                </view>
+                <view class="assessment-detail-type-content">
+                  {{ assessment["Type"] }}
+                </view>
+              </view>
+              <view class="assessment-detail-description">
+                <view class="assessment-detail-description-title">
+                  {{ $t("Assessment Description") }}
+                </view>
+                <view class="assessment-detail-description-content">
+                  {{ assessment["Description"] }}
+                </view>
+              </view>
+              <view class="assessment-detail-weight">
+                <view class="assessment-detail-weight-title">
+                  {{ $t("Assessment Weight") }}
+                </view>
+                <view class="assessment-detail-weight-content">
+                  {{ assessment["Weight"] }}
+                </view>
+              </view>
+              <view class="assessment-detail-due">
+                <view class="assessment-detail-due-title">
+                  {{ $t("Assessment Due") }}
+                </view>
+                <view class="assessment-detail-due-content">
+                  {{ assessment["Due"] }}
+                </view>
+              </view>
+              <view class="assessment-detail-length">
+                <view class="assessment-detail-length-title">
+                  {{ $t("Assessment Length") }}
+                </view>
+                <view class="assessment-detail-length-content">
+                  {{ assessment["Length"] }}
+                </view>
+              </view>
             </view>
           </view>
         </view>
@@ -334,7 +383,14 @@ onReachBottom(() => {
   .session-content,
   .academic-unit-content,
   .overview-content,
-  .assessment-summary-notes-content,
+  .assessment-summary-note {
+    font-family: "Arial", sans-serif;
+    color: #333;
+    line-height: 1.6;
+    padding: 10px;
+    background-color: white;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
   .assessment-details-content {
     font-family: "Arial", sans-serif;
     color: #333;
@@ -342,6 +398,38 @@ onReachBottom(() => {
     padding: 10px;
     background-color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 2rem;
+    .assessment-detail-type,
+    .assessment-detail-description,
+    .assessment-detail-weight,
+    .assessment-detail-due,
+    .assessment-detail-length {
+      display: flex;
+      flex-direction: column;
+      .assessment-detail-type-title,
+      .assessment-detail-description-title,
+      .assessment-detail-weight-title,
+      .assessment-detail-due-title,
+      .assessment-detail-length-title {
+        font-weight: bold;
+        line-height: 1.6;
+        color: #000;
+      }
+      .assessment-detail-type-content,
+      .assessment-detail-description-content,
+      .assessment-detail-weight-content,
+      .assessment-detail-due-content,
+      .assessment-detail-length-content {
+        font-family: "Arial", sans-serif;
+        color: #333;
+        line-height: 1.6;
+        padding: 10px;
+        background-color: white;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+      }
+    }
   }
 }
 

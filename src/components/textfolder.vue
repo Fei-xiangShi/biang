@@ -6,7 +6,7 @@
       </view>
       <view class="folded-overlay" :class="{ 'unfolded-overlay': unfolding }" />
       <view class="toggle" @tap="toggleStatus">
-        <view class="title">{{ unfolding ? "收起" : "展开" }}</view>
+        <view class="title">{{ unfolding ? $t("收起") : $t("展开") }}</view>
         <view class="toggle-button">
           <view
             class="folded-button-icon"

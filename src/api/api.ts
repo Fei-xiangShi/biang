@@ -2,14 +2,14 @@ import http from "./request";
 import apiUrl from "@/config/apiConfig";
 
 const Api = {
-  receiveCalendar: (ics_url: string) =>
-    http.post(apiUrl.ics, { ics_url: ics_url }),
+  receiveCalendar: (ics_url: string, auedu_session: string) =>
+    http.post(apiUrl.ics, { ics_url: ics_url, auedu_session: auedu_session }),
   wxLogin: (code: string, nickName: string) =>
     http.post(apiUrl.wxLogin, {
       code: code,
       username: nickName,
     }),
-  getProgramList: () => http.get(apiUrl.getProgramList),
+  getProgramList: (university_id: string) => http.get(apiUrl.getProgramList+"?university_id="+university_id),
   uploadAvatar: (avatarUrl: string, aueduSession: string) =>
     uni.uploadFile({
       url: apiUrl.uploadAvatar,

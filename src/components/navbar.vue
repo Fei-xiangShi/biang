@@ -24,6 +24,8 @@
       @cancel="cancelChangeSchool"
       @confirm="confirmChangeSchool"
       @close="closeChangeSchool"
+      :confirmText="t('确认')"
+      :cancelText="t('取消')"
     />
   </view>
 </template>
@@ -37,6 +39,11 @@ const { t } = useI18n();
 const schoolname = ref(uni.getStorageSync("school"));
 const showChangeSchool = ref(false);
 const schools = [Object.keys(universities)];
+schools.forEach((element) => {
+  element.forEach((item, index) => {
+    element[index] = t(item + "全称");
+  });
+});
 
 defineProps({
   returnButtonIconColor: {
