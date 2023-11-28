@@ -122,7 +122,7 @@
             {{ $t("日程数量") + `: ` + classCount }}
           </view>
         </view>
-        <view class="today-class-right">
+        <view class="today-class-right" @tap="redirectToClassTable">
           <view class="today-class-area">
             <view class="no-class" v-if="todayClass.length <= 0">
               {{ $t("今日无课") }}
@@ -816,7 +816,7 @@ const hideKeyboard = () => {
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      width: 65%;
+      width: 55%;
       border-radius: var(--borderRadius-medium, 0.375rem);
       .today-class-area {
         width: 100%;
@@ -827,11 +827,13 @@ const hideKeyboard = () => {
         align-items: center;
         border-radius: var(--borderRadius-medium, 0.375rem);
         .no-class {
+          padding: 1rem;
           background: rgb(216, 216, 216);
           width: 100%;
           height: 100%;
           border-radius: 1rem;
           display: flex;
+          text-align: center;
           align-items: center;
           justify-content: center;
           font-size: 2rem;
