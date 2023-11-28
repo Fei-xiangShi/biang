@@ -18,7 +18,7 @@
               <view class="input">
                 <input
                   class="url"
-                  placeholder="课表链接"
+                  :placeholder= "$t('课表链接') "
                   type="text"
                   v-model="classTableUrl"
                 />
