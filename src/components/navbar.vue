@@ -36,9 +36,11 @@ import universities from "@/config/universities";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-const schoolname = ref(uni.getStorageSync("school"));
+const schoolname = ref(uni.getStorageSync("school")) || '悉尼大学';
 const showChangeSchool = ref(false);
-const schools = [Object.keys(universities)];
+const language: "zh-Hans" | "en" = uni.getStorageSync("lang");
+const schools = [Object.keys(universities['zh-Hans'])];
+
 schools.forEach((element) => {
   element.forEach((item, index) => {
     element[index] = t(item + "全称");
@@ -81,10 +83,7 @@ const confirmChangeSchool = (e: any) => {
   uni.setStorageSync("school", e.value[0]);
   showChangeSchool.value = false;
   schoolname.value = e.value[0];
-  uni.setStorageSync(
-    "schoolId",
-    universities[e.value[0] as keyof typeof universities]
-  );
+  uni.setStorageSync("schoolId", (universities[language] as any)[e.value[0]]);
 };
 
 const closeChangeSchool = () => {

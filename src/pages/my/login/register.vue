@@ -2,7 +2,7 @@
     <navbar />
     <view class="login-container">
       <view class="icon"></view>
-      <view class="title-text">{{ $t("登录") }}</view>
+      <view class="title-text">{{ $t("注册新账号") }}</view>
       <view class="sub-title-text">{{ $t("登录副标题提示") }}</view>
       <view class="school-select-input">
         <u-form>
