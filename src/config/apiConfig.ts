@@ -6,6 +6,10 @@ const apiUrl = {
   ics: `${baseUrl}/ics`,
   // 微信登录
   wxLogin: `${baseUrl}/wxLogin`,
+  // 邮箱登录
+  emailLogin: `${baseUrl}/emailLogin`,
+  // 邮箱注册
+  emailRegister: `${baseUrl}/emailRegister`,
   // 获取项目列表
   getProgramList: `${baseUrl}/getProgramList`,
   // 上传头像

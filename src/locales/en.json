@@ -133,5 +133,7 @@
   "展开": "Expand",
   "收起": "Collapse",
   "悉尼大学全称": "University of Sydney",
-  "新南威尔士大学全称": "University of New South Wales"
+  "新南威尔士大学全称": "University of New South Wales",
+  "登录成功":"Login successfully",
+  "登录失败,请先注册":"Login failed, please register first"
 }

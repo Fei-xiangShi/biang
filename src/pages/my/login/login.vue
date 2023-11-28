@@ -1,5 +1,6 @@
 <template>
   <navbar />
+  <WxLogin></WxLogin>
   <view class="login-container">
     <view class="email-login" v-if="!wxLogin">
       <view class="icon"></view>
@@ -49,6 +50,7 @@ import { useI18n } from "vue-i18n";
 import { ref } from "vue";
 import navbar from "@/components/navbar.vue";
 import RouteConfig from "@/config/routes";
+import WxLogin from "@/components/login/wxLogin.vue";
 
 const { t } = useI18n();
 

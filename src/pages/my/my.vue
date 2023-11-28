@@ -240,7 +240,7 @@ const onLogin = async () => {
   }
   uni.setStorageSync("userAvatarUrl", userAvatarUrl.value);
   uni.setStorageSync("username", username.value);
-  Api.wxLogin(code.value, username.value).then((res: any) => {
+  Api.wxLogin(code.value).then((res: any) => {
     const responseSuccess = res.data.success;
     if (responseSuccess === "登录成功") {
       isLogin.value = true;
