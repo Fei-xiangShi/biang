@@ -94,7 +94,11 @@
       <view class="tab-notice">
         <text class="tab-notice-text">{{ $t("遇到问题") }}</text>
       </view>
-      <view class="resend-button" :class="[timeleft < 0 ? 'available' : '']">
+      <view
+        class="resend-button"
+        :class="[timeleft < 0 ? 'available' : '']"
+        @tap="resendEmail"
+      >
         <view class="number" v-if="timeleft > -1">
           <u-count-down
             :time="60 * 1000"
@@ -104,7 +108,7 @@
           />
           <view class="s">s</view>
         </view>
-        <view class="resend-text" @tap="resendEmail">{{ $t("重新发送") }}</view>
+        <view class="resend-text">{{ $t("重新发送") }}</view>
       </view>
       <view class="confirm-button">
         <view class="button-text" @tap="confirm">{{ $t("验证") }}</view>
@@ -125,7 +129,9 @@
             color="#606266"
           />
         </view>
-        <text :class="['successPage-notice-text', 'textFadeInRight']">{{ $t("验证成功提示") }}</text>
+        <text :class="['successPage-notice-text', 'textFadeInRight']">{{
+          $t("验证成功提示")
+        }}</text>
       </view>
       <view class="successPage-button">
         <view class="successPage-button-text" @tap="goToMy">{{
@@ -165,6 +171,7 @@ const timeChange = () => {
 };
 
 const resendEmail = () => {
+  if (timeleft.value > -1) return;
   Api.sendEmail(
     uni.getStorageSync("email"),
     uni.getStorageSync("aueduSession"),
@@ -480,5 +487,4 @@ const sixChange = () => {
 .textFadeInRight {
   animation: fadeInRight 1s ease forwards;
 }
-
 </style>

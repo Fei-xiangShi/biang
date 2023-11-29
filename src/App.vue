@@ -6,6 +6,12 @@ import Api from "./api/api";
 const { locale } = useI18n();
 
 onLaunch(() => {
+  let school = uni.getStorageSync("school");
+  if (!school) {
+    school = "悉尼大学";
+    uni.setStorageSync("school", school);
+    uni.setStorageSync("schoolId", 1);
+  }
   Api.getProgramList(uni.getStorageSync("schoolId")).then((res: any) => {
     uni.setStorageSync("programList", res.data);
   });

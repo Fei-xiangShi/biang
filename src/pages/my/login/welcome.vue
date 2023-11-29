@@ -36,7 +36,7 @@
         <view class="next">
           <view
             class="create-account"
-            @tap="navTo(RouteConfig.my.login.register.url)"
+            @tap="navTo(RouteConfig.my.login.wxRegister.url)"
             >{{ $t("创建账号") }}</view
           >
           <view class="next-step">

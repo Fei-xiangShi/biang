@@ -32,8 +32,11 @@ const RouteConfig = {
       welcome: {
         url: "welcome",
       },
-      register: {
-        url: "register",
+      emailRegister: {
+        url: "emailRegister",
+      },
+      wxRegister: {
+        url: "wxRegister",
       },
     },
 

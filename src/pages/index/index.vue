@@ -57,7 +57,7 @@
                 :placeholder="t('单元号选择框提示')"
                 border="none"
               />
-              <u-icon slot="right" name="arrow-right"/>
+              <u-icon slot="right" name="arrow-right" />
             </u-form-item>
           </u-form>
           <u-picker
@@ -94,12 +94,75 @@
       />
     </view>
     <view class="cards">
-      <view class="class-query-card" @tap="redirectToClassTable">
-        <view class="title">
-          <view class="title-text">{{ $t("课表查询按钮标题") }}</view>
+      <view class="class-query" v-if="!haveClassTable">
+        <view class="class-query-card" @tap="redirectToClassTable">
+          <view class="title">
+            <view class="title-text">{{ $t("课表查询按钮标题") }}</view>
+          </view>
+          <view class="content">
+            <view class="content-text">{{ $t("课表查询按钮内容") }}</view>
+          </view>
         </view>
-        <view class="content">
-          <view class="content-text">{{ $t("课表查询按钮内容") }}</view>
+      </view>
+      <view class="today-class" v-else>
+        <view class="today-class-left">
+          <view class="head">
+            <view class="date">
+              {{ new Date().toLocaleDateString() }}
+            </view>
+            <view class="progress-line" v-if="classCount">
+              <u-line-progress
+                :percentage="classPercentage"
+                activeColor="green"
+              />
+            </view>
+          </view>
+
+          <view class="class-count">
+            {{ $t("日程数量") + `: ` + classCount }}
+          </view>
+        </view>
+        <view class="today-class-right" @tap="redirectToClassTable">
+          <view class="today-class-area">
+            <view class="no-class" v-if="todayClass.length <= 0">
+              {{ $t("今日无课") }}
+            </view>
+            <view
+              class="classes"
+              v-for="(course, index) in todayClass"
+              :key="index"
+              v-else
+            >
+              <view class="course">
+                <view class="course-status" :class="{ done: course.finised }" />
+                <view class="course-text">
+                  <view
+                    class="course-name"
+                    :class="{ 'done-title': course.finised }"
+                  >
+                    {{ course.summary[lang] }}
+                  </view>
+                  <view class="course-time">
+                    {{
+                      new Date(course.start).toLocaleTimeString("zh-CN", {
+                        hour12: false,
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })
+                    }}
+                    -
+                    {{
+                      new Date(course.end).toLocaleTimeString("zh-CN", {
+                        hour12: false,
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })
+                    }}
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
         </view>
       </view>
 
@@ -258,6 +321,26 @@ const unitCode = ref("");
 const showUnitsPicker = ref(false);
 const pickerLoading = ref(false);
 const pickerTitle = ref("");
+const classes = uni.getStorageSync("classTableContent").events;
+const haveClassTable = ref(classes && classes.length > 0);
+const todayClass = ref([]) as any;
+const classCount = ref(0);
+const classPercentage = ref(100);
+
+if (haveClassTable.value) {
+  let done = 0;
+  classes.forEach((element: any) => {
+    if (new Date(element.start) === new Date()) {
+      element.finised = new Date(element.end).getTime() < new Date().getTime();
+      if (element.finised) {
+        done++;
+      }
+      todayClass.value.push(element);
+      classCount.value++;
+      classPercentage.value = Math.round((1 - done / classCount.value) * 100);
+    }
+  });
+}
 
 const cancelPick = () => {
   showUnitsPicker.value = false;
@@ -285,15 +368,17 @@ const loadUnits = () => {
   }
   showUnitsPicker.value = true;
   pickerLoading.value = true;
-  Api.getUnits(courseCode.value, uni.getStorageSync("schoolId")).then((res: any) => {
-    if (res.statusCode == 200) {
-      pickerTitle.value = t("单元号选择框提示");
-      unitCodes.value = [res.data.units];
-    } else {
-      pickerTitle.value = t("无单元号提示");
+  Api.getUnits(courseCode.value, uni.getStorageSync("schoolId")).then(
+    (res: any) => {
+      if (res.statusCode == 200) {
+        pickerTitle.value = t("单元号选择框提示");
+        unitCodes.value = [res.data.units];
+      } else {
+        pickerTitle.value = t("无单元号提示");
+      }
+      pickerLoading.value = false;
     }
-    pickerLoading.value = false;
-  });
+  );
 };
 
 const searchClass = () => {
@@ -679,6 +764,128 @@ const hideKeyboard = () => {
           font-size: 0.6rem;
           color: chocolate;
           font-family: "LXGW WenKai";
+        }
+      }
+    }
+  }
+  .today-class::after {
+    filter: blur(5px);
+  }
+  .today-class {
+    background: rgba(255, 255, 255, 0.5);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    margin: 10px 0px;
+    border-radius: var(--borderRadius-medium, 0.375rem);
+    min-height: 11.5rem;
+    padding: 1rem 0.8rem;
+    .today-class-left {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      width: 40%;
+      border-radius: var(--borderRadius-medium, 0.375rem);
+      margin-right: 0.5rem;
+      .head {
+        display: flex;
+        flex-direction: column;
+        .date {
+          display: flex;
+          align-items: center;
+          font-size: 1.2rem;
+          color: black;
+          font-family: "LXGW WenKai";
+        }
+        .progress-line {
+          display: flex;
+          align-items: center;
+          margin-top: 0.8rem;
+        }
+      }
+      .class-count {
+        display: flex;
+        align-items: center;
+        font-size: 0.8rem;
+        color: rgba(116, 116, 116);
+        font-family: "LXGW WenKai";
+      }
+    }
+    .today-class-right {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 55%;
+      border-radius: var(--borderRadius-medium, 0.375rem);
+      .today-class-area {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        align-items: center;
+        border-radius: var(--borderRadius-medium, 0.375rem);
+        .no-class {
+          padding: 1rem;
+          background: rgb(216, 216, 216);
+          width: 100%;
+          height: 100%;
+          border-radius: 1rem;
+          display: flex;
+          text-align: center;
+          align-items: center;
+          justify-content: center;
+          font-size: 2rem;
+          color: black;
+          font-family: "LXGW WenKai";
+        }
+        .classes {
+          display: flex;
+          flex-direction: column;
+          justify-content: space-between;
+          height: fit-content;
+          border-radius: var(--borderRadius-medium, 0.375rem);
+          .course {
+            display: flex;
+            flex-direction: row;
+            height: fit-content;
+            border-radius: var(--borderRadius-medium, 0.375rem);
+            .course-status {
+              width: 5px;
+              height: auto;
+              border-radius: 10px;
+              background: rgb(36, 184, 34);
+              margin: 0.5rem;
+            }
+            .done {
+              background: rgb(182, 182, 182);
+            }
+
+            .course-text {
+              flex: 1;
+              display: flex;
+              flex-direction: column;
+              justify-content: space-between;
+              .course-name {
+                display: flex;
+                align-items: center;
+                font-size: 1rem;
+                color: black;
+                font-family: "LXGW WenKai";
+                font-weight: bold;
+              }
+              .done-title {
+                color: rgb(161, 161, 161);
+              }
+              .course-time {
+                display: flex;
+                align-items: center;
+                font-size: 0.9rem;
+                color: rgb(118, 118, 118);
+              }
+            }
+          }
         }
       }
     }
