@@ -28,6 +28,8 @@ const apiUrl = {
   user: `${baseUrl}/user`,
   // 评论相关
   comments: `${baseUrl}/comments/`,
+  // 邮箱注册
+  emailRegister: `${baseUrl}/emailRegister`,
 };
 
 export default apiUrl;

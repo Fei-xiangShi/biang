@@ -25,38 +25,38 @@
       "path": "pages/classTable/classTable",
       "style": {
         "navigationBarTitleText": "课表",
-        "navigationStyle":"custom"
+        "navigationStyle": "custom"
       }
     }
   ],
-  "subPackages":[
+  "subPackages": [
     {
-      "root":"pages/my/sub",
-      "pages":[
+      "root": "pages/my/sub",
+      "pages": [
         {
-          "path":"changeClassTableUrl",
-          "style":{
+          "path": "changeClassTableUrl",
+          "style": {
             "navigationBarTitleText": "绑定课表",
             "navigationStyle": "custom"
           }
         },
         {
-          "path":"settings",
-          "style":{
+          "path": "settings",
+          "style": {
             "navigationBarTitleText": "设置",
             "navigationStyle": "custom"
           }
         },
         {
-          "path":"verifyEmail",
-          "style":{
+          "path": "verifyEmail",
+          "style": {
             "navigationBarTitleText": "邮箱绑定",
             "navigationStyle": "custom"
           }
         },
         {
-          "path":"verifyCode",
-          "style":{
+          "path": "verifyCode",
+          "style": {
             "navigationBarTitleText": "验证码输入",
             "navigationStyle": "custom"
           }
@@ -64,64 +64,71 @@
       ]
     },
     {
-      "root":"pages/my/login",
-      "pages":[
+      "root": "pages/my/login",
+      "pages": [
         {
-          "path":"login",
-          "style":{
+          "path": "login",
+          "style": {
             "navigationBarTitleText": "登录",
             "navigationStyle": "custom"
           }
         },
         {
-          "path":"welcome",
-          "style":{
+          "path": "welcome",
+          "style": {
             "navigationBarTitleText": "欢迎",
             "navigationStyle": "custom"
           }
         },
         {
-          "path":"register",
-          "style":{
-            "navigationBarTitleText": "注册",
+          "path": "emailRegister",
+          "style": {
+            "navigationBarTitleText": "邮箱注册",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "wxRegister",
+          "style": {
+            "navigationBarTitleText": "微信注册",
             "navigationStyle": "custom"
           }
         }
       ]
     },
     {
-      "root":"pages/classDetail",
-      "pages":[
+      "root": "pages/classDetail",
+      "pages": [
         {
-          "path" : "classDetail",
+          "path": "classDetail",
           "style": {
             "navigationBarTitleText": "课程详情",
-            "navigationStyle":"custom"
+            "navigationStyle": "custom"
           }
         }
       ]
     },
     {
-      "root":"pages/admin/notices",
-      "pages":[
+      "root": "pages/admin/notices",
+      "pages": [
         {
-          "path":"notices",
-          "style":{
+          "path": "notices",
+          "style": {
             "navigationBarTitleText": "通知管理",
             "navigationStyle": "custom",
             "enablePullDownRefresh": true
           }
         },
         {
-          "path":"add",
-          "style":{
+          "path": "add",
+          "style": {
             "navigationBarTitleText": "添加通知",
             "navigationStyle": "custom"
           }
         },
         {
-          "path":"modify",
-          "style":{
+          "path": "modify",
+          "style": {
             "navigationBarTitleText": "修改通知",
             "navigationStyle": "custom"
           }
@@ -129,11 +136,11 @@
       ]
     },
     {
-      "root":"pages/admin/test",
-      "pages":[
+      "root": "pages/admin/test",
+      "pages": [
         {
-          "path":"test",
-          "style":{
+          "path": "test",
+          "style": {
             "navigationBarTitleText": "测试"
           }
         }
@@ -152,7 +159,8 @@
     "borderStyle": "black",
     "backgroundColor": "#FFFFFF",
     "iconWidth": "24px",
-    "list": [{
+    "list": [
+      {
         "pagePath": "pages/index/index",
         "iconPath": "static/icons/index/index_unselected.png",
         "selectedIconPath": "static/icons/index/index_selected.png",
@@ -173,5 +181,3 @@
     ]
   }
 }
-
-

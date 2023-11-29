@@ -17,6 +17,9 @@
       />
     </view>
   </view>
+  <view class="nav-to-register" @click="navTo(RouteConfig.my.login.emailRegister.url)">
+    <view class="nav-to-register-text">{{ $t("没有账号？去注册") }}</view>
+  </view>
 </template>
 
 <script setup lang="ts">
@@ -56,6 +59,12 @@ const loginFail = () => {
 
 const toggleLogin = (method: loginMethods) => {
   login.value = method;
+};
+
+const navTo = (url: string) => {
+  uni.navigateTo({
+    url,
+  });
 };
 
 </script>

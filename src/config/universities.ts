@@ -6,5 +6,5 @@ export default {
   en: {
     "University of Sydney": "1",
     "University of New South Wales": "2",
-  }
+  },
 };
