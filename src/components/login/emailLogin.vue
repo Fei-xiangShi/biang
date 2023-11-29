@@ -1,8 +1,5 @@
 <template>
   <view class="email-login-container">
-    <view class="toggle-to-wx" @tap="$emit('toggleLogin', wxLogin)">
-      <view class="toggle-to-wx-text">{{ t("使用微信登录") }}</view>
-    </view>
     <view class="email-login-title">{{ t("邮箱登录") }}</view>
     <view class="email-login-input-container">
       <view class="email-login-input-title">{{ t("邮箱") }}</view>
@@ -23,12 +20,12 @@
       />
     </view>
     <view class="email-login-button-container">
-      <view class="email-login-button" @tap="EmailLogin()">{{
-        t("登录")
-      }}</view>
+      <view class="email-login-button" @tap="EmailLogin()">
+        {{ t("登录") }}
+      </view>
     </view>
-    <view class="email-register" @tap="navTo(RouteConfig.my.url)">
-      {{ t("使用邮箱注册") }}
+    <view class="toggle-to-wx" @tap="$emit('toggleLogin', wxLogin)">
+      <view class="toggle-to-wx-text">{{ t("使用微信登录") }}</view>
     </view>
   </view>
 </template>
@@ -48,15 +45,14 @@ const emailID = ref("");
 const wxLogin = loginMethods.WX;
 const email = loginMethods.Email;
 
-
 const EmailLogin = () => {
   Api.emailLogin(emailID.value, password.value).then((res: any) => {
     if (res.data.success === true) {
       console.log("登录成功");
-      emit("loginSuccess",res);
+      emit("loginSuccess", res);
     } else {
-      emit("loginFail",res.error);
-      }
+      emit("loginFail", res.error);
+    }
   });
 };
 

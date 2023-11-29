@@ -123,15 +123,13 @@ const Api = {
     username: string,
     university: string,
     avatarSize: string,
-    size: string,
     email?: undefined | string
   ) =>
     http.post(apiUrl.wxRegister, {
       code: code,
       username: username,
       university: university,
-      avatar_size: avatarSize,
-      size: size,
+      size: avatarSize,
       email: email,
     }),
 };

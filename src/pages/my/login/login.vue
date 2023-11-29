@@ -22,9 +22,6 @@
   >
     <view class="nav-to-register-text">{{ $t("没有账号？去注册") }}</view>
   </view>
-  <view class="wx-register" @click="navTo(RouteConfig.my.login.wxRegister.url)">
-    <view class="wx-register-text">{{ $t("微信一键注册") }}</view>
-  </view>
 </template>
 
 <script setup lang="ts">
@@ -46,7 +43,6 @@ const emailLogin = loginMethods.Email;
 const login = ref(wxLogin);
 
 const loginSuccess = (res: any) => {
-  console.log("111");
   uni.setStorageSync("aueduSession", res.data.data.auedu_session);
   uni.setStorageSync("username", res.data.data.username);
   uni.setStorageSync("schoolId", res.data.data.school);
@@ -91,3 +87,13 @@ const navTo = (url: string) => {
   });
 };
 </script>
+
+<style lang="scss" scoped>
+.login-container{
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  background-color: #fff;
+}
+</style>

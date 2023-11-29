@@ -95,7 +95,7 @@
 <script setup lang="ts">
 import universities from "@/config/universities";
 import { useI18n } from "vue-i18n";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import navbar from "@/components/navbar.vue";
 import Checker from "@/utils/checker";
 import Api from "@/api/api";
@@ -114,9 +114,10 @@ const pickerLoading = ref(false);
 const username = ref("");
 const usernameValid = ref();
 const schoolId = ref("1");
-const email = ref("");
+const email = ref();
 const emailValid = ref();
 const userAvatarUrl = ref("");
+const code = ref("");
 let size = "0";
 
 const checkUsername = () => {
@@ -164,12 +165,7 @@ const onChooseAvatar = (e: any) => {
 };
 
 const commitRegister = () => {
-  if (
-    !username.value ||
-    !email.value ||
-    !schoolId.value ||
-    !userAvatarUrl.value
-  ) {
+  if (!username.value || !schoolId.value || !userAvatarUrl.value) {
     uni.showToast({
       title: t("请填写完整信息"),
       icon: "none",
@@ -177,7 +173,7 @@ const commitRegister = () => {
     });
     return;
   }
-  if (!usernameValid.value || !emailValid.value) {
+  if (!usernameValid.value) {
     uni.showToast({
       title: t("请填写正确信息"),
       icon: "none",
@@ -186,11 +182,11 @@ const commitRegister = () => {
     return;
   }
   Api.wxRegister(
+    code.value,
     username.value,
-    email.value,
     schoolId.value,
-    userAvatarUrl.value,
-    size
+    size,
+    email.value ? email.value : null
   ).then((res: any) => {
     if (res.data.success === true) {
       uni.showToast({
@@ -238,6 +234,20 @@ const commitRegister = () => {
     }
   });
 };
+
+onMounted(() => {
+  uni.login({
+    provider: "weixin",
+    success: (res) => {
+      uni.getUserInfo({
+        provider: "weixin",
+        success: (infoRes) => {
+          code.value = res.code;
+        },
+      });
+    },
+  });
+});
 </script>
 
 <style lang="scss" scoped>
