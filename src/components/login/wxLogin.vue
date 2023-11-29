@@ -6,7 +6,7 @@
     <view class="wx-login-button" @tap="login">
       {{ t("微信一键登录按钮") }}
     </view>
-    <view class="wx-register" @tap="turnToWXRegister">
+    <view class="wx-register" @tap="navTo(RouteConfig.my.login.wxRegister.url)">
       {{ t("使用微信注册") }}
     </view>
   </view>
@@ -27,17 +27,21 @@ const code = ref("");
 
 const login = () => {
   Api.wxLogin(code.value).then((res: any) => {
-    if (res.success === "登录成功") {
-      emit("loginSuccess");
+    if (res.data.success === true) {
+      emit("loginSuccess", res);
     } else {
-      emit("loginFail");
+      emit("loginFail", res);
+      if (res.data.status === 404) {
+        //这里判断是不是用户不存在
+        navTo(RouteConfig.my.login.wxRegister.url);
+      }
     }
   });
 };
 
-const turnToWXRegister = (url: string) => {
+const navTo = (url: string) => {
   uni.navigateTo({
-    url: RouteConfig.my.url,
+    url: url,
   });
 };
 

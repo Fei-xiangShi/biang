@@ -1,6 +1,6 @@
 <template>
   <view class="email-login-container">
-    <view class="toggle-to-wx" @click="$emit('toggleLogin', wxLogin)">
+    <view class="toggle-to-wx" @tap="$emit('toggleLogin', wxLogin)">
       <view class="toggle-to-wx-text">{{ t("使用微信登录") }}</view>
     </view>
     <view class="email-login-title">{{ t("邮箱登录") }}</view>
@@ -48,11 +48,15 @@ const emailID = ref("");
 const wxLogin = loginMethods.WX;
 const email = loginMethods.Email;
 
+
 const EmailLogin = () => {
   Api.emailLogin(emailID.value, password.value).then((res: any) => {
-    if (res.success === "登录成功") {
-      emit("loginSuccess");
-    }
+    if (res.data.success === true) {
+      console.log("登录成功");
+      emit("loginSuccess",res);
+    } else {
+      emit("loginFail",res.error);
+      }
   });
 };
 

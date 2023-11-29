@@ -261,6 +261,7 @@ onMounted(() => {
         success: (infoRes) => {
           console.log("获取用户信息成功" + JSON.stringify(infoRes));
           code.value = JSON.parse(JSON.stringify(res)).code;
+          console.log(code.value);
         },
       });
     },

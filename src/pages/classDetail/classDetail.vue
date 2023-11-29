@@ -184,7 +184,7 @@ const getReplyList = () => {
   concatenatingReplyList(res);
 };
 
-const inputReply = (parentReplyId: number, parentReplyName: string) => {
+const inputReply = (parentReplyId: string, parentReplyName: string) => {
   inputingReply.value = true;
   reply.value.parent = parentReplyId;
   placeholder.value = "回复 " + parentReplyName + ": ";

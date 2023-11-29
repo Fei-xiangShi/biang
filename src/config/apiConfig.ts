@@ -1,3 +1,4 @@
+
 const baseUrl = "https://auproj.3li.top/api";
 // api 文档 https://apifox.com/apidoc/shared-4267f6f3-67b7-4f56-8049-a157c20a428a
 
@@ -8,8 +9,6 @@ const apiUrl = {
   wxLogin: `${baseUrl}/wxLogin`,
   // 邮箱登录
   emailLogin: `${baseUrl}/emailLogin`,
-  // 邮箱注册
-  emailRegister: `${baseUrl}/emailRegister`,
   // 获取项目列表
   getProgramList: `${baseUrl}/getProgramList`,
   // 上传头像

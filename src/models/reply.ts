@@ -17,6 +17,6 @@ export default class Reply {
   likes: number = 0;
   createAt: string = "";
   updateAt: string = "";
-  parent: number | null = null;
+  parent: string | null = null;
   replies: Reply[] = [];
 }
