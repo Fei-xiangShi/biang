@@ -9,7 +9,8 @@ const Api = {
       code: code,
       username: nickName,
     }),
-  getProgramList: (university_id: string) => http.get(apiUrl.getProgramList+"?university_id="+university_id),
+  getProgramList: (university_id: string) =>
+    http.get(apiUrl.getProgramList + "?university_id=" + university_id),
   uploadAvatar: (avatarUrl: string, aueduSession: string) =>
     uni.uploadFile({
       url: apiUrl.uploadAvatar,
@@ -88,17 +89,28 @@ const Api = {
   allNotices: () => http.get(apiUrl.notices + "?mode=all"),
   getUser: (auedu_session: string) => http.post(apiUrl.user, { auedu_session }),
   getComments: (university_id: number, course_code: string, page: number) =>
-    http.get(`${apiUrl.comments}university/${university_id}/${course_code}/?page=${page}`),
-  postComment: (
-    auedu_session: string,
-    comment: object
-  ) => http.post(apiUrl.comments, {
-    auedu_session: auedu_session,
-    comment: comment
-  }),
+    http.get(
+      `${apiUrl.comments}university/${university_id}/${course_code}/?page=${page}`
+    ),
+  postComment: (auedu_session: string, comment: object) =>
+    http.post(apiUrl.comments, {
+      auedu_session: auedu_session,
+      comment: comment,
+    }),
   deleteComment: (id: number, auedu_session: string) =>
     http.del(`${apiUrl.comments}${id}/`, { auedu_session: auedu_session }),
-
+  emailRegister: (
+    email: string,
+    username: string,
+    password: string,
+    university: string
+  ) =>
+    http.post(apiUrl.emailRegister, {
+      email: email,
+      username: username,
+      password: password,
+      university: university,
+    }),
 };
 
 export default Api;
