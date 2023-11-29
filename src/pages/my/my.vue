@@ -9,43 +9,6 @@
         @cancel="cancelLang"
       />
     </view>
-    <view class="chooseAvatarModal">
-      <modal
-        :title="t('补全登录信息')"
-        :show="isAvatarChoosing"
-        :closeOnClickOverlay="true"
-        @confirm="onLogin"
-        @cancel="cancelAvatar"
-      >
-        <view class="AvatarContainer">
-          <view class="uploadAvatar">
-            <button
-              class="avatar-wrapper"
-              open-type="chooseAvatar"
-              @chooseavatar="onChooseAvatar"
-              style="padding: 0"
-            >
-              <view class="avatarShow">
-                <image
-                  class="avatar"
-                  :src="userAvatarUrl"
-                  style="width: 100%; height: 100%"
-                />
-              </view>
-            </button>
-          </view>
-          <view class="inputName">
-            <input
-              class="username"
-              type="username"
-              :placeholder="t('请输入昵称')"
-              v-model="username"
-            />
-          </view>
-          <view class="avatarFill"></view>
-        </view>
-      </modal>
-    </view>
     <view class="head" @tap="navTo(RouteConfig.my.login.url)" v-if="!isLogin">
       <view class="avatar">
         <u-avatar icon="star-fill" />
@@ -129,25 +92,13 @@ import RouteConfig from "@/config/routes";
 import changeLanguageModal from "@/components/changeLanguageModal.vue";
 import { useI18n } from "vue-i18n";
 import { ref, onMounted } from "vue";
-import modal from "@/components/modal.vue";
 import Api from "@/api/api";
 
 const isAdmin = ref(false);
 const session = uni.getStorageSync("aueduSession");
-const isLogin = ref(
-  !(
-    session == "" ||
-    session.length == 0 ||
-    session == null ||
-    session == undefined
-  )
-);
-const isAvatarChoosing = ref(false);
-const userAvatarUrl = ref(
-  "https://mmbiz.qpic.cn/mmbiz/icTdbqWNOwNRna42FI242Lcia07jQodd2FJGIYQfG0LAJGFxM4FbnQP6yfMxBgJ0F3YRqJCJ1aPAK2dQagdusBZg/0"
-);
+const isLogin = ref(session && session.length > 0);
+const userAvatarUrl = ref("");
 const username = ref("");
-const code = ref("");
 const showChooseLangualge = ref(false);
 const Notify = ref();
 
@@ -161,14 +112,6 @@ const navTo = (url: any) => {
       url: url,
     });
   }
-};
-
-const onChooseAvatar = (e: any) => {
-  userAvatarUrl.value = e.detail.avatarUrl;
-};
-
-const navToLogin = () => {
-  isAvatarChoosing.value = true;
 };
 
 const swiperList = [
@@ -219,63 +162,18 @@ const cancelLang = () => {
   showChooseLangualge.value = false;
 };
 
-const cancelAvatar = () => {
-  isAvatarChoosing.value = false;
-};
-
-const onLogin = async () => {
-  if (!userAvatarUrl.value) {
-    uni.showToast({
-      title: t("请填入头像"),
-      icon: "none",
-    });
-    return 0;
-  }
-  if (!username.value) {
-    uni.showToast({
-      title: t("请输入昵称"),
-      icon: "none",
-    });
-    return 0;
-  }
-  uni.setStorageSync("userAvatarUrl", userAvatarUrl.value);
-  uni.setStorageSync("username", username.value);
-  Api.wxLogin(code.value, username.value).then((res: any) => {
-    const responseSuccess = res.data.success;
-    if (responseSuccess === "登录成功") {
-      isLogin.value = true;
-      uni.setStorageSync("aueduSession", res.data.auedu_session);
-      // Api.uploadAvatar(userAvatarUrl.value, res.data.auedu_session);
-    }
-  });
-  isAvatarChoosing.value = false;
-};
-
 onMounted(() => {
-  uni.login({
-    provider: "weixin",
-    success: (res) => {
-      console.log("微信登录成功" + JSON.stringify(res));
-      uni.getUserInfo({
-        provider: "weixin",
-        success: (infoRes) => {
-          console.log("获取用户信息成功" + JSON.stringify(infoRes));
-          code.value = JSON.parse(JSON.stringify(res)).code;
-        },
-      });
-    },
-  });
-  username.value = uni.getStorageSync("username");
-  userAvatarUrl.value = uni.getStorageSync("userAvatarUrl");
-  Api.getUser(session).then((res: any) => {
-    if (res.statusCode === 200) {
-      if (res.data.is_staff === true) {
-        isAdmin.value = true;
+  if (isLogin.value) {
+    Api.getUser(session).then((res: any) => {
+      if (res.statusCode === 200) {
+        if (res.data.is_staff === true) {
+          isAdmin.value = true;
+        }
+        username.value = res.data.username;
+        userAvatarUrl.value = res.data.avatar_url;
       }
-      username.value = res.data.username;
-      userAvatarUrl.value = res.data.avatar_url;
-    }
-  });
+    });
+  }
 });
 </script>
 

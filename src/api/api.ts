@@ -11,22 +11,8 @@ const Api = {
     }),
   getProgramList: (university_id: string) =>
     http.get(apiUrl.getProgramList + "?university_id=" + university_id),
-  uploadAvatar: (url: string, avatarUrl: string, AuthData?: any) =>
-    uni.uploadFile({
-      url: url,
-      filePath: avatarUrl,
-      name: "file",
-      formData: {
-        key: AuthData?.key,
-        success_action_status: 200,
-        "Content-Type": "",
-        "q-sign-algorithm": AuthData?.qSignAlgorithm,
-        "q-ak": AuthData?.qAk,
-        "q-key-time": AuthData?.qKeyTime,
-        "q-signature": AuthData?.qSignature,
-        policy: AuthData?.policy,
-      },
-    }),
+  uploadAvatar: (url: string, avatarData: string | ArrayBuffer, header: object) =>
+    http.put(url, avatarData, header),
   updateAvatarUrl: (avatarUrl: string, aueduSession: string) =>
     http.post(apiUrl.uploadAvatar, {
       avatar_url: avatarUrl,
@@ -130,6 +116,7 @@ const Api = {
     username: string,
     university: string,
     avatarSize: string,
+    size: string,
     email?: undefined | string
   ) =>
     http.post(apiUrl.wxRegister, {
@@ -137,6 +124,7 @@ const Api = {
       username: username,
       university: university,
       avatar_size: avatarSize,
+      size: size,
       email: email,
     }),
 };

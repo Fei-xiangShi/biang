@@ -117,6 +117,7 @@ const schoolId = ref("1");
 const email = ref("");
 const emailValid = ref();
 const userAvatarUrl = ref("");
+let size = "0";
 
 const checkUsername = () => {
   usernameValid.value = Checker.checkUsername(username.value);
@@ -154,6 +155,12 @@ const hideKeyboard = () => {
 
 const onChooseAvatar = (e: any) => {
   userAvatarUrl.value = e.detail.avatarUrl;
+  uni.getFileInfo({
+    filePath: userAvatarUrl.value,
+    success: (res) => {
+      size = String(res.size);
+    },
+  });
 };
 
 const commitRegister = () => {
@@ -182,7 +189,8 @@ const commitRegister = () => {
     username.value,
     email.value,
     schoolId.value,
-    userAvatarUrl.value
+    userAvatarUrl.value,
+    size
   ).then((res: any) => {
     if (res.data.success === true) {
       uni.showToast({
@@ -194,24 +202,30 @@ const commitRegister = () => {
       uni.setStorageSync("username", username.value);
       uni.setStorageSync("school", schoolName.value);
       uni.setStorageSync("schoolId", schoolId.value);
-      const AuthData = {} as any;
-      const urlParams = new URLSearchParams(
-        res.data.presigned_url.split("?")[1]
-      );
-      AuthData.key = urlParams.get("key");
-      AuthData.qSignAlgorithm = urlParams.get("q-sign-algorithm");
-      AuthData.qAk = urlParams.get("q-ak");
-      AuthData.qKeyTime = urlParams.get("q-key-time");
-      AuthData.qSignature = urlParams.get("q-signature");
-      AuthData.policy = urlParams.get("policy");
-      Api.uploadAvatar(res.data.presigned_url, userAvatarUrl.value, AuthData).then(
-        (res: any) => {
-          // if (res.statusCode === 200) {
-            console.log(res);
-            // uni.setStorageSync("userAvatarUrl", userAvatarUrl.value);
-          // }
-        }
-      );
+      uni.getFileSystemManager().readFile({
+        filePath: userAvatarUrl.value,
+        success: (result) => {
+          const headers = {
+            "Content-Type": "image/jpeg",
+            "Content-Length": size,
+          };
+          Api.uploadAvatar(res.data.presigned_url, result.data, headers).then(
+            (res: any) => {
+              if (res.statusCode === 200) {
+                console.log(res);
+                Api.updateAvatarUrl(
+                  userAvatarUrl.value,
+                  uni.getStorageSync("aueduSession")
+                ).then((res: any) => {
+                  if (res.data.success === true) {
+                    uni.setStorageSync("userAvatarUrl", userAvatarUrl.value);
+                  }
+                });
+              }
+            }
+          );
+        },
+      });
       uni.reLaunch({
         url: RouteConfig.my.url,
       });

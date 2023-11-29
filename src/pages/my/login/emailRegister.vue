@@ -259,14 +259,33 @@ const commitRegister = () => {
           uni.setStorageSync("username", username.value);
           uni.setStorageSync("school", schoolName.value);
           uni.setStorageSync("schoolId", schoolId.value);
-          Api.uploadAvatar(res.data.presigned_url, userAvatarUrl.value).then(
-            (res: any) => {
-              // if (res.statusCode === 200) {
-              console.log(res);
-              // uni.setStorageSync("userAvatarUrl", userAvatarUrl.value);
-              // }
-            }
-          );
+          uni.getFileSystemManager().readFile({
+            filePath: userAvatarUrl.value,
+            success: (result) => {
+              const headers = {
+                "Content-Type": "image/jpeg",
+                "Content-Length": size,
+              };
+              Api.uploadAvatar(
+                res.data.presigned_url,
+                result.data,
+                headers
+              ).then((res: any) => {
+                if (res.statusCode === 200) {
+                  console.log(res);
+                  Api.updateAvatarUrl(
+                    userAvatarUrl.value,
+                    uni.getStorageSync("aueduSession")
+                  ).then((res: any) => {
+                    if (res.data.success === true) {
+                      uni.setStorageSync("userAvatarUrl", userAvatarUrl.value);
+                    }
+                  });
+                }
+              });
+            },
+          });
+
           uni.reLaunch({
             url: RouteConfig.my.url,
           });
