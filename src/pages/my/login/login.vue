@@ -22,6 +22,9 @@
   >
     <view class="nav-to-register-text">{{ $t("没有账号？去注册") }}</view>
   </view>
+  <view class="wx-register" @click="navTo(RouteConfig.my.login.wxRegister.url)">
+    <view class="wx-register-text">{{ $t("微信一键注册") }}</view>
+  </view>
 </template>
 
 <script setup lang="ts">

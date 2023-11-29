@@ -3,9 +3,25 @@
   <view class="login-container">
     <view class="title-text">{{ $t("注册新账号") }}</view>
     <view class="sub-title-text">{{ $t("注册副标题提示") }}</view>
+    <view class="avatar">
+      <view class="avatar-title">
+        <view class="avatar-title-text">{{ $t("头像选择框标题") }}</view>
+      </view>
+      <view class="upload-avatar">
+        <button
+          class="avatar-wrapper"
+          open-type="chooseAvatar"
+          @chooseavatar="onChooseAvatar"
+        >
+          <view class="avatarShow">
+            <image class="avatar-image" :src="userAvatarUrl" />
+          </view>
+        </button>
+      </view>
+    </view>
     <view class="email">
       <view class="email-input-title">
-        <view class="email-input-title-text">{{ $t("邮箱输入框标题") }}</view>
+        <view class="email-input-title-text">{{ $t("邮箱输入框标题") }}*</view>
       </view>
       <view class="email-input">
         <u-input
@@ -22,9 +38,9 @@
     </view>
     <view class="username">
       <view class="username-input-title">
-        <view class="username-input-title-text">{{
-          $t("用户名输入框标题")
-        }}</view>
+        <view class="username-input-title-text">
+          {{ $t("用户名输入框标题") }}*
+        </view>
       </view>
       <view class="username-input">
         <u-input
@@ -45,7 +61,7 @@
     <view class="password">
       <view class="password-input-title">
         <view class="password-input-title-text">
-          {{ $t("密码输入框标题") }}
+          {{ $t("密码输入框标题") }}*
         </view>
       </view>
       <view class="password-input">
@@ -68,7 +84,7 @@
     <view class="password-confirm">
       <view class="password-confirm-input-title">
         <view class="password-confirm-input-title-text">
-          {{ $t("确认密码输入框标题") }}
+          {{ $t("确认密码输入框标题") }}*
         </view>
       </view>
       <view class="password-input">
@@ -90,7 +106,7 @@
     </view>
     <view class="school-select-input">
       <u-form>
-        <u-form-item :label="t('学校选择框标题')" @click="hideKeyboard">
+        <u-form-item :label="t('学校选择框标题') + '*'" @click="hideKeyboard">
           <u-input
             v-model="schoolName"
             disabled
@@ -148,6 +164,8 @@ const passwordIsSame = ref();
 const emailValid = ref();
 const username = ref("");
 const usernameValid = ref();
+const userAvatarUrl = ref("");
+let size = "0";
 
 const checkPasswordSame = () => {
   if (password.value !== confrimedPassword.value) {
@@ -206,6 +224,16 @@ const hideKeyboard = () => {
   uni.hideKeyboard();
 };
 
+const onChooseAvatar = (e: any) => {
+  userAvatarUrl.value = e.detail.avatarUrl;
+  uni.getFileInfo({
+    filePath: userAvatarUrl.value,
+    success: (res) => {
+      size = String(res.size);
+    },
+  });
+};
+
 const commitRegister = () => {
   if (
     checkEmail() &&
@@ -217,7 +245,8 @@ const commitRegister = () => {
       email.value,
       username.value,
       password.value,
-      schoolId.value
+      schoolId.value,
+      size
     )
       .then((res: any) => {
         if (res.data.success === true) {
@@ -230,8 +259,33 @@ const commitRegister = () => {
           uni.setStorageSync("username", username.value);
           uni.setStorageSync("school", schoolName.value);
           uni.setStorageSync("schoolId", schoolId.value);
-          const presignedUrl = res.data.presigned_url;
-          console.log(presignedUrl);
+          uni.getFileSystemManager().readFile({
+            filePath: userAvatarUrl.value,
+            success: (result) => {
+              const headers = {
+                "Content-Type": "image/jpeg",
+                "Content-Length": size,
+              };
+              Api.uploadAvatar(
+                res.data.presigned_url,
+                result.data,
+                headers
+              ).then((res: any) => {
+                if (res.statusCode === 200) {
+                  console.log(res);
+                  Api.updateAvatarUrl(
+                    userAvatarUrl.value,
+                    uni.getStorageSync("aueduSession")
+                  ).then((res: any) => {
+                    if (res.data.success === true) {
+                      uni.setStorageSync("userAvatarUrl", userAvatarUrl.value);
+                    }
+                  });
+                }
+              });
+            },
+          });
+
           uni.reLaunch({
             url: RouteConfig.my.url,
           });
@@ -260,7 +314,7 @@ const commitRegister = () => {
   flex-direction: column;
   justify-content: center;
   height: 100%;
-  padding: 2rem;
+  padding: 0 2rem;
 }
 
 .title-text {
@@ -273,6 +327,42 @@ const commitRegister = () => {
   font-size: 14px;
   color: #999;
   margin-top: 10px;
+}
+
+.avatar {
+  width: 100%;
+  margin-top: 20px;
+  .avatar-title {
+    width: 100%;
+    .avatar-title-text {
+      font-size: 14px;
+      color: #999;
+    }
+  }
+  .upload-avatar {
+    width: 5rem;
+    height: 5rem;
+    margin-top: 10px;
+    button {
+      width: 100%;
+      height: 100%;
+      padding: 0;
+      border-radius: 50%;
+    }
+    .avatar-wrapper {
+      width: 100%;
+      height: 100%;
+      .avatarShow {
+        width: 100%;
+        height: 100%;
+        .avatar-image {
+          width: 100%;
+          height: 100%;
+          border-radius: 50%;
+        }
+      }
+    }
+  }
 }
 
 .email {
@@ -409,7 +499,7 @@ const commitRegister = () => {
 
 .school-select-input {
   width: 100%;
-  margin-top: 10px;
+  margin-top: 20px;
   u-form {
     width: 100%;
     u-form-item {

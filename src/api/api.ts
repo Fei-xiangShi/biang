@@ -13,28 +13,17 @@ const Api = {
       email: email,
       password: password,
     }),
-  emailRegister: (
-    email: string,
-    username: string,
-    password: string,
-    university: string
-  ) =>
-    http.post(apiUrl.emailRegister, {
-      email: email,
-      username: username,
-      password: password,
-      university: university,
-    }),
   getProgramList: (university_id: string) =>
     http.get(apiUrl.getProgramList + "?university_id=" + university_id),
-  uploadAvatar: (avatarUrl: string, aueduSession: string) =>
-    uni.uploadFile({
-      url: apiUrl.uploadAvatar,
-      filePath: avatarUrl,
-      name: "avatar",
-      formData: {
-        aueduSession: aueduSession,
-      },
+  uploadAvatar: (
+    url: string,
+    avatarData: string | ArrayBuffer,
+    header: object
+  ) => http.put(url, avatarData, header),
+  updateAvatarUrl: (avatarUrl: string, aueduSession: string) =>
+    http.post(apiUrl.uploadAvatar, {
+      avatar_url: avatarUrl,
+      auedu_session: aueduSession,
     }),
   getCourseDetail: (
     course_code: string,
@@ -115,6 +104,36 @@ const Api = {
     }),
   deleteComment: (id: number, auedu_session: string) =>
     http.del(`${apiUrl.comments}${id}/`, { auedu_session: auedu_session }),
+  emailRegister: (
+    email: string,
+    username: string,
+    password: string,
+    university: string,
+    avatarSize: string
+  ) =>
+    http.post(apiUrl.emailRegister, {
+      email: email,
+      username: username,
+      password: password,
+      university: university,
+      avatar_size: avatarSize,
+    }),
+  wxRegister: (
+    code: string,
+    username: string,
+    university: string,
+    avatarSize: string,
+    size: string,
+    email?: undefined | string
+  ) =>
+    http.post(apiUrl.wxRegister, {
+      code: code,
+      username: username,
+      university: university,
+      avatar_size: avatarSize,
+      size: size,
+      email: email,
+    }),
 };
 
 export default Api;

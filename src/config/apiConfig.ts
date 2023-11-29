@@ -29,6 +29,8 @@ const apiUrl = {
   comments: `${baseUrl}/comments/`,
   // 邮箱注册
   emailRegister: `${baseUrl}/emailRegister`,
+  // 微信注册
+  wxRegister: `${baseUrl}/wxRegister`,
 };
 
 export default apiUrl;
