@@ -4,21 +4,33 @@ import apiUrl from "@/config/apiConfig";
 const Api = {
   receiveCalendar: (ics_url: string, auedu_session: string) =>
     http.post(apiUrl.ics, { ics_url: ics_url, auedu_session: auedu_session }),
-  wxLogin: (code: string, nickName: string) =>
+  wxLogin: (code: string, username: string) =>
     http.post(apiUrl.wxLogin, {
       code: code,
-      username: nickName,
+      username: username,
     }),
   getProgramList: (university_id: string) =>
     http.get(apiUrl.getProgramList + "?university_id=" + university_id),
-  uploadAvatar: (avatarUrl: string, aueduSession: string) =>
+  uploadAvatar: (url: string, avatarUrl: string, AuthData?: any) =>
     uni.uploadFile({
-      url: apiUrl.uploadAvatar,
+      url: url,
       filePath: avatarUrl,
-      name: "avatar",
+      name: "file",
       formData: {
-        aueduSession: aueduSession,
+        key: AuthData?.key,
+        success_action_status: 200,
+        "Content-Type": "",
+        "q-sign-algorithm": AuthData?.qSignAlgorithm,
+        "q-ak": AuthData?.qAk,
+        "q-key-time": AuthData?.qKeyTime,
+        "q-signature": AuthData?.qSignature,
+        policy: AuthData?.policy,
       },
+    }),
+  updateAvatarUrl: (avatarUrl: string, aueduSession: string) =>
+    http.post(apiUrl.uploadAvatar, {
+      avatar_url: avatarUrl,
+      auedu_session: aueduSession,
     }),
   getCourseDetail: (
     course_code: string,
@@ -103,13 +115,29 @@ const Api = {
     email: string,
     username: string,
     password: string,
-    university: string
+    university: string,
+    avatarSize: string
   ) =>
     http.post(apiUrl.emailRegister, {
       email: email,
       username: username,
       password: password,
       university: university,
+      avatar_size: avatarSize,
+    }),
+  wxRegister: (
+    code: string,
+    username: string,
+    university: string,
+    avatarSize: string,
+    email?: undefined | string
+  ) =>
+    http.post(apiUrl.wxRegister, {
+      code: code,
+      username: username,
+      university: university,
+      avatar_size: avatarSize,
+      email: email,
     }),
 };
 

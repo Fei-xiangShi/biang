@@ -245,7 +245,7 @@ const onLogin = async () => {
     if (responseSuccess === "登录成功") {
       isLogin.value = true;
       uni.setStorageSync("aueduSession", res.data.auedu_session);
-      Api.uploadAvatar(userAvatarUrl.value, res.data.auedu_session);
+      // Api.uploadAvatar(userAvatarUrl.value, res.data.auedu_session);
     }
   });
   isAvatarChoosing.value = false;

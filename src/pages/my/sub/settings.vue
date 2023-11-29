@@ -47,9 +47,8 @@ const logout = () => {
         uni.removeStorageSync("classTableUrl");
         uni.removeStorageSync("aueduSession");
         uni.removeStorageSync("classTableContent");
-        uni.removeStorageSync("nickname");
+        uni.removeStorageSync("username");
         uni.removeStorageSync("userAvatarUrl");
-        uni.removeStorageSync("isLogin");
         uni.reLaunch({
           url: "/pages/index/index",
         });
