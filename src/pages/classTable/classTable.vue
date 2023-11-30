@@ -78,12 +78,12 @@ const getNewClassTable = () => {
         uni.setStorageSync("classTableUrl", classTableUrl.value);
         haveClassTable.value = true;
       } else {
-        ErrorHandler(res.statusCode);
+        ErrorHandler(res);
       }
     })
     .catch((err: any) => {
       uni.showToast({
-        title: err.message,
+        title: t(err.message),
         icon: "none",
       });
     })

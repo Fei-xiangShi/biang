@@ -142,9 +142,12 @@ const closeChangeSchool = () => {
 }
 
 .title {
+  display: flex;
   flex: 1;
   text-align: center;
+  justify-content: center;
   .title-text{
+    width: fit-content;
     font-size: 1.2rem;
     font-weight: bold;
     color: #000000ee;

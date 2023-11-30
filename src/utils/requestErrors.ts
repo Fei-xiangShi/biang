@@ -43,7 +43,7 @@ class NullError extends RequestError {
 
 class UnkownError extends RequestError {
   constructor() {
-    super("unkown error.", RequestErrorCode.UnkownError);
+    super("Unkown error. Please contact with the admin", RequestErrorCode.UnkownError);
   }
 }
 
@@ -160,4 +160,4 @@ const ErrorHandler = (res: any) => {
     throw new UnkownError();
   }
 };
-export { ErrorHandler };
+export { ErrorHandler, RequestError, RequestErrorCode };

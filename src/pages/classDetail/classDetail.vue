@@ -152,6 +152,9 @@ import Reply from "@/models/reply";
 import { onReachBottom } from "@dcloudio/uni-app";
 import textfolder from "@/components/textfolder.vue";
 import { ErrorHandler } from "@/utils/requestErrors";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const replyList = ref(new ReplyList());
 const reply = ref(new Reply());
@@ -256,7 +259,7 @@ const commitReply = () => {
     })
     .catch((err) => {
       uni.showToast({
-        title: err.message,
+        title: t(err.message),
         icon: "none",
       });
     });

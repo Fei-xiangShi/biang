@@ -10,13 +10,10 @@
 </template>
 
 <script setup lang="ts">
-import { useI18n } from "vue-i18n";
 import { ref } from "vue";
 import EmailLogin from "@/components/login/emailLogin.vue";
 import WxLogin from "@/components/login/wxLogin.vue";
 import loginMethods from "@/models/loginMethods";
-
-const { t } = useI18n();
 
 const wxLogin = loginMethods.WX;
 const emailLogin = loginMethods.Email;

@@ -37,7 +37,7 @@
           class="username-input-warning-text"
           v-if="usernameValid === false"
         >
-          {{ $t("用户名格式错误警告") }}
+          {{ usernameWarning }}
         </view>
       </view>
     </view>
@@ -58,7 +58,7 @@
           v-if="emailValid === false"
           :style="{ color: 'rgb(167, 167, 167)' }"
         >
-          {{ $t("邮箱格式错误提醒") }}
+          {{ emailWarning }}
         </view>
       </view>
     </view>
@@ -104,7 +104,7 @@ import navbar from "@/components/navbar.vue";
 import Checker from "@/utils/checker";
 import Api from "@/api/api";
 import RouteConfig from "@/config/routes";
-import { ErrorHandler } from "@/utils/requestErrors";
+import { ErrorHandler, RequestErrorCode } from "@/utils/requestErrors";
 
 const { t } = useI18n();
 
@@ -118,9 +118,11 @@ const schools = [
 const pickerLoading = ref(false);
 const username = ref("");
 const usernameValid = ref();
+const usernameWarning = ref(t("用户名格式错误警告"));
 const schoolId = ref("1");
 const email = ref();
 const emailValid = ref();
+const emailWarning = ref(t("邮箱格式错误提醒"));
 const code = ref("");
 const userAvatarUrl = ref(
   "https://img.ixintu.com/download/jpg/20201201/653c62f6204ba19a0c630206bee5923f_512_512.jpg!ys"
@@ -213,40 +215,25 @@ const commitRegister = () => {
               "Content-Type": "image/jpeg",
               "Content-Length": size,
             };
-            Api.uploadAvatar(res.data.presigned_url, result.data, headers)
-              .then((res: any) => {
+            Api.uploadAvatar(res.data.presigned_url, result.data, headers).then(
+              (res: any) => {
                 if (res.statusCode === 200) {
                   console.log(res);
                   Api.updateAvatarUrl(
                     userAvatarUrl.value,
                     uni.getStorageSync("aueduSession")
-                  )
-                    .then((res: any) => {
-                      if (res.data.success === true) {
-                        uni.setStorageSync(
-                          "userAvatarUrl",
-                          userAvatarUrl.value
-                        );
-                      } else {
-                        ErrorHandler(res);
-                      }
-                    })
-                    .catch((err: any) => {
-                      uni.showToast({
-                        title: err.message,
-                        icon: "none",
-                      });
-                    });
+                  ).then((res: any) => {
+                    if (res.data.success === true) {
+                      uni.setStorageSync("userAvatarUrl", userAvatarUrl.value);
+                    } else {
+                      ErrorHandler(res);
+                    }
+                  });
                 } else {
                   ErrorHandler(res);
                 }
-              })
-              .catch((err: any) => {
-                uni.showToast({
-                  title: err.message,
-                  icon: "none",
-                });
-              });
+              }
+            );
           },
         });
         uni.reLaunch({
@@ -257,10 +244,18 @@ const commitRegister = () => {
       }
     })
     .catch((err: any) => {
-      uni.showToast({
-        title: err.message,
-        icon: "none",
-      });
+      if (err.code === RequestErrorCode.UserExistsError) {
+        usernameValid.value = false;
+        usernameWarning.value = t(err.message)
+      } else if (err.code === RequestErrorCode.EmailExistsError) {
+        emailValid.value = false;
+        emailWarning.value = t(err.message)
+      } else {
+        uni.showToast({
+          title: t(err.message),
+          icon: "none",
+        });
+      }
     });
 };
 

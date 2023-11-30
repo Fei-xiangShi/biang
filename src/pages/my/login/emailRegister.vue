@@ -14,7 +14,7 @@
           @chooseavatar="onChooseAvatar"
         >
           <view class="avatarShow">
-            <image class="avatar-image" :src="userAvatarUrl" />
+            <image class="avatar-image" :src="avatarUrl" />
           </view>
         </button>
       </view>
@@ -32,7 +32,7 @@
       </view>
       <view class="email-input-warning">
         <view class="email-input-warning-text" v-if="emailValid === false">
-          {{ $t("邮箱格式错误提醒") }}
+          {{ emailWarning }}
         </view>
       </view>
     </view>
@@ -54,7 +54,7 @@
           class="username-input-warning-text"
           v-if="usernameValid === false"
         >
-          {{ $t("用户名格式错误警告") }}
+          {{ usernameWarning }}
         </view>
       </view>
     </view>
@@ -174,7 +174,7 @@ import navbar from "@/components/navbar.vue";
 import Checker from "@/utils/checker";
 import Api from "@/api/api";
 import RouteConfig from "@/config/routes";
-import { ErrorHandler } from "@/utils/requestErrors";
+import { ErrorHandler, RequestErrorCode } from "@/utils/requestErrors";
 
 const { t } = useI18n();
 
@@ -187,14 +187,16 @@ const schools = [
   ),
 ];
 const pickerLoading = ref(false);
-const email = ref("");
 const password = ref("");
 const confrimedPassword = ref("");
 const passwordIsSame = ref();
+const email = ref("");
 const emailValid = ref();
+const emailWarning = ref(t("邮箱格式错误提醒"));
 const username = ref("");
 const usernameValid = ref();
-const userAvatarUrl = ref(
+const usernameWarning = ref(t("用户名格式错误提醒"));
+const avatarUrl = ref(
   "https://img.ixintu.com/download/jpg/20201201/653c62f6204ba19a0c630206bee5923f_512_512.jpg!ys"
 );
 let size = "8192";
@@ -268,9 +270,9 @@ const hideKeyboard = () => {
 };
 
 const onChooseAvatar = (e: any) => {
-  userAvatarUrl.value = e.detail.avatarUrl;
+  avatarUrl.value = e.detail.avatarUrl;
   uni.getFileInfo({
-    filePath: userAvatarUrl.value,
+    filePath: avatarUrl.value,
     success: (res) => {
       size = String(res.size);
     },
@@ -303,51 +305,35 @@ const commitRegister = () => {
           uni.setStorageSync("school", school.value);
           uni.setStorageSync("schoolId", schoolId.value);
           uni.getFileSystemManager().readFile({
-            filePath: userAvatarUrl.value,
+            filePath: avatarUrl.value,
             success: (result) => {
               const headers = {
                 "Content-Type": "image/jpeg",
                 "Content-Length": size,
               };
-              Api.uploadAvatar(res.data.presigned_url, result.data, headers)
-                .then((res: any) => {
-                  if (res.statusCode === 200) {
-                    console.log(res);
-                    Api.updateAvatarUrl(
-                      userAvatarUrl.value,
-                      uni.getStorageSync("aueduSession")
-                    )
-                      .then((res: any) => {
-                        if (res.data.success === true) {
-                          uni.setStorageSync(
-                            "userAvatarUrl",
-                            userAvatarUrl.value
-                          );
-                        } else {
-                          ErrorHandler(res);
-                        }
-                      })
-                      .catch((err: any) => {
-                        uni.showToast({
-                          title: err.message,
-                          icon: "none",
-                          duration: 2000,
-                        });
-                      });
-                  } else {
-                    ErrorHandler(res);
-                  }
-                })
-                .catch((err: any) => {
-                  uni.showToast({
-                    title: err.message,
-                    icon: "none",
-                    duration: 2000,
+              Api.uploadAvatar(
+                res.data.presigned_url,
+                result.data,
+                headers
+              ).then((res: any) => {
+                if (res.statusCode === 200) {
+                  console.log(res);
+                  Api.updateAvatarUrl(
+                    avatarUrl.value,
+                    uni.getStorageSync("aueduSession")
+                  ).then((res: any) => {
+                    if (res.data.success === true) {
+                      uni.setStorageSync("avatarUrl", avatarUrl.value);
+                    } else {
+                      ErrorHandler(res);
+                    }
                   });
-                });
+                } else {
+                  ErrorHandler(res);
+                }
+              });
             },
           });
-
           uni.reLaunch({
             url: RouteConfig.my.url,
           });
@@ -356,11 +342,19 @@ const commitRegister = () => {
         }
       })
       .catch((err: any) => {
-        uni.showToast({
-          title: err.message,
-          icon: "none",
-          duration: 2000,
-        });
+        if (err.code === RequestErrorCode.EmailExistsError) {
+          emailValid.value = false;
+          emailWarning.value = t(err.message);
+        } else if (err.code === RequestErrorCode.UsernameExistsError) {
+          usernameValid.value = false;
+          usernameWarning.value = t(err.message);
+        } else {
+          uni.showToast({
+            title: t(err.message),
+            icon: "none",
+            duration: 2000,
+          });
+        }
       });
   }
 };

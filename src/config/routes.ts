@@ -29,9 +29,6 @@ const RouteConfig = {
     },
     login: {
       url: "login/login",
-      welcome: {
-        url: "welcome",
-      },
       emailRegister: {
         url: "emailRegister",
       },

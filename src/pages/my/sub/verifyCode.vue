@@ -9,7 +9,26 @@
         <text class="title-text">{{ $t("输入验证码提示") }}</text>
       </view>
       <view class="code-inputs">
-        <u-code-input :focus="true" :bold="true" />
+        <input
+          class="code-input"
+          adjust-position="false"
+          auto-blur="true"
+          @blur="confirm(code)"
+          :focus="focus"
+          v-model="code"
+          type="number"
+          maxlength="6"
+        />
+        <view
+          class="code-input-block"
+          v-for="i in 6"
+          :key="i"
+          @tap="focusToInput"
+        >
+          <view class="single-code" :class="{ inputing: code.length == i - 1 }">
+            {{ code[i - 1] }}
+          </view>
+        </view>
       </view>
       <view class="warning" v-if="warning">
         <text class="warning-text">{{ $t("验证码错误") }}</text>
@@ -19,22 +38,13 @@
       </view>
       <view
         class="resend-button"
-        :class="[timeleft < 0 ? 'available' : '']"
+        :class="[timeleft <= 0 ? 'available' : '']"
         @tap="resendEmail"
       >
-        <view class="number" v-if="timeleft > -1">
-          <u-count-down
-            :time="60 * 1000"
-            format="ss"
-            autoStart
-            @change="timeChange"
-          />
-          <view class="s">s</view>
-        </view>
-        <view class="resend-text">{{ $t("重新发送") }}</view>
+        <view class="resend-text">{{ showTime }} {{ $t("重新发送") }}</view>
       </view>
       <view class="confirm-button">
-        <view class="button-text" @tap="confirm">{{ $t("验证") }}</view>
+        <view class="button-text" @tap="confirm(code)">{{ $t("验证") }}</view>
       </view>
       <view class="bottom">
         <text class="bottom-text">{{ $t("验证码底部提示") }}</text>
@@ -57,7 +67,7 @@
         }}</text>
       </view>
       <view class="successPage-button">
-        <view class="successPage-button-text" @tap="goToMy">{{
+        <view class="successPage-button-text" @tap="redirect">{{
           $t("返回")
         }}</view>
       </view>
@@ -69,35 +79,49 @@
 import { ref } from "vue";
 import Api from "@/api/api";
 import navbar from "@/components/navbar.vue";
-import RouteConfig from "@/config/routes";
 import { ErrorHandler } from "@/utils/requestErrors";
+import { useI18n } from "vue-i18n";
 
-const first = ref("");
-const second = ref("");
-const third = ref("");
-const fourth = ref("");
-const fifth = ref("");
-const sixth = ref("");
-const firstInputFocus = ref(true);
-const secondInputFocus = ref(false);
-const thirdInputFocus = ref(false);
-const fourthInputFocus = ref(false);
-const fifthInputFocus = ref(false);
-const sixthInputFocus = ref(false);
+const { t } = useI18n();
+
 const warning = ref(false);
 const disabled = ref(false);
 const timeleft = ref(60);
 const success = ref(false);
 const animeShow = ref(false);
+const showTime = ref(timeleft.value + "s");
+const code = ref("");
+const focus = ref(true);
 
-const timeChange = () => {
-  timeleft.value -= 1;
+const props = defineProps({
+  email: {
+    type: String,
+    default: "",
+  },
+  redirctTo: {
+    type: String,
+    default: "",
+  },
+});
+
+const resetTime = () => {
+  timeleft.value = 60;
+  const intervalId = setInterval(() => {
+    timeleft.value--;
+    showTime.value = timeleft.value + "s";
+    if (timeleft.value === 0) {
+      clearInterval(intervalId);
+      showTime.value = "";
+    }
+  }, 1000);
 };
 
+resetTime();
+
 const resendEmail = () => {
-  if (timeleft.value > -1) return;
+  if (timeleft.value > 0) return;
   Api.sendEmail(
-    uni.getStorageSync("email"),
+    props.email,
     uni.getStorageSync("aueduSession"),
     uni.getStorageSync("lang")
   )
@@ -110,107 +134,53 @@ const resendEmail = () => {
     })
     .catch((err: any) => {
       uni.showToast({
-        title: err.message,
+        title: t(err.message),
         icon: "none",
       });
     });
-  timeleft.value = 60;
+  resetTime();
 };
 
-const confirm = () => {
+const focusToInput = () => {
+  focus.value = true;
+};
+
+const confirm = (code: string) => {
+  focus.value = false;
   disabled.value = true;
-  Api.verifyEmail(
-    uni.getStorageSync("aueduSession"),
-    first.value +
-      second.value +
-      third.value +
-      fourth.value +
-      fifth.value +
-      sixth.value
-  ).then((res: any) => {
-    if (res.statusCode === 200) {
-      success.value = true;
-      uni.setStorageSync("emailVerified", true);
-      setTimeout(() => {
-        animeShow.value = true;
-      }, 100);
-    } else {
-      warning.value = true;
-    }
+  if (code.length < 6) {
     disabled.value = false;
-  });
+    return;
+  }
+  Api.verifyEmail(uni.getStorageSync("aueduSession"), code)
+    .then((res: any) => {
+      if (res.statusCode === 200) {
+        success.value = true;
+        uni.setStorageSync("emailVerified", true);
+        uni.setStorageSync("email", props.email);
+        setTimeout(() => {
+          animeShow.value = true;
+        }, 100);
+      } else {
+        ErrorHandler(res);
+      }
+    })
+    .catch((err: any) => {
+      warning.value = true;
+      uni.showToast({
+        title: t(err.message),
+        icon: "none",
+      });
+    })
+    .finally(() => {
+      disabled.value = false;
+    });
 };
 
-const goToMy = () => {
+const redirect = () => {
   uni.reLaunch({
-    url: RouteConfig.my.url,
+    url: props.redirctTo,
   });
-};
-
-const firstChange = () => {
-  if (first.value.length === 1) {
-    secondInputFocus.value = true;
-    firstInputFocus.value = false;
-  }
-  if (first.value.length === 0) {
-    firstInputFocus.value = true;
-    secondInputFocus.value = false;
-  }
-};
-
-const secondChange = () => {
-  if (second.value.length === 1) {
-    thirdInputFocus.value = true;
-    secondInputFocus.value = false;
-  }
-  if (second.value.length === 0) {
-    firstInputFocus.value = true;
-    secondInputFocus.value = false;
-  }
-};
-
-const thirdChange = () => {
-  if (third.value.length === 1) {
-    fourthInputFocus.value = true;
-    thirdInputFocus.value = false;
-  }
-  if (third.value.length === 0) {
-    secondInputFocus.value = true;
-    thirdInputFocus.value = false;
-  }
-};
-
-const forthChange = () => {
-  if (fourth.value.length === 1) {
-    fifthInputFocus.value = true;
-    fourthInputFocus.value = false;
-  }
-  if (fourth.value.length === 0) {
-    thirdInputFocus.value = true;
-    fourthInputFocus.value = false;
-  }
-};
-
-const fifthChange = () => {
-  if (fifth.value.length === 1) {
-    sixthInputFocus.value = true;
-    fifthInputFocus.value = false;
-  }
-  if (fifth.value.length === 0) {
-    fourthInputFocus.value = true;
-    fifthInputFocus.value = false;
-  }
-};
-
-const sixChange = () => {
-  if (sixth.value.length === 1) {
-    sixthInputFocus.value = false;
-    confirm();
-  }
-  if (sixth.value.length === 0) {
-    fifthInputFocus.value = true;
-    sixthInputFocus.value = false;
-  }
 };
 </script>
 
@@ -259,21 +229,40 @@ const sixChange = () => {
   }
   .code-inputs {
     width: 100%;
-    height: 10%;
+    height: 15%;
     display: flex;
     align-items: center;
     justify-content: space-between;
+    margin-bottom: 1rem;
     .code-input {
-      width: 15%;
+      position: absolute;
+      left: 0;
+      top: 0;
+      height: 100rpx;
+      width: 100%;
+      opacity: 0;
+      z-index: 99;
+      outline: none;
+    }
+    .code-input-block {
+      width: 13%;
       height: 100%;
       display: flex;
       align-items: center;
       justify-content: center;
-      border-radius: 5px;
-      u-input {
+      .single-code {
         width: 100%;
         height: 100%;
-        text-align: center;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+        background: rgba(177, 177, 177, 0.556);
+        border-radius: 5px;
+        transition: all 0.3s;
+        &.inputing {
+          background: rgb(124, 124, 124);
+        }
       }
     }
   }
@@ -312,15 +301,6 @@ const sixChange = () => {
     background: rgba(177, 177, 177, 0.556);
     transition: all 0.3s;
     padding: 0 10px;
-    .number {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      justify-content: center;
-      .s {
-        margin-right: 0.5rem;
-      }
-    }
   }
 
   .available {

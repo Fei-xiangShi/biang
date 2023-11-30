@@ -15,7 +15,7 @@
       <view class="email-login-input-warning">
         <view
           class="email-login-input-warning-text"
-          v-if="emailValid === false || emailExists === false"
+          v-if="emailValid === false"
         >
           {{ t(emailWarning) }}
         </view>
@@ -57,13 +57,13 @@ import Api from "@/api/api";
 import RouteConfig from "@/config/routes";
 import navbar from "@/components/navbar.vue";
 import Checker from "@/utils/checker";
+import { ErrorHandler } from "@/utils/requestErrors";
 
 const { t } = useI18n();
 
 const email = ref("");
 const wxLogin = loginMethods.WX;
 const emailValid = ref(true);
-const emailExists = ref(true);
 const emailWarning = ref("");
 
 const login = () => {
@@ -72,16 +72,20 @@ const login = () => {
     emailWarning.value = "邮箱格式错误";
     return;
   }
-  Api.emailExists(email.value).then((res: any) => {
-    if (res.data.success === true) {
-      navTo(
-        `${RouteConfig.my.login.emailLoginPassword.url}?email=${email.value}`
-      );
-    } else {
-      emailExists.value = false;
-      emailWarning.value = "邮箱不存在";
-    }
-  });
+  Api.emailExists(email.value)
+    .then((res: any) => {
+      if (res.data.success === true) {
+        navTo(
+          `${RouteConfig.my.login.emailLoginPassword.url}?email=${email.value}`
+        );
+      } else {
+        ErrorHandler(res);
+      }
+    })
+    .catch((err: any) => {
+      emailWarning.value = t(err.message);
+      emailValid.value = true;
+    });
 };
 
 const navTo = (url: string) => {

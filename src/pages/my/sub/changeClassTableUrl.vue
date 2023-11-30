@@ -53,6 +53,9 @@ import Api from "@/api/api";
 import { ref } from "vue";
 import navbar from "@/components/navbar.vue";
 import { ErrorHandler } from "@/utils/requestErrors";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const classTableUrl = ref("");
 const classTableContent = ref("");
@@ -82,7 +85,7 @@ const getNewClassTable = () => {
     .catch((err: any) => {
       console.log(err);
       uni.showToast({
-        title: err.message,
+        title: t(err.message),
         icon: "none",
       });
     })

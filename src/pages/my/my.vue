@@ -179,7 +179,7 @@ onMounted(() => {
       })
       .catch((err: any) => {
         uni.showToast({
-          title: err.message,
+          title: t(err.message),
           icon: "none",
         });
       });

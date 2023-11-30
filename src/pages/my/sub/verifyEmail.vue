@@ -33,6 +33,9 @@ import Api from "@/api/api";
 import navbar from "@/components/navbar.vue";
 import RouteConfig from "@/config/routes";
 import { ErrorHandler } from "@/utils/requestErrors";
+import { useI18n } from "vue-i18n";
+
+const { t } = useI18n();
 
 const email = ref("");
 const warning = ref(false);
@@ -57,9 +60,8 @@ const confirm = () => {
   )
     .then((res: any) => {
       if (res.statusCode === 200) {
-        uni.setStorageSync("email", email.value);
         uni.navigateTo({
-          url: RouteConfig.my.verifyCode.url,
+          url: `${RouteConfig.my.verifyCode.url}?email=${email.value}&redirectTo=${RouteConfig.my.url}`,
         });
       } else {
         ErrorHandler(res);
@@ -67,7 +69,7 @@ const confirm = () => {
     })
     .catch((err: any) => {
       uni.showToast({
-        title: err.message,
+        title: t(err.message),
         icon: "none",
       });
     })

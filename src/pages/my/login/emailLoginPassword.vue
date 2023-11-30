@@ -16,7 +16,7 @@
       </view>
     </view>
     <view class="email-login-button-container">
-      <view class="email-login-button" @tap="EmailLogin()">
+      <view class="email-login-button" @tap="login()">
         {{ t("登录") }}
       </view>
     </view>
@@ -38,7 +38,7 @@ const { t } = useI18n();
 const password = ref("");
 const passwordWrong = ref(false);
 
-const EmailLogin = () => {
+const login = () => {
   Api.emailLogin(props.email, password.value)
     .then((res: any) => {
       if (res.statusCode === 200) {
@@ -65,7 +65,7 @@ const EmailLogin = () => {
     })
     .catch((err: any) => {
       uni.showToast({
-        title: err.message,
+        title: t(err.message),
         icon: "none",
       });
     });
