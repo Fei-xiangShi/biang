@@ -1,13 +1,11 @@
 <template>
   <view class="wx-login-container">
-    <view class="toggle-to-email" @click="$emit('toggleLogin', email)">
-      <view class="toggle-to-email-text">{{ t("使用邮箱登录") }}</view>
-    </view>
+    <view class="wx-login-title">{{ t("微信登录标题") }}</view>
     <view class="wx-login-button" @tap="login">
       {{ t("微信一键登录按钮") }}
     </view>
-    <view class="wx-register" @tap="navTo(RouteConfig.my.login.wxRegister.url)">
-      {{ t("使用微信注册") }}
+    <view class="toggle-to-email" @click="$emit('toggleLogin', email)">
+      <view class="toggle-to-email-text">{{ t("使用邮箱登录") }}</view>
     </view>
   </view>
 </template>
@@ -30,8 +28,7 @@ const login = () => {
       emit("loginSuccess", res);
     } else {
       emit("loginFail", res);
-      if (res.data.status === 404) {
-        //这里判断是不是用户不存在
+      if (res.statusCode === 400 && res.data.errors[0].code === "blank") {
         navTo(RouteConfig.my.login.wxRegister.url);
       }
     }
@@ -48,12 +45,10 @@ onMounted(() => {
   uni.login({
     provider: "weixin",
     success: (res) => {
-      console.log("微信登录成功" + JSON.stringify(res));
       uni.getUserInfo({
         provider: "weixin",
         success: (infoRes) => {
-          console.log("获取用户信息成功" + JSON.stringify(infoRes));
-          code.value = JSON.parse(JSON.stringify(res)).code;
+          code.value = res.code;
         },
       });
     },
@@ -63,31 +58,6 @@ onMounted(() => {
 const emit = defineEmits(["loginSuccess", "loginFail", "toggleLogin"]);
 </script>
 
-<style lang="scss">
-.wx-login-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  height: 100%;
-  .toggle-to-email {
-    margin-top: 20px;
-    margin-bottom: 20px;
-    .toggle-to-email-text {
-      color: #999999;
-      font-size: 14px;
-    }
-  }
-  .wx-login-button {
-    width: 100%;
-    height: 50px;
-    background-color: #00e923;
-    border-radius: 5px;
-    color: #ffffff;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    font-size: 16px;
-  }
-}
+<style lang="scss" scoped>
+
 </style>

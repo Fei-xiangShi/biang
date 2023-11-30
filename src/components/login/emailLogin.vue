@@ -1,8 +1,5 @@
 <template>
   <view class="email-login-container">
-    <view class="toggle-to-wx" @tap="$emit('toggleLogin', wxLogin)">
-      <view class="toggle-to-wx-text">{{ t("使用微信登录") }}</view>
-    </view>
     <view class="email-login-title">{{ t("邮箱登录") }}</view>
     <view class="email-login-input-container">
       <view class="email-login-input-title">{{ t("邮箱") }}</view>
@@ -18,8 +15,8 @@
         t("下一步")
       }}</view>
     </view>
-    <view class="email-register" @tap="navTo(RouteConfig.my.url)">
-      {{ t("使用邮箱注册") }}
+    <view class="toggle-to-wx" @tap="$emit('toggleLogin', wxLogin)">
+      <view class="toggle-to-wx-text">{{ t("使用微信登录") }}</view>
     </view>
   </view>
 </template>
@@ -45,8 +42,8 @@ const emailExists = () => {
       console.log("验证成功");
       navTo(RouteConfig.my.login.emailLoginPassword.url)
     } else {
-      emit("loginFail",res.error);
-      }
+      emit("loginFail", res.error);
+    }
   });
 };
 
