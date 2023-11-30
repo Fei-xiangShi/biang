@@ -1,7 +1,7 @@
 <template>
   <navbar :title="t('一键登录')" />
   <view class="wx-login-container">
-    <view class="icon"></view>
+    <img src="../../static/icons/logo.png" class="icon" />
     <view class="wx-login-title">{{ $t("微信登录标题") }}</view>
     <view class="wx-login-content">{{ $t("微信登录提示") }}</view>
     <view class="wx-login-button" @tap="login">
@@ -94,7 +94,6 @@ const emit = defineEmits(["toggleLogin"]);
     width: 70px;
     border-radius: 50%;
     margin-top: 5rem;
-    // background: url("/static/images/login/wxLogin.png") no-repeat center;
     background-size: contain;
   }
   .wx-login-title {

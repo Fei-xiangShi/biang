@@ -1,6 +1,7 @@
 <template>
-  <navbar />
+  <navbar :title="t('邮箱登录')" />
   <view class="email-login-container">
+    <img src="../../static/icons/logo.png" class="icon" />
     <view class="email-login-title">{{ t("邮箱登录") }}</view>
     <view class="email-login-input-container">
       <view class="email-login-input-container">
@@ -23,7 +24,7 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import Api from "@/api/api";
 import RouteConfig from "@/config/routes";
 import universities from "@/config/universities";
@@ -33,11 +34,9 @@ const language: "zh-Hans" | "en" = uni.getStorageSync("lang");
 const { t } = useI18n();
 
 const password = ref("");
-const emailID = ref("");
 
 const EmailLogin = () => {
-  emailID.value = uni.getStorageSync("email");
-  Api.emailLogin(emailID.value, password.value).then((res: any) => {
+  Api.emailLogin(props.email, password.value).then((res: any) => {
     if (res.data.success === true) {
       console.log("登录成功");
       uni.setStorageSync("aueduSession", res.data.data.auedu_session);
@@ -59,10 +58,75 @@ const EmailLogin = () => {
       uni.reLaunch({
         url: RouteConfig.my.url,
       });
-    } else {
     }
   });
 };
 
-
+const props = defineProps({
+  email: {
+    type: String,
+    required: true,
+  },
+});
 </script>
+
+<style lang="scss" scoped>
+.email-login-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 0 2rem;
+  .icon {
+    height: 70px;
+    width: 70px;
+    border-radius: 50%;
+    margin-top: 5rem;
+    background-size: contain;
+  }
+  .email-login-title {
+    font-size: 24px;
+    font-weight: bold;
+    margin-top: 40px;
+  }
+  .email-login-input-container {
+    width: 100%;
+    margin-top: 40px;
+    .email-login-input-title {
+      font-size: 14px;
+      color: #999;
+    }
+    .email-login-input {
+      width: 100%;
+      border-bottom: 1px solid #999;
+      padding: 10px 0;
+      font-size: 16px;
+    }
+  }
+  .email-login-button-container {
+    width: 100%;
+    margin-top: 40px;
+    .email-login-button {
+      width: 100%;
+      height: 40px;
+      font-size: 16px;
+      color: #fff;
+      background-color: #000;
+      border-radius: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+  }
+  .nav-to-register {
+    width: 100%;
+    margin-top: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .nav-to-register-text {
+      font-size: 14px;
+      color: #999;
+    }
+  }
+}
+</style>

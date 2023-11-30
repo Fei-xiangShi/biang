@@ -1,22 +1,11 @@
 <template>
-  <navbar />
   <view class="login-container">
     <view class="wx-login" v-if="login === wxLogin">
-      <WxLogin
-        @toggleLogin="toggleLogin"
-      />
+      <WxLogin @toggleLogin="toggleLogin" />
     </view>
     <view class="email-login" v-else-if="login === emailLogin">
-      <EmailLogin
-        @toggleLogin="toggleLogin"
-      />
+      <EmailLogin @toggleLogin="toggleLogin" />
     </view>
-  </view>
-  <view
-    class="nav-to-register"
-    @click="navTo(RouteConfig.my.login.emailRegister.url)"
-  >
-    <view class="nav-to-register-text">{{ $t("没有账号？去注册") }}</view>
   </view>
 </template>
 
@@ -28,15 +17,12 @@ import EmailLogin from "@/components/login/emailLogin.vue";
 import WxLogin from "@/components/login/wxLogin.vue";
 import loginMethods from "@/models/loginMethods";
 
-
 const { t } = useI18n();
 
 const wxLogin = loginMethods.WX;
 const emailLogin = loginMethods.Email;
 
 const login = ref(wxLogin);
-
-
 
 const toggleLogin = (method: loginMethods) => {
   login.value = method;
