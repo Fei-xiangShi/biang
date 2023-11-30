@@ -17,11 +17,11 @@
           </view>
 
           <view class="acrylic-content">
-            <view class="acrylic-content-Title">{{$t('导入课表')}}</view>
+            <view class="acrylic-content-Title">{{ $t("导入课表") }}</view>
             <view class="input">
               <input
                 class="url"
-                :placeholder= "$t('课表链接') "
+                :placeholder="$t('课表链接')"
                 type="text"
                 v-model="classTableUrl"
               />
@@ -55,13 +55,16 @@ import classTableItem from "@/components/classTableItem.vue";
 import Api from "@/api/api";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
+import { onMounted } from "vue";
 
 const { t } = useI18n();
 
-const classTableUrl = ref("");
+const classTableUrl = ref(uni.getStorageSync("classTableUrl"));
 const classTableContent = ref("");
-const content = ref(uni.getStorageSync("classTableContent"))
-const haveClassTable = ref(!(content.value == "" || content.value == null || content.value == undefined));
+const content = ref(uni.getStorageSync("classTableContent"));
+const haveClassTable = ref(
+  !(content.value == "" || content.value == null || content.value == undefined)
+);
 const isLoading = ref(false);
 
 const getNewClassTable = () => {
@@ -73,10 +76,10 @@ const getNewClassTable = () => {
         uni.setStorageSync("classTableContent", classTableContent.value);
         uni.setStorageSync("classTableUrl", classTableUrl.value);
         haveClassTable.value = true;
-      } else if (res.statusCode === 403){
-        throw new Error(t('未登录提示'));
-      }else {
-        throw new Error(t('课表获取失败'));
+      } else if (res.statusCode === 403) {
+        throw new Error(t("未登录提示"));
+      } else {
+        throw new Error(t("课表获取失败"));
       }
       isLoading.value = false;
     })
@@ -88,10 +91,16 @@ const getNewClassTable = () => {
       isLoading.value = false;
     });
 };
+
+onMounted(() => {
+  const haveClassTableUrl = classTableUrl.value && classTableUrl.value.length > 0;
+  if (!haveClassTable.value && haveClassTableUrl) {
+    getNewClassTable();
+  }
+});
 </script>
 
 <style scoped lang="scss">
-
 .await {
   overflow: hidden;
   width: 100%;

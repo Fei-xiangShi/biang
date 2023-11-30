@@ -4,20 +4,18 @@
     <img src="../../static/icons/logo.png" class="icon" />
     <view class="email-login-title">{{ t("邮箱登录") }}</view>
     <view class="email-login-input-container">
-      <view class="email-login-input-container">
-        <view class="email-login-input-title">{{ t("密码") }}</view>
-        <input
-          class="email-login-input"
-          :placeholder="t('请输入密码')"
-          type="password"
-          v-model="password"
-        />
-      </view>
+      <view class="email-login-input-title">{{ t("密码") }}</view>
+      <input
+        class="email-login-input"
+        :placeholder="t('请输入密码')"
+        type="password"
+        v-model="password"
+      />
     </view>
     <view class="email-login-button-container">
-      <view class="email-login-button" @tap="EmailLogin()">{{
-        t("登录")
-      }}</view>
+      <view class="email-login-button" @tap="EmailLogin()">
+        {{ t("登录") }}
+      </view>
     </view>
   </view>
 </template>
@@ -38,23 +36,19 @@ const password = ref("");
 const EmailLogin = () => {
   Api.emailLogin(props.email, password.value).then((res: any) => {
     if (res.data.success === true) {
-      console.log("登录成功");
+      uni.setStorageSync("email", res.data.data.email)
       uni.setStorageSync("aueduSession", res.data.data.auedu_session);
       uni.setStorageSync("username", res.data.data.username);
-      uni.setStorageSync("schoolId", res.data.data.school);
+      uni.setStorageSync("schoolId", String(res.data.data.university));
+      uni.setStorageSync("classTableUrl", res.data.data.ics_url);
       uni.setStorageSync(
-        "schoolName",
+        "school",
         Object.keys(universities[language] as { [key: string]: string }).find(
           (key) =>
             (universities[language] as { [key: string]: string })[key] ===
-            res.data.data.school
+            String(res.data.data.university)
         )
       );
-      uni.showToast({
-        title: t("登陆成功"),
-        icon: "success",
-        duration: 2000,
-      });
       uni.reLaunch({
         url: RouteConfig.my.url,
       });
@@ -115,17 +109,6 @@ const props = defineProps({
       display: flex;
       align-items: center;
       justify-content: center;
-    }
-  }
-  .nav-to-register {
-    width: 100%;
-    margin-top: 40px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    .nav-to-register-text {
-      font-size: 14px;
-      color: #999;
     }
   }
 }

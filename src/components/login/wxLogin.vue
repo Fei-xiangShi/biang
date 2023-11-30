@@ -10,6 +10,17 @@
     <view class="toggle-to-email" @tap="emit('toggleLogin', email)">
       <view class="toggle-to-email-text">{{ t("使用邮箱登录") }}</view>
     </view>
+    <view class="user-agreement">
+      <view class="user-agreement-text">
+        {{ $t("登录即代表同意") }}
+        <text class="user-agreement-text-highlight">
+          {{ $t("服务条款") }}
+          <text class="and">{{ $t("和") }}</text>
+          {{ $t("用户协议") }}
+        </text>
+        {{ $t("并使用微信登录") }}
+      </view>
+    </view>
   </view>
 </template>
 
@@ -31,22 +42,19 @@ const code = ref("");
 const login = () => {
   Api.wxLogin(code.value).then((res: any) => {
     if (res.data.success === true) {
+      uni.setStorageSync("email", res.data.data.email)
       uni.setStorageSync("aueduSession", res.data.data.auedu_session);
       uni.setStorageSync("username", res.data.data.username);
-      uni.setStorageSync("schoolId", res.data.data.school);
+      uni.setStorageSync("schoolId", String(res.data.data.university));
+      uni.setStorageSync("classTableUrl", res.data.data.ics_url);
       uni.setStorageSync(
-        "schoolName",
+        "school",
         Object.keys(universities[language] as { [key: string]: string }).find(
           (key) =>
             (universities[language] as { [key: string]: string })[key] ===
-            res.data.data.school
+            String(res.data.data.university)
         )
       );
-      uni.showToast({
-        title: t("登陆成功"),
-        icon: "success",
-        duration: 2000,
-      });
       uni.reLaunch({
         url: RouteConfig.my.url,
       });
@@ -125,6 +133,25 @@ const emit = defineEmits(["toggleLogin"]);
     .toggle-to-email-text {
       font-size: 14px;
       color: #007aff;
+    }
+  }
+  .user-agreement {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: absolute;
+    bottom: 50px;
+    .user-agreement-text {
+      font-size: 12px;
+      color: #999;
+      text-align: center;
+      .user-agreement-text-highlight {
+        color: #007aff;
+        .and {
+          color: #999;
+        }
+      }
     }
   }
 }

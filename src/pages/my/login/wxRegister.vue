@@ -62,7 +62,7 @@
       <u-form>
         <u-form-item :label="t('学校选择框标题') + '*'" @click="hideKeyboard">
           <u-input
-            v-model="schoolName"
+            v-model="school"
             disabled
             disabledColor="rgb(0,0,0,0)"
             :placeholder="t('学校选择框占位符')"
@@ -103,7 +103,7 @@ import RouteConfig from "@/config/routes";
 
 const { t } = useI18n();
 
-const schoolName = ref("");
+const school = ref("");
 const showSchoolPicker = ref(false);
 const schools = [
   Object.keys(
@@ -129,10 +129,10 @@ const cancelPick = () => {
 };
 
 const confirmPick = (selection: any) => {
-  schoolName.value = selection.value[0];
+  school.value = selection.value[0];
   schoolId.value = (
     universities[uni.getStorageSync("lang") as keyof typeof universities] as any
-  )[schoolName.value];
+  )[school.value];
   showSchoolPicker.value = false;
 };
 
@@ -196,7 +196,7 @@ const commitRegister = () => {
       });
       uni.setStorageSync("aueduSession", res.data.data.auedu_session);
       uni.setStorageSync("username", username.value);
-      uni.setStorageSync("school", schoolName.value);
+      uni.setStorageSync("school", school.value);
       uni.setStorageSync("schoolId", schoolId.value);
       uni.getFileSystemManager().readFile({
         filePath: userAvatarUrl.value,
