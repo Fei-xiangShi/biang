@@ -93,6 +93,9 @@ import changeLanguageModal from "@/components/changeLanguageModal.vue";
 import { useI18n } from "vue-i18n";
 import { ref, onMounted } from "vue";
 import Api from "@/api/api";
+import { ErrorHandler } from "@/utils/requestErrors";
+
+const { t, locale } = useI18n();
 
 const isAdmin = ref(false);
 const session = uni.getStorageSync("aueduSession");
@@ -101,8 +104,6 @@ const userAvatarUrl = ref("");
 const username = ref("");
 const showChooseLangualge = ref(false);
 const Notify = ref();
-
-const { t, locale } = useI18n();
 
 const navTo = (url: any) => {
   if (url === "languageSetting") {
@@ -164,15 +165,24 @@ const cancelLang = () => {
 
 onMounted(() => {
   if (isLogin.value) {
-    Api.getUser(session).then((res: any) => {
-      if (res.statusCode === 200) {
-        if (res.data.is_staff === true) {
-          isAdmin.value = true;
+    Api.getUser(session)
+      .then((res: any) => {
+        if (res.statusCode === 200) {
+          if (res.data.is_staff === true) {
+            isAdmin.value = true;
+          }
+          username.value = res.data.username;
+          userAvatarUrl.value = res.data.avatar_url;
+        } else {
+          ErrorHandler(res);
         }
-        username.value = res.data.username;
-        userAvatarUrl.value = res.data.avatar_url;
-      }
-    });
+      })
+      .catch((err: any) => {
+        uni.showToast({
+          title: err.message,
+          icon: "none",
+        });
+      });
   }
 });
 </script>

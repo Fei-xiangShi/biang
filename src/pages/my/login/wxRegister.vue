@@ -104,6 +104,7 @@ import navbar from "@/components/navbar.vue";
 import Checker from "@/utils/checker";
 import Api from "@/api/api";
 import RouteConfig from "@/config/routes";
+import { ErrorHandler } from "@/utils/requestErrors";
 
 const { t } = useI18n();
 
@@ -193,52 +194,74 @@ const commitRegister = () => {
     schoolId.value,
     size,
     email.value ? email.value : null
-  ).then((res: any) => {
-    if (res.data.success === true) {
-      uni.showToast({
-        title: t("注册成功"),
-        icon: "success",
-        duration: 2000,
-      });
-      uni.setStorageSync("aueduSession", res.data.data.auedu_session);
-      uni.setStorageSync("username", username.value);
-      uni.setStorageSync("school", school.value);
-      uni.setStorageSync("schoolId", schoolId.value);
-      uni.getFileSystemManager().readFile({
-        filePath: userAvatarUrl.value,
-        success: (result) => {
-          const headers = {
-            "Content-Type": "image/jpeg",
-            "Content-Length": size,
-          };
-          Api.uploadAvatar(res.data.presigned_url, result.data, headers).then(
-            (res: any) => {
-              if (res.statusCode === 200) {
-                console.log(res);
-                Api.updateAvatarUrl(
-                  userAvatarUrl.value,
-                  uni.getStorageSync("aueduSession")
-                ).then((res: any) => {
-                  if (res.data.success === true) {
-                    uni.setStorageSync("userAvatarUrl", userAvatarUrl.value);
-                  }
+  )
+    .then((res: any) => {
+      if (res.data.success === true) {
+        uni.showToast({
+          title: t("注册成功"),
+          icon: "success",
+          duration: 2000,
+        });
+        uni.setStorageSync("aueduSession", res.data.data.auedu_session);
+        uni.setStorageSync("username", username.value);
+        uni.setStorageSync("school", school.value);
+        uni.setStorageSync("schoolId", schoolId.value);
+        uni.getFileSystemManager().readFile({
+          filePath: userAvatarUrl.value,
+          success: (result) => {
+            const headers = {
+              "Content-Type": "image/jpeg",
+              "Content-Length": size,
+            };
+            Api.uploadAvatar(res.data.presigned_url, result.data, headers)
+              .then((res: any) => {
+                if (res.statusCode === 200) {
+                  console.log(res);
+                  Api.updateAvatarUrl(
+                    userAvatarUrl.value,
+                    uni.getStorageSync("aueduSession")
+                  )
+                    .then((res: any) => {
+                      if (res.data.success === true) {
+                        uni.setStorageSync(
+                          "userAvatarUrl",
+                          userAvatarUrl.value
+                        );
+                      } else {
+                        ErrorHandler(res);
+                      }
+                    })
+                    .catch((err: any) => {
+                      uni.showToast({
+                        title: err.message,
+                        icon: "none",
+                      });
+                    });
+                } else {
+                  ErrorHandler(res);
+                }
+              })
+              .catch((err: any) => {
+                uni.showToast({
+                  title: err.message,
+                  icon: "none",
                 });
-              }
-            }
-          );
-        },
-      });
-      uni.reLaunch({
-        url: RouteConfig.my.url,
-      });
-    } else {
+              });
+          },
+        });
+        uni.reLaunch({
+          url: RouteConfig.my.url,
+        });
+      } else {
+        ErrorHandler(res);
+      }
+    })
+    .catch((err: any) => {
       uni.showToast({
-        title: t("注册失败"),
+        title: err.message,
         icon: "none",
-        duration: 2000,
       });
-    }
-  });
+    });
 };
 
 onMounted(() => {

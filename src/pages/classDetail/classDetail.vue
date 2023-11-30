@@ -151,6 +151,7 @@ import ReplyList from "@/models/replyList";
 import Reply from "@/models/reply";
 import { onReachBottom } from "@dcloudio/uni-app";
 import textfolder from "@/components/textfolder.vue";
+import { ErrorHandler } from "@/utils/requestErrors";
 
 const replyList = ref(new ReplyList());
 const reply = ref(new Reply());
@@ -237,8 +238,8 @@ const commitReply = () => {
   ] = replyContent.value;
   reply.value.course = props.courseCode;
   reply.value.lang = uni.getStorageSync("lang");
-  Api.postComment(uni.getStorageSync("aueduSession"), reply.value).then(
-    (res: any) => {
+  Api.postComment(uni.getStorageSync("aueduSession"), reply.value)
+    .then((res: any) => {
       if (res.statusCode === 201) {
         uni.showToast({
           title: "评论成功",
@@ -250,13 +251,15 @@ const commitReply = () => {
         getReplyList();
         replyContent.value = "";
       } else {
-        uni.showToast({
-          title: "评论失败: " + res.errMsg,
-          icon: "none",
-        });
+        ErrorHandler(res.statusCode);
       }
-    }
-  );
+    })
+    .catch((err) => {
+      uni.showToast({
+        title: err.message,
+        icon: "none",
+      });
+    });
 };
 
 onMounted(() => {

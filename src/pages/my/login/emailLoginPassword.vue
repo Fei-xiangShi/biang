@@ -11,6 +11,9 @@
         type="password"
         v-model="password"
       />
+      <view class="password-wrong-warning-text" v-if="passwordWrong">
+        {{ $t("密码错误提醒") }}
+      </view>
     </view>
     <view class="email-login-button-container">
       <view class="email-login-button" @tap="EmailLogin()">
@@ -27,33 +30,45 @@ import Api from "@/api/api";
 import RouteConfig from "@/config/routes";
 import universities from "@/config/universities";
 import navbar from "@/components/navbar.vue";
+import { ErrorHandler } from "@/utils/requestErrors";
 const language: "zh-Hans" | "en" = uni.getStorageSync("lang");
 
 const { t } = useI18n();
 
 const password = ref("");
+const passwordWrong = ref(false);
 
 const EmailLogin = () => {
-  Api.emailLogin(props.email, password.value).then((res: any) => {
-    if (res.data.success === true) {
-      uni.setStorageSync("email", res.data.data.email)
-      uni.setStorageSync("aueduSession", res.data.data.auedu_session);
-      uni.setStorageSync("username", res.data.data.username);
-      uni.setStorageSync("schoolId", String(res.data.data.university));
-      uni.setStorageSync("classTableUrl", res.data.data.ics_url);
-      uni.setStorageSync(
-        "school",
-        Object.keys(universities[language] as { [key: string]: string }).find(
-          (key) =>
-            (universities[language] as { [key: string]: string })[key] ===
-            String(res.data.data.university)
-        )
-      );
-      uni.reLaunch({
-        url: RouteConfig.my.url,
+  Api.emailLogin(props.email, password.value)
+    .then((res: any) => {
+      if (res.statusCode === 200) {
+        uni.setStorageSync("email", res.data.data.email);
+        uni.setStorageSync("aueduSession", res.data.data.auedu_session);
+        uni.setStorageSync("username", res.data.data.username);
+        uni.setStorageSync("schoolId", res.data.data.university);
+        uni.setStorageSync("classTableUrl", res.data.data.ics_url);
+        uni.setStorageSync(
+          "school",
+          Object.keys(universities[language] as { [key: string]: string }).find(
+            (key) =>
+              (universities[language] as { [key: string]: string })[key] ===
+              res.data.data.university
+          )
+        );
+        uni.reLaunch({
+          url: RouteConfig.my.url,
+        });
+      } else {
+        ErrorHandler(res);
+        passwordWrong.value = true;
+      }
+    })
+    .catch((err: any) => {
+      uni.showToast({
+        title: err.message,
+        icon: "none",
       });
-    }
-  });
+    });
 };
 
 const props = defineProps({
@@ -94,6 +109,11 @@ const props = defineProps({
       border-bottom: 1px solid #999;
       padding: 10px 0;
       font-size: 16px;
+    }
+    .password-wrong-warning-text {
+      font-size: 14px;
+      color: #f00;
+      margin-top: 10px;
     }
   }
   .email-login-button-container {

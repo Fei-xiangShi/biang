@@ -45,14 +45,14 @@ const login = () => {
       uni.setStorageSync("email", res.data.data.email)
       uni.setStorageSync("aueduSession", res.data.data.auedu_session);
       uni.setStorageSync("username", res.data.data.username);
-      uni.setStorageSync("schoolId", String(res.data.data.university));
+      uni.setStorageSync("schoolId", res.data.data.university);
       uni.setStorageSync("classTableUrl", res.data.data.ics_url);
       uni.setStorageSync(
         "school",
         Object.keys(universities[language] as { [key: string]: string }).find(
           (key) =>
             (universities[language] as { [key: string]: string })[key] ===
-            String(res.data.data.university)
+            res.data.data.university
         )
       );
       uni.reLaunch({

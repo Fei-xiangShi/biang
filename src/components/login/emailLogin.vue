@@ -54,7 +54,6 @@ import loginMethods from "@/models/loginMethods";
 import { useI18n } from "vue-i18n";
 import { ref } from "vue";
 import Api from "@/api/api";
-import { defineEmits } from "vue";
 import RouteConfig from "@/config/routes";
 import navbar from "@/components/navbar.vue";
 import Checker from "@/utils/checker";

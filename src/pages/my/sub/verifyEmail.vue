@@ -20,9 +20,9 @@
       <view class="confirm-button">
         <view class="button-text" @tap="confirm">{{ $t("确认") }}</view>
       </view>
-        <view class="bottom">
-          <text class="bottom-text">{{ $t("邮箱验证底部提示") }}</text>
-        </view>
+      <view class="bottom">
+        <text class="bottom-text">{{ $t("邮箱验证底部提示") }}</text>
+      </view>
     </view>
   </view>
 </template>
@@ -32,9 +32,11 @@ import { ref } from "vue";
 import Api from "@/api/api";
 import navbar from "@/components/navbar.vue";
 import RouteConfig from "@/config/routes";
+import { ErrorHandler } from "@/utils/requestErrors";
 
 const email = ref("");
 const warning = ref(false);
+const loading = ref(false);
 
 const validateEmail = (email: string): boolean => {
   const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
@@ -42,6 +44,8 @@ const validateEmail = (email: string): boolean => {
 };
 
 const confirm = () => {
+  if (loading.value) return;
+  loading.value = true;
   if (!validateEmail(email.value)) {
     warning.value = true;
     return;
@@ -50,19 +54,26 @@ const confirm = () => {
     email.value,
     uni.getStorageSync("aueduSession"),
     uni.getStorageSync("lang")
-  ).then((res: any) => {
-    if (res.statusCode === 200) {
-      uni.setStorageSync("email", email.value);
-      uni.navigateTo({
-        url: RouteConfig.my.verifyCode.url,
-      });
-    } else {
+  )
+    .then((res: any) => {
+      if (res.statusCode === 200) {
+        uni.setStorageSync("email", email.value);
+        uni.navigateTo({
+          url: RouteConfig.my.verifyCode.url,
+        });
+      } else {
+        ErrorHandler(res);
+      }
+    })
+    .catch((err: any) => {
       uni.showToast({
-        title: res.data.error,
+        title: err.message,
         icon: "none",
       });
-    }
-  });
+    })
+    .finally(() => {
+      loading.value = false;
+    });
 };
 </script>
 

@@ -12,7 +12,6 @@
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
 import { ref } from "vue";
-import RouteConfig from "@/config/routes";
 import EmailLogin from "@/components/login/emailLogin.vue";
 import WxLogin from "@/components/login/wxLogin.vue";
 import loginMethods from "@/models/loginMethods";
@@ -26,12 +25,6 @@ const login = ref(wxLogin);
 
 const toggleLogin = (method: loginMethods) => {
   login.value = method;
-};
-
-const navTo = (url: string) => {
-  uni.navigateTo({
-    url,
-  });
 };
 </script>
 

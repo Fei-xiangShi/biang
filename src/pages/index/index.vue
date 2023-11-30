@@ -233,6 +233,7 @@ import { onMounted, ref } from "vue";
 import { useI18n } from "vue-i18n";
 import changeLanguageModal from "@/components/changeLanguageModal.vue";
 import Api from "@/api/api";
+import { ErrorHandler } from "@/utils/requestErrors";
 
 const { t, locale } = useI18n();
 
@@ -374,11 +375,14 @@ const loadUnits = () => {
         pickerTitle.value = t("单元号选择框提示");
         unitCodes.value = [res.data.units];
       } else {
+        ErrorHandler(res);
         pickerTitle.value = t("无单元号提示");
       }
       pickerLoading.value = false;
     }
-  );
+  ).catch((err: any) => {
+    console.log(err);
+  })
 };
 
 const searchClass = () => {

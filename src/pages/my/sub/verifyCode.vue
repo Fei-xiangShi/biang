@@ -9,7 +9,7 @@
         <text class="title-text">{{ $t("输入验证码提示") }}</text>
       </view>
       <view class="code-inputs">
-        <u-code-input :focus="true" :bold="true"/>
+        <u-code-input :focus="true" :bold="true" />
       </view>
       <view class="warning" v-if="warning">
         <text class="warning-text">{{ $t("验证码错误") }}</text>
@@ -70,6 +70,7 @@ import { ref } from "vue";
 import Api from "@/api/api";
 import navbar from "@/components/navbar.vue";
 import RouteConfig from "@/config/routes";
+import { ErrorHandler } from "@/utils/requestErrors";
 
 const first = ref("");
 const second = ref("");
@@ -99,7 +100,20 @@ const resendEmail = () => {
     uni.getStorageSync("email"),
     uni.getStorageSync("aueduSession"),
     uni.getStorageSync("lang")
-  );
+  )
+    .then((res: any) => {
+      if (res.data.success === true) {
+        timeleft.value = 60;
+      } else {
+        ErrorHandler(res);
+      }
+    })
+    .catch((err: any) => {
+      uni.showToast({
+        title: err.message,
+        icon: "none",
+      });
+    });
   timeleft.value = 60;
 };
 

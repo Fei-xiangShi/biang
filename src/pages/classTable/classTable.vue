@@ -56,6 +56,7 @@ import Api from "@/api/api";
 import { ref } from "vue";
 import { useI18n } from "vue-i18n";
 import { onMounted } from "vue";
+import { ErrorHandler } from "@/utils/requestErrors";
 
 const { t } = useI18n();
 
@@ -76,24 +77,24 @@ const getNewClassTable = () => {
         uni.setStorageSync("classTableContent", classTableContent.value);
         uni.setStorageSync("classTableUrl", classTableUrl.value);
         haveClassTable.value = true;
-      } else if (res.statusCode === 403) {
-        throw new Error(t("未登录提示"));
       } else {
-        throw new Error(t("课表获取失败"));
+        ErrorHandler(res.statusCode);
       }
-      isLoading.value = false;
     })
     .catch((err: any) => {
       uni.showToast({
         title: err.message,
         icon: "none",
       });
+    })
+    .finally(() => {
       isLoading.value = false;
     });
 };
 
 onMounted(() => {
-  const haveClassTableUrl = classTableUrl.value && classTableUrl.value.length > 0;
+  const haveClassTableUrl =
+    classTableUrl.value && classTableUrl.value.length > 0;
   if (!haveClassTable.value && haveClassTableUrl) {
     getNewClassTable();
   }
