@@ -27,7 +27,7 @@
         <u-input
           v-model="email"
           :placeholder="t('邮箱输入框占位符')"
-          @change="checkEmail"
+          @blur="checkEmail"
         />
       </view>
       <view class="email-input-warning">
@@ -46,7 +46,7 @@
         <u-input
           v-model="username"
           :placeholder="t('用户名输入框占位符')"
-          @change="checkUsername"
+          @blur="checkUsername"
         />
       </view>
       <view class="username-input-warning">
@@ -68,16 +68,46 @@
         <u-input
           v-model="password"
           :placeholder="t('密码输入框占位符')"
-          @change="checkPasswordValid"
+          @blur="checkPasswordValid"
           type="password"
         />
       </view>
       <view class="password-input-warning">
         <view
           class="password-input-warning-text"
-          v-if="passwordValid === false"
+          :class="{
+            ok: checkPasswordValid() || password === '',
+            green: Checker.checkPassword(password)[0] === true,
+          }"
         >
-          {{ $t("密码格式错误警告") }}
+          · {{ $t("密码包含字母") }}
+        </view>
+        <view
+          class="password-input-warning-text"
+          :class="{
+            ok: checkPasswordValid() || password === '',
+            green: Checker.checkPassword(password)[1] === true,
+          }"
+        >
+          · {{ $t("密码包含数字") }}
+        </view>
+        <view
+          class="password-input-warning-text"
+          :class="{
+            ok: checkPasswordValid() || password === '',
+            green: Checker.checkPassword(password)[2] === true,
+          }"
+        >
+          · {{ $t("密码包含特殊符号") }}
+        </view>
+        <view
+          class="password-input-warning-text"
+          :class="{
+            ok: checkPasswordValid() || password === '',
+            green: Checker.checkPassword(password)[3] === true,
+          }"
+        >
+          · {{ $t("密码长度必须在6-20之间") }}
         </view>
       </view>
     </view>
@@ -91,7 +121,7 @@
         <u-input
           v-model="confrimedPassword"
           :placeholder="t('确认密码输入框占位符')"
-          @change="checkPasswordSame"
+          @blur="checkPasswordSame"
           type="password"
         />
       </view>
@@ -159,13 +189,14 @@ const pickerLoading = ref(false);
 const email = ref("");
 const password = ref("");
 const confrimedPassword = ref("");
-const passwordValid = ref();
 const passwordIsSame = ref();
 const emailValid = ref();
 const username = ref("");
 const usernameValid = ref();
-const userAvatarUrl = ref("");
-let size = "0";
+const userAvatarUrl = ref(
+  "https://img.ixintu.com/download/jpg/20201201/653c62f6204ba19a0c630206bee5923f_512_512.jpg!ys"
+);
+let size = "8192";
 
 const checkPasswordSame = () => {
   if (password.value !== confrimedPassword.value) {
@@ -186,11 +217,22 @@ const checkEmail = () => {
 };
 
 const checkPasswordValid = () => {
-  if (!Checker.checkPassword(password.value)) {
-    passwordValid.value = false;
+  let cnt = 0;
+  if (Checker.checkPassword(password.value)[0]) {
+    cnt++;
+  }
+  if (Checker.checkPassword(password.value)[1]) {
+    cnt++;
+  }
+  if (Checker.checkPassword(password.value)[2]) {
+    cnt++;
+  }
+  if (!Checker.checkPassword(password.value)[3]) {
+    cnt = 0;
+  }
+  if (cnt < 1) {
     return false;
   }
-  passwordValid.value = true;
   return true;
 };
 
@@ -460,6 +502,13 @@ const commitRegister = () => {
       font-size: 12px;
       color: #ff0000;
       margin-top: 5px;
+      transition: all 0.5s;
+    }
+    .ok {
+      color: rgb(167, 167, 167);
+    }
+    .green {
+      color: #00ca00;
     }
   }
 }

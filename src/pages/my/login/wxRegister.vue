@@ -29,7 +29,7 @@
         <u-input
           v-model="username"
           :placeholder="t('用户名输入框占位符')"
-          @change="checkUsername"
+          @blur="checkUsername"
         />
       </view>
       <view class="username-input-warning">
@@ -49,11 +49,15 @@
         <u-input
           v-model="email"
           :placeholder="t('邮箱输入框占位符')"
-          @change="checkEmail"
+          @blur="checkEmail"
         />
       </view>
       <view class="email-input-warning">
-        <view class="email-input-warning-text" v-if="emailValid === false">
+        <view
+          class="email-input-warning-text"
+          v-if="emailValid === false"
+          :style="{ color: 'rgb(167, 167, 167)' }"
+        >
           {{ $t("邮箱格式错误提醒") }}
         </view>
       </view>
@@ -116,9 +120,11 @@ const usernameValid = ref();
 const schoolId = ref("1");
 const email = ref();
 const emailValid = ref();
-const userAvatarUrl = ref("");
 const code = ref("");
-let size = "0";
+const userAvatarUrl = ref(
+  "https://img.ixintu.com/download/jpg/20201201/653c62f6204ba19a0c630206bee5923f_512_512.jpg!ys"
+);
+let size = "8192";
 
 const checkUsername = () => {
   usernameValid.value = Checker.checkUsername(username.value);
