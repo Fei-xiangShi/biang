@@ -31,18 +31,16 @@ import RouteConfig from "@/config/routes";
 
 const { t } = useI18n();
 
-const password = ref("");
 const emailID = ref("");
 const wxLogin = loginMethods.WX;
-
 
 const emailExists = () => {
   Api.emailExists(emailID.value).then((res: any) => {
     if (res.data.success === true) {
       console.log("验证成功");
-      navTo(RouteConfig.my.login.emailLoginPassword.url)
+      uni.setStorageSync("email", emailID.value);
+      navTo(RouteConfig.my.login.emailLoginPassword.url);
     } else {
-      emit("loginFail", res.error);
     }
   });
 };

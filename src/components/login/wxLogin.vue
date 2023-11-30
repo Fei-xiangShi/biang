@@ -16,6 +16,8 @@ import { useI18n } from "vue-i18n";
 import { ref, onMounted } from "vue";
 import Api from "@/api/api";
 import RouteConfig from "@/config/routes";
+import universities from "@/config/universities";
+const language: "zh-Hans" | "en" = uni.getStorageSync("lang");
 
 const { t } = useI18n();
 
@@ -25,9 +27,26 @@ const code = ref("");
 const login = () => {
   Api.wxLogin(code.value).then((res: any) => {
     if (res.data.success === true) {
-      emit("loginSuccess", res);
+      uni.setStorageSync("aueduSession", res.data.data.auedu_session);
+      uni.setStorageSync("username", res.data.data.username);
+      uni.setStorageSync("schoolId", res.data.data.school);
+      uni.setStorageSync(
+        "schoolName",
+        Object.keys(universities[language] as { [key: string]: string }).find(
+          (key) =>
+            (universities[language] as { [key: string]: string })[key] ===
+            res.data.data.school
+        )
+      );
+      uni.showToast({
+        title: t("登陆成功"),
+        icon: "success",
+        duration: 2000,
+      });
+      uni.reLaunch({
+        url: RouteConfig.my.url,
+      });
     } else {
-      emit("loginFail", res);
       if (res.statusCode === 400 && res.data.errors[0].code === "blank") {
         navTo(RouteConfig.my.login.wxRegister.url);
       }
@@ -55,9 +74,7 @@ onMounted(() => {
   });
 });
 
-const emit = defineEmits(["loginSuccess", "loginFail", "toggleLogin"]);
+const emit = defineEmits(["toggleLogin"]);
 </script>
 
-<style lang="scss" scoped>
-
-</style>
+<style lang="scss" scoped></style>

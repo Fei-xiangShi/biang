@@ -23,7 +23,7 @@
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 import Api from "@/api/api";
 import RouteConfig from "@/config/routes";
 import universities from "@/config/universities";
@@ -36,6 +36,7 @@ const password = ref("");
 const emailID = ref("");
 
 const EmailLogin = () => {
+  emailID.value = uni.getStorageSync("email");
   Api.emailLogin(emailID.value, password.value).then((res: any) => {
     if (res.data.success === true) {
       console.log("登录成功");
@@ -62,4 +63,6 @@ const EmailLogin = () => {
     }
   });
 };
+
+
 </script>
