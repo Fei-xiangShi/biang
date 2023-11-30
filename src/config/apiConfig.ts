@@ -31,6 +31,8 @@ const apiUrl = {
   emailRegister: `${baseUrl}/emailRegister`,
   // 微信注册
   wxRegister: `${baseUrl}/wxRegister`,
+  // 检查邮箱是否存在
+  emailExists: `${baseUrl}/emailExists`,
 };
 
 export default apiUrl;

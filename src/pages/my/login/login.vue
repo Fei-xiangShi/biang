@@ -46,7 +46,6 @@ const emailLogin = loginMethods.Email;
 const login = ref(wxLogin);
 
 const loginSuccess = (res: any) => {
-  console.log("111");
   uni.setStorageSync("aueduSession", res.data.data.auedu_session);
   uni.setStorageSync("username", res.data.data.username);
   uni.setStorageSync("schoolId", res.data.data.school);

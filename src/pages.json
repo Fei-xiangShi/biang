@@ -93,6 +93,13 @@
             "navigationBarTitleText": "微信注册",
             "navigationStyle": "custom"
           }
+        },
+        {
+          "path": "emailLoginPassword",
+          "style": {
+            "navigationBarTitleText": "邮箱密码输入",
+            "navigationStyle": "custom"
+          }
         }
       ]
     },

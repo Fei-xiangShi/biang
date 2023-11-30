@@ -13,18 +13,9 @@
         v-model="emailID"
       />
     </view>
-    <view class="email-login-input-container">
-      <view class="email-login-input-title">{{ t("密码") }}</view>
-      <input
-        class="email-login-input"
-        :placeholder="t('请输入密码')"
-        type="password"
-        v-model="password"
-      />
-    </view>
     <view class="email-login-button-container">
-      <view class="email-login-button" @tap="EmailLogin()">{{
-        t("登录")
+      <view class="email-login-button" @tap="emailExists">{{
+        t("下一步")
       }}</view>
     </view>
     <view class="email-register" @tap="navTo(RouteConfig.my.url)">
@@ -46,14 +37,13 @@ const { t } = useI18n();
 const password = ref("");
 const emailID = ref("");
 const wxLogin = loginMethods.WX;
-const email = loginMethods.Email;
 
 
-const EmailLogin = () => {
-  Api.emailLogin(emailID.value, password.value).then((res: any) => {
+const emailExists = () => {
+  Api.emailExists(emailID.value).then((res: any) => {
     if (res.data.success === true) {
-      console.log("登录成功");
-      emit("loginSuccess",res);
+      console.log("验证成功");
+      navTo(RouteConfig.my.login.emailLoginPassword.url)
     } else {
       emit("loginFail",res.error);
       }

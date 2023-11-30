@@ -21,7 +21,6 @@ import RouteConfig from "@/config/routes";
 
 const { t } = useI18n();
 
-const wxLogin = loginMethods.WX;
 const email = loginMethods.Email;
 const code = ref("");
 

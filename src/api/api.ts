@@ -134,6 +134,8 @@ const Api = {
       size: size,
       email: email,
     }),
+  emailExists: (email: string) =>
+    http.post(apiUrl.emailExists, { email: email }),
 };
 
 export default Api;
