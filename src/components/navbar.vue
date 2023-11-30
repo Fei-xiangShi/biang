@@ -16,6 +16,9 @@
           </view>
         </view>
       </view>
+      <view class="title">
+        <view class="title-text">{{ title }}</view>
+      </view>
     </view>
     <u-picker
       :show="showChangeSchool"
@@ -36,10 +39,10 @@ import universities from "@/config/universities";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-const schoolname = ref(uni.getStorageSync("school")) || '悉尼大学';
+const schoolname = ref(uni.getStorageSync("school")) || "悉尼大学";
 const showChangeSchool = ref(false);
 const language: "zh-Hans" | "en" = uni.getStorageSync("lang");
-const schools = [Object.keys(universities['zh-Hans'])];
+const schools = [Object.keys(universities["zh-Hans"])];
 
 schools.forEach((element) => {
   element.forEach((item, index) => {
@@ -55,6 +58,10 @@ defineProps({
   showChangeSchoolButton: {
     type: Boolean,
     default: false,
+  },
+  title: {
+    type: String,
+    default: "",
   },
 });
 
@@ -104,6 +111,7 @@ const closeChangeSchool = () => {
   background-color: rgba($color: #000000, $alpha: 0);
   color: #fff;
   height: 44px;
+  width: -webkit-fill-available;
 }
 
 .return-button {
@@ -131,5 +139,16 @@ const closeChangeSchool = () => {
   font-size: 1rem;
   font-weight: bold;
   padding: 0.2rem 0.5rem;
+}
+
+.title {
+  flex: 1;
+  text-align: center;
+  .title-text{
+    font-size: 1.2rem;
+    font-weight: bold;
+    color: #000000ee;
+    transform: translateX(-1.5rem);
+  }
 }
 </style>

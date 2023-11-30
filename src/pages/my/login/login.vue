@@ -1,33 +1,33 @@
 <template>
-  <navbar />
-  <view class="login-container">
-    <view class="wx-login" v-if="login === wxLogin">
-      <WxLogin
-        @login-success="loginSuccess"
-        @login-fail="loginFail"
-        @toggleLogin="toggleLogin"
-      />
+  <view class="container">
+    <view class="login-container">
+      <view class="wx-login" v-if="login === wxLogin">
+        <WxLogin
+          @login-success="loginSuccess"
+          @login-fail="loginFail"
+          @toggleLogin="toggleLogin"
+        />
+      </view>
+      <view class="email-login" v-else-if="login === emailLogin">
+        <EmailLogin
+          @login-success="loginSuccess"
+          @login-fail="loginFail"
+          @toggleLogin="toggleLogin"
+        />
+      </view>
+      <view
+        class="nav-to-register"
+        @click="navTo(RouteConfig.my.login.emailRegister.url)"
+      >
+        <view class="nav-to-register-text">{{ $t("没有账号？去注册") }}</view>
+      </view>
     </view>
-    <view class="email-login" v-else-if="login === emailLogin">
-      <EmailLogin
-        @login-success="loginSuccess"
-        @login-fail="loginFail"
-        @toggleLogin="toggleLogin"
-      />
-    </view>
-  </view>
-  <view
-    class="nav-to-register"
-    @click="navTo(RouteConfig.my.login.emailRegister.url)"
-  >
-    <view class="nav-to-register-text">{{ $t("没有账号？去注册") }}</view>
   </view>
 </template>
 
 <script setup lang="ts">
 import { useI18n } from "vue-i18n";
 import { ref } from "vue";
-import navbar from "@/components/navbar.vue";
 import RouteConfig from "@/config/routes";
 import EmailLogin from "@/components/login/emailLogin.vue";
 import WxLogin from "@/components/login/wxLogin.vue";
@@ -47,9 +47,13 @@ const loginSuccess = (res: any) => {
   uni.setStorageSync("username", res.data.data.username);
   uni.setStorageSync("schoolId", res.data.data.school);
   uni.setStorageSync(
-  "schoolName",
-  Object.keys((universities[language] as { [key: string]: string })).find(key => (universities[language] as { [key: string]: string })[key] === res.data.data.school)
-);
+    "schoolName",
+    Object.keys(universities[language] as { [key: string]: string }).find(
+      (key) =>
+        (universities[language] as { [key: string]: string })[key] ===
+        res.data.data.school
+    )
+  );
   uni.showToast({
     title: t("登陆成功"),
     icon: "success",
@@ -89,11 +93,12 @@ const navTo = (url: string) => {
 </script>
 
 <style lang="scss" scoped>
-.login-container{
+.container {
+  position: absolute;
+  width: 100%;
   height: 100%;
   display: flex;
+  overflow: hidden;
   flex-direction: column;
-  align-items: center;
-  background-color: #fff;
 }
 </style>
