@@ -132,6 +132,8 @@ const Api = {
       size: avatarSize,
       email: email,
     }),
+  emailExists: (email: string) =>
+    http.post(apiUrl.emailExists, { email: email }),
 };
 
 export default Api;

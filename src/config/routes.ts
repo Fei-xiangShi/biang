@@ -38,6 +38,9 @@ const RouteConfig = {
       wxRegister: {
         url: "wxRegister",
       },
+      emailLoginPassword: {
+        url: "emailLoginPassword",
+      },
     },
 
     verifyCode: {
