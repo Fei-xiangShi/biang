@@ -27,8 +27,8 @@
       @cancel="cancelChangeSchool"
       @confirm="confirmChangeSchool"
       @close="closeChangeSchool"
-      :confirmText="t('确认')"
-      :cancelText="t('取消')"
+      :confirmText="t('navbar.确认')"
+      :cancelText="t('navbar.取消')"
     />
   </view>
 </template>
@@ -39,7 +39,7 @@ import universities from "@/config/universities";
 import { useI18n } from "vue-i18n";
 
 const { t } = useI18n();
-const schoolname = ref(uni.getStorageSync("school")) || "悉尼大学";
+const schoolname = ref(uni.getStorageSync("school")) || t("悉尼大学");
 const showChangeSchool = ref(false);
 const language: "zh-Hans" | "en" = uni.getStorageSync("lang");
 const schools = [Object.keys(universities["zh-Hans"])];
@@ -146,7 +146,7 @@ const closeChangeSchool = () => {
   flex: 1;
   text-align: center;
   justify-content: center;
-  .title-text{
+  .title-text {
     width: fit-content;
     font-size: 1.2rem;
     font-weight: bold;

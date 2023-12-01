@@ -29,12 +29,12 @@
     </view>
     <view class="search-class white-blur">
       <view class="search-title">
-        {{ $t("课程查找标题") }}
+        {{ $t("index.课程查找标题") }}
       </view>
       <view class="search-input-area">
         <view class="course_code">
           <u-input
-            :placeholder="t('课程代码输入框提示')"
+            :placeholder="t('index.课程代码输入框提示')"
             border="bottom"
             clearable
             v-model="courseCode"
@@ -43,7 +43,7 @@
         <view class="unit_code">
           <u-form>
             <u-form-item
-              :label="t('单元')"
+              :label="t('index.单元')"
               borderBottom
               @click="
                 loadUnits();
@@ -54,7 +54,7 @@
                 v-model="unitCode"
                 disabled
                 disabledColor="rgb(0,0,0,0)"
-                :placeholder="t('单元号选择框提示')"
+                :placeholder="t('index.单元号选择框提示')"
                 border="none"
               />
               <u-icon slot="right" name="arrow-right" />
@@ -70,16 +70,16 @@
             @change="changePick"
             :loading="pickerLoading"
             :title="pickerTitle"
-            :confirmText="t('确认')"
-            :cancelText="t('取消')"
+            :confirmText="t('index.确认')"
+            :cancelText="t('index.取消')"
           />
         </view>
       </view>
       <view class="search-button" @tap="searchClass">
-        {{ $t("课表查询按钮") }}
+        {{ $t("index.课表查询按钮") }}
       </view>
       <view class="search-text">
-        <view class="search-text-title">{{ $t("课程逐层查找提示") }}</view>
+        <view class="search-text-title">{{ $t("index.课程逐层查找提示") }}</view>
         <view class="search-nav-icon">
           <u-icon name="arrow-right" :size="14" color="black" />
         </view>
@@ -97,10 +97,10 @@
       <view class="class-query" v-if="!haveClassTable">
         <view class="class-query-card" @tap="redirectToClassTable">
           <view class="title">
-            <view class="title-text">{{ $t("课表查询按钮标题") }}</view>
+            <view class="title-text">{{ $t("index.课表查询按钮标题") }}</view>
           </view>
           <view class="content">
-            <view class="content-text">{{ $t("课表查询按钮内容") }}</view>
+            <view class="content-text">{{ $t("index.课表查询按钮内容") }}</view>
           </view>
         </view>
       </view>
@@ -119,13 +119,13 @@
           </view>
 
           <view class="class-count">
-            {{ $t("日程数量") + `: ` + classCount }}
+            {{ $t("index.日程数量") + `: ` + classCount }}
           </view>
         </view>
         <view class="today-class-right" @tap="redirectToClassTable">
           <view class="today-class-area">
             <view class="no-class" v-if="todayClass.length <= 0">
-              {{ $t("今日无课") }}
+              {{ $t("index.今日无课") }}
             </view>
             <view
               class="classes"
@@ -181,7 +181,7 @@
         </view>
         <view class="column-two">
           <view class="todo">
-            <view class="todo-title">{{ $t("待办按钮标题") }}</view>
+            <view class="todo-title">{{ $t("index.待办按钮标题") }}</view>
             <view class="todo-content">
               <u-notice-bar
                 :text="todoList"
@@ -193,8 +193,8 @@
             </view>
           </view>
           <view class="kit">
-            <view class="kit-title">{{ $t("校园好礼按钮标题") }}</view>
-            <view class="kit-content">{{ $t("校园好礼按钮内容") }}</view>
+            <view class="kit-title">{{ $t("index.校园好礼按钮标题") }}</view>
+            <view class="kit-content">{{ $t("index.校园好礼按钮内容") }}</view>
           </view>
         </view>
       </view>
@@ -202,19 +202,19 @@
       <view class="two-cards">
         <view class="purchase-card">
           <view class="title">
-            <view class="title-text">{{ $t("特惠按钮标题") }}</view>
+            <view class="title-text">{{ $t("index.特惠按钮标题") }}</view>
           </view>
           <view class="content">
-            <view class="content-text">{{ $t("特惠按钮内容") }}</view>
+            <view class="content-text">{{ $t("index.特惠按钮内容") }}</view>
             <u-icon name="arrow-right" :size="8" color="black" />
           </view>
         </view>
         <view class="store-card">
           <view class="title">
-            <view class="title-text">{{ $t("商店按钮标题") }}</view>
+            <view class="title-text">{{ $t("index.商店按钮标题") }}</view>
           </view>
           <view class="content">
-            <view class="content-text">{{ $t("商店按钮内容") }}</view>
+            <view class="content-text">{{ $t("index.商店按钮内容") }}</view>
             <u-icon name="arrow-right" :size="8" color="black" />
           </view>
         </view>
@@ -362,7 +362,7 @@ const changePick = (e: any) => {
 
 const loadUnits = () => {
   if (courseCode.value == "" || courseCode.value == null) {
-    notify.message = t("课程代码为空提示");
+    notify.message = t("index.课程代码为空提示");
     notify.type = "warning";
     Notify.value.show(notify);
     return;
@@ -372,11 +372,11 @@ const loadUnits = () => {
   Api.getUnits(courseCode.value, uni.getStorageSync("schoolId")).then(
     (res: any) => {
       if (res.statusCode == 200) {
-        pickerTitle.value = t("单元号选择框提示");
+        pickerTitle.value = t("index.单元号选择框提示");
         unitCodes.value = [res.data.units];
       } else {
         ErrorHandler(res);
-        pickerTitle.value = t("无单元号提示");
+        pickerTitle.value = t("index.无单元号提示");
       }
       pickerLoading.value = false;
     }
@@ -387,13 +387,13 @@ const loadUnits = () => {
 
 const searchClass = () => {
   if (courseCode.value == "" || courseCode.value == null) {
-    notify.message = t("课程代码为空提示");
+    notify.message = t("index.课程代码为空提示");
     notify.type = "warning";
     Notify.value.show(notify);
     return;
   }
   if (unitCode.value == "" || unitCode.value == null) {
-    notify.message = t("单元号为空提示");
+    notify.message = t("index.单元号为空提示");
     notify.type = "warning";
     Notify.value.show(notify);
     return;
@@ -434,7 +434,7 @@ const confirmLang = (id: any) => {
       break;
   }
   locale.value = uni.getStorageSync("lang");
-  notify.message = t("成功设置语言提示");
+  notify.message = t("index.成功设置语言提示");
   notify.type = "success";
   Notify.value.show(notify);
   showChooseLangualge.value = false;
@@ -443,7 +443,7 @@ const confirmLang = (id: any) => {
 const cancelLang = () => {
   notify.type = "primary";
   uni.setStorageSync("lang", uni.getLocale());
-  notify.message = t("取消设置语言提示");
+  notify.message = t("index.取消设置语言提示");
   Notify.value.show(notify);
   showChooseLangualge.value = false;
 };
@@ -540,8 +540,6 @@ const hideKeyboard = () => {
     align-items: center;
     margin: 10px 0px;
     font-size: 1.5rem;
-    color: cornflowerblue;
-    font-family: "LXGW WenKai";
   }
   .search-input-area {
     display: flex;
@@ -569,30 +567,22 @@ const hideKeyboard = () => {
     justify-content: center;
     text-align: center;
     align-items: center;
-    margin: 10px 0;
+    margin: 10px 0 5px 0;
     height: 2rem;
     width: 65%;
-    border-radius: var(--borderRadius-medium, 0.375rem);
-    background: linear-gradient(
-      90deg,
-      rgba(220, 71, 228, 0.442) 40%,
-      rgba(220, 71, 228, 0.316) 95%
-    );
-    box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
-    .search-button-text {
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1rem;
-      color: black;
-      font-family: "LXGW WenKai";
-    }
+    color: rgb(0, 108, 209);
+    border: rgb(0, 108, 209) 1px solid;
+    border-radius: var(--borderRadius-medium, 0.5rem);
   }
   .search-text {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    .search-text-title{
+      font-size: 0.8rem;
+      color: rgb(116,116,116)
+    }
   }
 }
 

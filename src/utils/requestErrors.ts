@@ -13,6 +13,8 @@ enum RequestErrorCode {
   UserExistsError = 1010,
   UserNotFoundError = 1011,
   EmailNotFoundError = 1012,
+  NotAuthenticatedError = 1013,
+  NoPermissionError = 1014,
 }
 
 class RequestError extends Error {
@@ -137,6 +139,18 @@ class EmailNotFoundError extends RequestError {
   }
 }
 
+class NotAuthenticatedError extends RequestError {
+  constructor() {
+    super("Not authenticated.", RequestErrorCode.NotAuthenticatedError);
+  }
+}
+
+class NoPermissionError extends RequestError {
+  constructor() {
+    super("No permission.", RequestErrorCode.NoPermissionError);
+  }
+}
+
 const aueduErrors = {
   blank: new BlankError(),
   null: new NullError(),
@@ -154,6 +168,8 @@ const aueduErrors = {
   1010: new UserExistsError(),
   1011: new UserNotFoundError(),
   1012: new EmailNotFoundError(),
+  1013: new NotAuthenticatedError(),
+  1014: new NoPermissionError(),
 };
 
 const ErrorHandler = (res: any) => {

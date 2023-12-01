@@ -11,44 +11,44 @@
           <view class="contactDetails-coordinator">
             <view class="contactDetails-coordinator-content">
               <span class="contactDetails-coordinator-title">
-                {{ $t("contactDetails-coordinator") }}:
+                {{ $t("classDetail.contactDetails-coordinator") }}:
               </span>
               {{ details["ContactDetails"]["Coordinator"] }}
             </view>
           </view>
           <view class="course-code">
             <view class="course-code-content">
-              <span class="course-code-title">{{ $t("courseCode") }}:</span>
+              <span class="course-code-title">{{ $t("classDetail.courseCode") }}:</span>
               {{ details["CourseCode"] }}
             </view>
           </view>
           <view class="unit-name">
             <view class="unit-name-content">
-              <span class="unit-name-title">{{ $t("unitName") }}:</span>
+              <span class="unit-name-title">{{ $t("classDetail.unitName") }}:</span>
               {{ details["Unit name"] }}
             </view>
           </view>
           <view class="session">
             <view class="session-content">
-              <span class="session-title">{{ $t("session") }}:</span>
+              <span class="session-title">{{ $t("classDetail.session") }}:</span>
               {{ details["Session"] }}
             </view>
           </view>
           <view class="academic-unit">
             <view class="academic-unit-content">
-              <span class="academic-unit-title">{{ $t("academicUnit") }}:</span>
+              <span class="academic-unit-title">{{ $t("classDetail.academicUnit") }}:</span>
               {{ details["Academic unit"] }}
             </view>
           </view>
           <view class="overview">
             <view class="overview-content">
-              <span class="overview-title">{{ $t("overview") }}:</span>
+              <span class="overview-title">{{ $t("classDetail.overview") }}:</span>
               {{ details["Overview"] }}
             </view>
           </view>
           <view class="assessment-summary-notes">
             <view class="assessment-summary-notes-title">
-              {{ $t("AssessmentSummaryNotes") }}:
+              {{ $t("classDetail.AssessmentSummaryNotes") }}:
             </view>
             <view
               class="assessment-summary-notes-content"
@@ -62,7 +62,7 @@
           </view>
           <view class="assessment-details">
             <view class="assessment-details-title">
-              {{ $t("AssessmentDetails") }}:
+              {{ $t("classDetail.AssessmentDetails") }}:
             </view>
             <view
               class="assessment-details-content"
@@ -71,7 +71,7 @@
             >
               <view class="assessment-detail-type">
                 <view class="assessment-detail-type-title">
-                  {{ $t("Assessment Type") }}
+                  {{ $t("classDetail.Assessment Type") }}
                 </view>
                 <view class="assessment-detail-type-content">
                   {{ assessment["Type"] }}
@@ -79,7 +79,7 @@
               </view>
               <view class="assessment-detail-description">
                 <view class="assessment-detail-description-title">
-                  {{ $t("Assessment Description") }}
+                  {{ $t("classDetail.Assessment Description") }}
                 </view>
                 <view class="assessment-detail-description-content">
                   {{ assessment["Description"] }}
@@ -87,7 +87,7 @@
               </view>
               <view class="assessment-detail-weight">
                 <view class="assessment-detail-weight-title">
-                  {{ $t("Assessment Weight") }}
+                  {{ $t("classDetail.Assessment Weight") }}
                 </view>
                 <view class="assessment-detail-weight-content">
                   {{ assessment["Weight"] }}
@@ -95,7 +95,7 @@
               </view>
               <view class="assessment-detail-due">
                 <view class="assessment-detail-due-title">
-                  {{ $t("Assessment Due") }}
+                  {{ $t("classDetail.Assessment Due") }}
                 </view>
                 <view class="assessment-detail-due-content">
                   {{ assessment["Due"] }}
@@ -103,7 +103,7 @@
               </view>
               <view class="assessment-detail-length">
                 <view class="assessment-detail-length-title">
-                  {{ $t("Assessment Length") }}
+                  {{ $t("classDetail.Assessment Length") }}
                 </view>
                 <view class="assessment-detail-length-content">
                   {{ assessment["Length"] }}

@@ -1,13 +1,13 @@
 <template>
-  <navbar :title="t('邮箱登录')" />
+  <navbar :title="t('emailLogin.邮箱登录')" />
   <view class="email-login-container">
     <img src="../../static/icons/logo.png" class="icon" />
-    <view class="email-login-title">{{ t("邮箱登录") }}</view>
+    <view class="email-login-title">{{ $t("emailLogin.邮箱登录") }}</view>
     <view class="email-login-input-container">
-      <view class="email-login-input-title">{{ t("邮箱") }}</view>
+      <view class="email-login-input-title">{{ $t("emailLogin.邮箱") }}</view>
       <input
         class="email-login-input"
-        :placeholder="t('请输入邮箱')"
+        :placeholder="t('emailLogin.请输入邮箱')"
         type="text"
         v-model="email.content"
         @blur="checkEmail(email)"
@@ -23,27 +23,29 @@
     </view>
     <view class="email-login-button-container">
       <view class="email-login-button" @tap="login">
-        {{ t("下一步") }}
+        {{ $t("emailLogin.下一步") }}
       </view>
     </view>
     <view
       class="nav-to-register"
       @click="navTo(RouteConfig.my.login.emailRegister.url)"
     >
-      <view class="nav-to-register-text">{{ $t("没有账号？去注册") }}</view>
+      <view class="nav-to-register-text">{{
+        $t("emailLogin.没有账号？去注册")
+      }}</view>
     </view>
     <view class="toggle-to-wx" @tap="emit('toggleLogin', wxLogin)">
-      <view class="toggle-to-wx-text">{{ t("使用微信登录") }}</view>
+      <view class="toggle-to-wx-text">{{ $t("emailLogin.使用微信登录") }}</view>
     </view>
     <view class="user-agreement">
       <view class="user-agreement-text">
-        {{ $t("登录即代表同意") }}
+        {{ $t("emailLogin.登录即代表同意") }}
         <text class="user-agreement-text-highlight">
-          {{ $t("服务条款") }}
-          <text class="and">{{ $t("和") }}</text>
-          {{ $t("用户协议") }}
+          {{ $t("emailLogin.服务条款") }}
+          <text class="and">{{ $t("emailLogin.和") }}</text>
+          {{ $t("emailLogin.用户协议") }}
         </text>
-        {{ $t("并使用邮箱登录") }}
+        {{ $t("emailLogin.并使用邮箱登录") }}
       </view>
     </view>
   </view>
@@ -57,7 +59,7 @@ import Api from "@/api/api";
 import RouteConfig from "@/config/routes";
 import navbar from "@/components/navbar.vue";
 import { checkEmail } from "@/utils/checker";
-import { ErrorHandler } from "@/utils/requestErrors";
+import { ErrorHandler, RequestErrorCode } from "@/utils/requestErrors";
 import { InputContent } from "@/types/inputContent";
 
 const { t } = useI18n();
@@ -72,14 +74,18 @@ const login = () => {
     .then((res: any) => {
       if (res.data.success === true) {
         navTo(
-          `${RouteConfig.my.login.emailLoginPassword.url}?email=${email.value}`
+          `${RouteConfig.my.login.emailLoginPassword.url}?email=${email.value.content}`
         );
       } else {
         ErrorHandler(res);
       }
     })
     .catch((err: any) => {
-      email.value.warning = t(err.message);
+      if (err.code === RequestErrorCode.EmailNotFoundError) {
+        email.value.warning = t("emailLogin.邮箱不存在");
+      } else {
+        email.value.warning = t(err.message);
+      }
       email.value.valid = false;
     });
 };

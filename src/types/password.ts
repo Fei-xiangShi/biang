@@ -5,6 +5,7 @@ export class Password {
   number: boolean;
   symbol: boolean;
   length: boolean;
+  againWarning: string = "两次输入的密码不一致";
   letterWarning: string = "密码必须包含字母";
   numberWarning: string = "密码必须包含数字";
   symbolWarning: string = "密码必须包含特殊字符";

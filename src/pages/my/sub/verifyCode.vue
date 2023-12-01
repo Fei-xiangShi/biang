@@ -3,10 +3,10 @@
     <navbar />
     <view class="verifyCode" :style="{ display: success ? 'none' : '' }">
       <view class="notice">
-        <text class="notice-text">{{ $t("请输入验证码提示") }}</text>
+        <text class="notice-text">{{ $t("verifyCode.请输入验证码提示") }}</text>
       </view>
       <view class="title">
-        <text class="title-text">{{ $t("输入验证码提示") }}</text>
+        <text class="title-text">{{ $t("verifyCode.输入验证码提示") }}</text>
       </view>
       <view class="code-inputs">
         <input
@@ -31,28 +31,28 @@
         </view>
       </view>
       <view class="warning" v-if="warning">
-        <text class="warning-text">{{ $t("验证码错误") }}</text>
+        <text class="warning-text">{{ $t("verifyCode.验证码错误") }}</text>
       </view>
       <view class="tab-notice">
-        <text class="tab-notice-text">{{ $t("遇到问题") }}</text>
+        <text class="tab-notice-text">{{ $t("verifyCode.遇到问题") }}</text>
       </view>
       <view
         class="resend-button"
         :class="[timeleft <= 0 ? 'available' : '']"
         @tap="resendEmail"
       >
-        <view class="resend-text">{{ showTime }} {{ $t("重新发送") }}</view>
+        <view class="resend-text">{{ showTime }} {{ $t("verifyCode.重新发送") }}</view>
       </view>
       <view class="confirm-button">
-        <view class="button-text" @tap="confirm(code)">{{ $t("验证") }}</view>
+        <view class="button-text" @tap="confirm(code)">{{ $t("verifyCode.验证") }}</view>
       </view>
       <view class="bottom">
-        <text class="bottom-text">{{ $t("验证码底部提示") }}</text>
+        <text class="bottom-text">{{ $t("verifyCode.验证码底部提示") }}</text>
       </view>
     </view>
     <view class="successPage" :style="{ display: success ? '' : 'none' }">
       <view class="successPage-title">
-        <text class="successPage-title-text">{{ $t("验证成功") }}</text>
+        <text class="successPage-title-text">{{ $t("verifyCode.验证成功") }}</text>
       </view>
       <view class="successPage-notice">
         <view class="icon" :class="{ 'choose-icon-animation': animeShow }">
@@ -63,12 +63,12 @@
           />
         </view>
         <text :class="['successPage-notice-text', 'textFadeInRight']">{{
-          $t("验证成功提示")
+          $t("verifyCode.验证成功提示")
         }}</text>
       </view>
       <view class="successPage-button">
         <view class="successPage-button-text" @tap="redirect">{{
-          $t("返回")
+          $t("verifyCode.返回")
         }}</view>
       </view>
     </view>

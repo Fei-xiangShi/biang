@@ -14,7 +14,7 @@
         <u-avatar icon="star-fill" />
       </view>
       <view class="username">
-        <view class="username-text">{{ $t("未登录提示") }}</view>
+        <view class="username-text">{{ $t("my.未登录用户名") }}</view>
         <view class="username-arrow">
           <u-icon name="arrow-right" :size="20" />
         </view>
@@ -102,7 +102,7 @@ const isAdmin = ref(false);
 const session = uni.getStorageSync("aueduSession");
 const isLogin = ref(session && session.length > 0);
 const userAvatarUrl = ref("");
-const username = ref("");
+const username = ref(uni.getStorageSync("username"));
 const showChooseLangualge = ref(false);
 const Notify = ref();
 
@@ -154,7 +154,7 @@ const confirmLang = (id: any) => {
       break;
   }
   locale.value = uni.getStorageSync("lang");
-  notify.message = t("成功设置语言提示");
+  notify.message = t("my.成功设置语言提示");
   notify.type = "success";
   Notify.value.show(notify);
   showChooseLangualge.value = false;
@@ -179,9 +179,9 @@ onMounted(() => {
         }
       })
       .catch((err: any) => {
-        if (err.code === RequestErrorCode.DefaultError) {
+        if (err.code === RequestErrorCode.NotAuthenticatedError) {
           uni.showToast({
-            title: t("登录失效"),
+            title: t("my.请登录"),
             icon: "none",
           });
           userLogout();

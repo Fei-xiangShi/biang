@@ -3,27 +3,33 @@
     <navbar />
     <view class="verifyEmail">
       <view class="notice">
-        <text class="notice-text">{{ $t("请输入邮箱提示") }}</text>
+        <text class="notice-text">{{ $t("verifyEmail.请输入邮箱提示") }}</text>
       </view>
       <view class="title">
-        <text class="title-text">{{ $t("验证您的身份") }}</text>
+        <text class="title-text">{{ $t("verifyEmail.验证您的身份") }}</text>
       </view>
       <view class="email-input">
         <u-input v-model="email.content" clearable @blur="checkEmail(email)" />
       </view>
       <view class="email.value.warning" v-if="email.warning">
         <text class="email.value.warning-text">{{
-          $t("邮箱格式错误提示")
+          $t("verifyEmail.邮箱格式错误提示")
         }}</text>
       </view>
       <view class="tab-notice">
-        <text class="tab-notice-text">{{ $t("邮箱验证详细信息") }}</text>
+        <text class="tab-notice-text">{{
+          $t("verifyEmail.邮箱验证详细信息")
+        }}</text>
       </view>
       <view class="confirm-button">
-        <view class="button-text" @tap="confirm">{{ $t("确认") }}</view>
+        <view class="button-text" @tap="confirm">{{
+          $t("verifyEmail.确认")
+        }}</view>
       </view>
       <view class="bottom">
-        <text class="bottom-text">{{ $t("邮箱验证底部提示") }}</text>
+        <text class="bottom-text">{{
+          $t("verifyEmail.邮箱验证底部提示")
+        }}</text>
       </view>
     </view>
   </view>
@@ -34,7 +40,7 @@ import { ref } from "vue";
 import Api from "@/api/api";
 import navbar from "@/components/navbar.vue";
 import RouteConfig from "@/config/routes";
-import { ErrorHandler } from "@/utils/requestErrors";
+import { ErrorHandler, RequestErrorCode } from "@/utils/requestErrors";
 import { useI18n } from "vue-i18n";
 import { InputContent } from "@/types/inputContent";
 import { checkEmail } from "@/utils/checker";

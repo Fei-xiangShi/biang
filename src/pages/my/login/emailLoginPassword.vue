@@ -1,23 +1,23 @@
 <template>
-  <navbar :title="t('邮箱登录')" />
+  <navbar :title="t('emailLoginPassword.邮箱登录')" />
   <view class="email-login-container">
     <img src="../../static/icons/logo.png" class="icon" />
-    <view class="email-login-title">{{ t("邮箱登录") }}</view>
+    <view class="email-login-title">{{ $t("emailLoginPassword.邮箱登录") }}</view>
     <view class="email-login-input-container">
-      <view class="email-login-input-title">{{ t("密码") }}</view>
+      <view class="email-login-input-title">{{ $t("emailLoginPassword.密码") }}</view>
       <input
         class="email-login-input"
-        :placeholder="t('请输入密码')"
+        :placeholder="t('emailLoginPassword.请输入密码')"
         type="password"
         v-model="password"
       />
       <view class="password-wrong-warning-text" v-if="passwordWrong">
-        {{ $t("密码错误提醒") }}
+        {{ $t("emailLoginPassword.密码错误提醒") }}
       </view>
     </view>
     <view class="email-login-button-container">
       <view class="email-login-button" @tap="login()">
-        {{ t("登录") }}
+        {{ $t("emailLoginPassword.登录") }}
       </view>
     </view>
   </view>

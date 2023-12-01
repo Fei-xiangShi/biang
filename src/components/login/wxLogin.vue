@@ -1,24 +1,24 @@
 <template>
-  <navbar :title="t('一键登录')" />
+  <navbar :title="t('wxLogin.一键登录')" />
   <view class="wx-login-container">
     <img src="../../static/icons/logo.png" class="icon" />
-    <view class="wx-login-title">{{ $t("微信登录标题") }}</view>
-    <view class="wx-login-content">{{ $t("微信登录提示") }}</view>
+    <view class="wx-login-title">{{ $t("wxLogin.微信登录标题") }}</view>
+    <view class="wx-login-content">{{ $t("wxLogin.微信登录提示") }}</view>
     <view class="wx-login-button" @tap="login">
-      {{ t("微信一键登录按钮") }}
+      {{ $t("wxLogin.微信一键登录按钮") }}
     </view>
     <view class="toggle-to-email" @tap="emit('toggleLogin', email)">
-      <view class="toggle-to-email-text">{{ t("使用邮箱登录") }}</view>
+      <view class="toggle-to-email-text">{{ $t("wxLogin.使用邮箱登录") }}</view>
     </view>
     <view class="user-agreement">
       <view class="user-agreement-text">
-        {{ $t("登录即代表同意") }}
+        {{ $t("wxLogin.登录即代表同意") }}
         <text class="user-agreement-text-highlight">
-          {{ $t("服务条款") }}
-          <text class="and">{{ $t("和") }}</text>
-          {{ $t("用户协议") }}
+          {{ $t("wxLogin.服务条款") }}
+          <text class="and">{{ $t("wxLogin.和") }}</text>
+          {{ $t("wxLogin.用户协议") }}
         </text>
-        {{ $t("并使用微信登录") }}
+        {{ $t("wxLogin.并使用微信登录") }}
       </view>
     </view>
   </view>
@@ -68,7 +68,7 @@ const login = () => {
     })
     .catch(() => {
       uni.showToast({
-        title: t("登录错误, 请重试"),
+        title: t("wxLogin.登录错误, 请重试"),
         icon: "none",
       });
     })

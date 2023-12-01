@@ -1,6 +1,6 @@
 <template>
   <modal
-    :title="t('选择语言提示')"
+    :title="t('changeLanguageModal.选择语言提示')"
     :show="show"
     :closeOnClickOverlay="true"
     @close="emit('cancel')"
@@ -51,7 +51,7 @@ const changeLang = (e: any) => {
 };
 
 const languageList = ref([
-  t("语言跟随系统提示"),
+  t("changeLanguageModal.语言跟随系统提示"),
   "简体中文",
   "繁体中文",
   "English",

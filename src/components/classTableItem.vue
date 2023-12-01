@@ -70,7 +70,7 @@
     >
       <view class="date-list">
         <view class="month-and-monthname">
-          <view class="month">{{ $t(`${calcMonthNum()}月`) }}</view>
+          <view class="month">{{ $t(`classTableItem.${calcMonthNum()}月`) }}</view>
         </view>
         <view
           class="weekday-and-date"
@@ -130,25 +130,25 @@
         :closeOnClickOverlay="true"
       >
         <view class="modal-header">
-          <view class="modal-title">{{ $t("课程详情标题") }}</view>
+          <view class="modal-title">{{ $t("classTableItem.课程详情标题") }}</view>
           <view class="class-name">{{ showCourse.summary[language] }}</view>
         </view>
         <view class="block-line" />
         <view class="modal-body">
           <view class="course-id">
-            <view class="course-id-title">{{ $t("课程号") }}</view>
+            <view class="course-id-title">{{ $t("classTableItem.课程号") }}</view>
             <view class="course-id-content">
               {{ showCourse.description.slice(0, 8) }}
             </view>
           </view>
           <view class="unit-id">
-            <view class="unit-id-title">{{ $t("单元号") }}</view>
+            <view class="unit-id-title">{{ $t("classTableItem.单元号") }}</view>
             <view class="unit-id-content">
               {{ showCourse.description.split(",")[0].slice(9) }}
             </view>
           </view>
           <view class="classroom">
-            <view class="classroom-title">{{ $t("教室") }}</view>
+            <view class="classroom-title">{{ $t("classTableItem.教室") }}</view>
             <view class="classroom-content">{{ showCourse.location }}</view>
           </view>
           <view
@@ -161,7 +161,7 @@
             "
           >
             <view class="nav-content">
-              {{ $t("点击跳转课程讨论页面") }}
+              {{ $t("classTableItem.点击跳转课程讨论页面") }}
             </view>
           </view>
         </view>
@@ -241,13 +241,13 @@ const calcMonthNum = () => {
 const curretWeekNum = ref(calcWeekNum(date));
 const dayItems = ref([{ date: 0, weekday: "", data: new Date() }]);
 const weekdays = [
-  t("星期日"),
-  t("星期一"),
-  t("星期二"),
-  t("星期三"),
-  t("星期四"),
-  t("星期五"),
-  t("星期六"),
+  t("classTableItem.星期日"),
+  t("classTableItem.星期一"),
+  t("classTableItem.星期二"),
+  t("classTableItem.星期三"),
+  t("classTableItem.星期四"),
+  t("classTableItem.星期五"),
+  t("classTableItem.星期六"),
 ];
 var weeks: any = [];
 
@@ -260,32 +260,32 @@ const calcWeekList = () => {
   for (let i = 1, j = 1; i <= 20; i++) {
     if (i === orientationWeek1) {
       weeks.push({
-        name: t("迎新第一周"),
+        name: t("classTableItem.迎新第一周"),
         id: i,
       });
     } else if (i === orientationWeek2) {
       weeks.push({
-        name: t("迎新第二周"),
+        name: t("classTableItem.迎新第二周"),
         id: i,
       });
     } else if (i === mosVactionWeek) {
       weeks.push({
-        name: t("期中假期"),
+        name: t("classTableItem.期中假期"),
         id: i,
       });
     } else if (i === exam1) {
       weeks.push({
-        name: t("期末第一周"),
+        name: t("classTableItem.期末第一周"),
         id: i,
       });
     } else if (i === exam2) {
       weeks.push({
-        name: t("期末第二周"),
+        name: t("classTableItem.期末第二周"),
         id: i,
       });
     } else {
       weeks.push({
-        name: t(`第${j}周`),
+        name: t(`classTableItem.第${j}周`),
         id: i,
       });
       j++;
@@ -476,7 +476,6 @@ const touchEnd = (e: any) => {
   }
   .name-arrow {
     display: flex;
-    margin-top: 3px;
     margin-left: 0.5rem;
     transition: transform 0.3s ease-in-out;
   }
@@ -493,8 +492,7 @@ const touchEnd = (e: any) => {
   border-radius: 5px 5px 0 0;
   flex: 1;
   background: rgba($color: #fff, $alpha: 0.4);
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
-    rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px;
   .date-list {
     display: flex;
     flex-direction: row;
@@ -551,6 +549,7 @@ const touchEnd = (e: any) => {
       align-items: center;
       min-width: 12%;
       .time-table-item {
+        border-top: 1px solid #000;
         height: 7.142%;
         display: flex;
         align-items: center;
@@ -569,26 +568,32 @@ const touchEnd = (e: any) => {
         max-width: 13.5%;
         .course-item {
           border-radius: 5px;
-          height: 85%;
+          height: 95%;
+          width: 90%;
           display: flex;
           flex-direction: column;
-          flex: 1;
+          align-items: center;
           overflow: hidden;
-          border: 3px solid #f0e8e8;
+          box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px;
           .course-name {
+            display: flex;
+            align-items: center;
             font-size: 0.7rem;
             font-weight: bold;
             color: black;
+            width: 90%;
           }
           .course-location {
             font-size: 0.8rem;
             font-weight: bold;
             color: black;
+            width: 90%;
           }
           .course-time {
             font-size: 0.8rem;
             font-weight: bold;
             color: black;
+            width: 90%;
           }
         }
       }
@@ -685,6 +690,7 @@ const touchEnd = (e: any) => {
     flex-direction: row;
     justify-content: center;
     width: 100%;
+    margin-top: 10px;
     .nav-content {
       display: flex;
       font-size: 0.8rem;

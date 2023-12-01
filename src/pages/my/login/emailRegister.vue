@@ -1,11 +1,13 @@
 <template>
   <navbar />
   <view class="login-container">
-    <view class="title-text">{{ $t("注册新账号") }}</view>
-    <view class="sub-title-text">{{ $t("注册副标题提示") }}</view>
+    <view class="title-text">{{ $t("emailRegister.注册新账号") }}</view>
+    <view class="sub-title-text">{{ $t("emailRegister.注册副标题提示") }}</view>
     <view class="avatar">
       <view class="avatar-title">
-        <view class="avatar-title-text">{{ $t("头像选择框标题") }}</view>
+        <view class="avatar-title-text">
+          {{ $t("emailRegister.头像选择框标题") }}
+        </view>
       </view>
       <view class="upload-avatar">
         <button
@@ -21,32 +23,34 @@
     </view>
     <view class="email">
       <view class="email-input-title">
-        <view class="email-input-title-text">{{ $t("邮箱输入框标题") }}*</view>
+        <view class="email-input-title-text"
+          >{{ $t("emailRegister.邮箱输入框标题") }}*</view
+        >
       </view>
       <view class="email-input">
         <u-input
           v-model="email.content"
-          :placeholder="t('邮箱输入框占位符')"
-          @blur="checkEmail"
+          :placeholder="t('emailRegister.邮箱输入框占位符')"
+          @blur="checkEmail(email)"
         />
       </view>
       <view class="email-input-warning">
         <view class="email-input-warning-text" v-if="email.valid === false">
-          {{ email.warning }}
+          {{ $t(email.warning) }}
         </view>
       </view>
     </view>
     <view class="username">
       <view class="username-input-title">
         <view class="username-input-title-text">
-          {{ $t("用户名输入框标题") }}*
+          {{ $t("emailRegister.用户名输入框标题") }}*
         </view>
       </view>
       <view class="username-input">
         <u-input
           v-model="username.content"
-          :placeholder="t('用户名输入框占位符')"
-          @blur="checkUsername"
+          :placeholder="t('emailRegister.用户名输入框占位符')"
+          @blur="checkUsername(username)"
         />
       </view>
       <view class="username-input-warning">
@@ -54,20 +58,20 @@
           class="username-input-warning-text"
           v-if="username.valid === false"
         >
-          {{ username.warning }}
+          {{ $t(username.warning) }}
         </view>
       </view>
     </view>
     <view class="password">
       <view class="password-input-title">
         <view class="password-input-title-text">
-          {{ $t("密码输入框标题") }}*
+          {{ $t("emailRegister.密码输入框标题") }}*
         </view>
       </view>
       <view class="password-input">
         <u-input
           v-model="password.content"
-          :placeholder="t('密码输入框占位符')"
+          :placeholder="t('emailRegister.密码输入框占位符')"
           @blur="password.checkPasswordAll()"
           type="password"
         />
@@ -80,7 +84,7 @@
             green: password.letter,
           }"
         >
-          · {{ $t("密码包含字母") }}
+          · {{ $t("emailRegister.密码包含字母") }}
         </view>
         <view
           class="password-input-warning-text"
@@ -89,7 +93,7 @@
             green: password.number,
           }"
         >
-          · {{ $t("密码包含数字") }}
+          · {{ $t("emailRegister.密码包含数字") }}
         </view>
         <view
           class="password-input-warning-text"
@@ -98,7 +102,7 @@
             green: password.symbol,
           }"
         >
-          · {{ $t("密码包含特殊符号") }}
+          · {{ $t("emailRegister.密码包含特殊符号") }}
         </view>
         <view
           class="password-input-warning-text"
@@ -107,21 +111,21 @@
             green: password.length,
           }"
         >
-          · {{ $t("密码长度必须在6-20之间") }}
+          · {{ $t("emailRegister.密码长度必须在6-20之间") }}
         </view>
       </view>
     </view>
     <view class="password-confirm">
       <view class="password-confirm-input-title">
         <view class="password-confirm-input-title-text">
-          {{ $t("确认密码输入框标题") }}*
+          {{ $t("emailRegister.确认密码输入框标题") }}*
         </view>
       </view>
       <view class="password-input">
         <u-input
           v-model="password.again"
-          :placeholder="t('确认密码输入框占位符')"
-          @blur="password.checkPasswordAgain"
+          :placeholder="t('emailRegister.确认密码输入框占位符')"
+          @blur="password.checkPasswordAgain()"
           type="password"
         />
       </view>
@@ -130,18 +134,21 @@
           class="password-input-warning-text"
           v-if="!password.checkPasswordAgain() && password.again !== ''"
         >
-          {{ $t("确认密码输入框警告") }}
+          {{ $t("emailRegister.确认密码输入框警告") }}
         </view>
       </view>
     </view>
     <view class="school-select-input">
       <u-form>
-        <u-form-item :label="t('学校选择框标题') + '*'" @click="hideKeyboard">
+        <u-form-item
+          :label="t('emailRegister.学校选择框标题') + '*'"
+          @click="hideKeyboard"
+        >
           <u-input
             v-model="school"
             disabled
             disabledColor="rgb(0,0,0,0)"
-            :placeholder="t('学校选择框占位符')"
+            :placeholder="t('emailRegister.学校选择框占位符')"
             shape="circle"
           />
           <u-icon slot="right" name="arrow-right" />
@@ -155,12 +162,12 @@
         @confirm="confirmPick"
         @close="closePick"
         :loading="pickerLoading"
-        :title="t('学校选择')"
+        :title="t('emailRegister.学校选择')"
       />
     </view>
     <view class="next">
       <view class="next-step" @tap="commitRegister">
-        <view class="next-step-text">{{ $t("下一步") }}</view>
+        <view class="next-step-text">{{ $t("emailRegister.下一步") }}</view>
       </view>
     </view>
   </view>
@@ -248,7 +255,7 @@ const commitRegister = () => {
       .then((res: any) => {
         if (res.data.success === true) {
           uni.showToast({
-            title: t("注册成功"),
+            title: t("emailRegister.注册成功"),
             icon: "success",
             duration: 2000,
           });

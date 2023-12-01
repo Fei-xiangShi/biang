@@ -1,11 +1,11 @@
 <template>
   <navbar />
   <view class="login-container">
-    <view class="title-text">{{ $t("微信注册新账号") }}</view>
-    <view class="sub-title-text">{{ $t("微信注册副标题提示") }}</view>
+    <view class="title-text">{{ $t("wxRegister.微信注册新账号") }}</view>
+    <view class="sub-title-text">{{ $t("wxRegister.微信注册副标题提示") }}</view>
     <view class="avatar">
       <view class="avatar-title">
-        <view class="avatar-title-text">{{ $t("头像选择框标题") }}</view>
+        <view class="avatar-title-text">{{ $t("wxRegister.头像选择框标题") }}</view>
       </view>
       <view class="upload-avatar">
         <button
@@ -22,14 +22,14 @@
     <view class="username">
       <view class="username-input-title">
         <view class="username-input-title-text">
-          {{ $t("用户名输入框标题") }}*
+          {{ $t("wxRegister.用户名输入框标题") }}*
         </view>
       </view>
       <view class="username-input">
         <u-input
           v-model="username"
-          :placeholder="t('用户名输入框占位符')"
-          @blur="checkUsername"
+          :placeholder="t('wxRegister.用户名输入框占位符')"
+          @blur="checkUsername(username)"
         />
       </view>
       <view class="username-input-warning">
@@ -37,19 +37,19 @@
           class="username-input-warning-text"
           v-if="username.valid === false"
         >
-          {{ username.warning }}
+          {{ $t(username.warning) }}
         </view>
       </view>
     </view>
     <view class="email">
       <view class="email-input-title">
-        <view class="email-input-title-text">{{ $t("邮箱输入框标题") }}</view>
+        <view class="email-input-title-text">{{ $t("wxRegister.邮箱输入框标题") }}</view>
       </view>
       <view class="email-input">
         <u-input
           v-model="email"
-          :placeholder="t('邮箱输入框占位符')"
-          @blur="checkEmail"
+          :placeholder="t('wxRegister.邮箱输入框占位符')"
+          @blur="checkEmail(email)"
         />
       </view>
       <view class="email-input-warning">
@@ -58,18 +58,18 @@
           v-if="email.valid === false"
           :style="{ color: 'rgb(167, 167, 167)' }"
         >
-          {{ email.warning }}
+          {{ $t(email.warning) }}
         </view>
       </view>
     </view>
     <view class="school-select-input">
       <u-form>
-        <u-form-item :label="t('学校选择框标题') + '*'" @click="hideKeyboard">
+        <u-form-item :label="t('wxRegister.学校选择框标题') + '*'" @click="hideKeyboard">
           <u-input
             v-model="school"
             disabled
             disabledColor="rgb(0,0,0,0)"
-            :placeholder="t('学校选择框占位符')"
+            :placeholder="t('wxRegister.学校选择框占位符')"
             shape="circle"
           />
           <u-icon slot="right" name="arrow-right" />
@@ -83,13 +83,13 @@
         @confirm="confirmPick"
         @close="closePick"
         :loading="pickerLoading"
-        :title="t('学校选择')"
+        :title="t('wxRegister.学校选择')"
       />
     </view>
     <view class="next">
       <view class="next-step">
         <view class="next-step-text" @tap="commitRegister">{{
-          $t("下一步")
+          $t("wxRegister.下一步")
         }}</view>
       </view>
     </view>
@@ -160,7 +160,7 @@ const onChooseAvatar = (e: any) => {
 const commitRegister = () => {
   if (!username.value.content) {
     uni.showToast({
-      title: t("请填写完整信息"),
+      title: t("wxRegister.请填写完整信息"),
       icon: "none",
       duration: 2000,
     });
@@ -180,7 +180,7 @@ const commitRegister = () => {
       .then((res: any) => {
         if (res.data.success === true) {
           uni.showToast({
-            title: t("注册成功"),
+            title: t("wxRegister.注册成功"),
             icon: "success",
             duration: 2000,
           });

@@ -14,11 +14,11 @@
           </view>
 
           <view class="acrylic-content">
-            <view class="acrylic-content-Title">{{ $t("导入课表") }}</view>
+            <view class="acrylic-content-Title">{{ $t("classTable.导入课表") }}</view>
             <view class="input">
               <input
                 class="url"
-                :placeholder="t('课表链接')"
+                :placeholder="t('classTable.课表链接')"
                 type="text"
                 v-model="classTableUrl"
               />
