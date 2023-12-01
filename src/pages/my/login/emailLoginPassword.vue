@@ -28,10 +28,9 @@ import { useI18n } from "vue-i18n";
 import { ref } from "vue";
 import Api from "@/api/api";
 import RouteConfig from "@/config/routes";
-import universities from "@/config/universities";
 import navbar from "@/components/navbar.vue";
 import { ErrorHandler } from "@/utils/requestErrors";
-const language: "zh-Hans" | "en" = uni.getStorageSync("lang");
+import { userInitFromRequest } from "@/utils/userManager";
 
 const { t } = useI18n();
 
@@ -42,19 +41,7 @@ const login = () => {
   Api.emailLogin(props.email, password.value)
     .then((res: any) => {
       if (res.statusCode === 200) {
-        uni.setStorageSync("email", res.data.data.email);
-        uni.setStorageSync("aueduSession", res.data.data.auedu_session);
-        uni.setStorageSync("username", res.data.data.username);
-        uni.setStorageSync("schoolId", res.data.data.university);
-        uni.setStorageSync("classTableUrl", res.data.data.ics_url);
-        uni.setStorageSync(
-          "school",
-          Object.keys(universities[language] as { [key: string]: string }).find(
-            (key) =>
-              (universities[language] as { [key: string]: string })[key] ===
-              res.data.data.university
-          )
-        );
+        userInitFromRequest(res);
         uni.reLaunch({
           url: RouteConfig.my.url,
         });

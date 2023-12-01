@@ -156,7 +156,6 @@ const confirm = (code: string) => {
     .then((res: any) => {
       if (res.statusCode === 200) {
         success.value = true;
-        uni.setStorageSync("emailVerified", true);
         uni.setStorageSync("email", props.email);
         setTimeout(() => {
           animeShow.value = true;
@@ -235,14 +234,7 @@ const redirect = () => {
     justify-content: space-between;
     margin-bottom: 1rem;
     .code-input {
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 100rpx;
-      width: 100%;
-      opacity: 0;
-      z-index: 99;
-      outline: none;
+      display: none;
     }
     .code-input-block {
       width: 13%;

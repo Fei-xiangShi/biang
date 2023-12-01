@@ -25,14 +25,14 @@
       </view>
       <view class="email-input">
         <u-input
-          v-model="email"
+          v-model="email.content"
           :placeholder="t('邮箱输入框占位符')"
           @blur="checkEmail"
         />
       </view>
       <view class="email-input-warning">
-        <view class="email-input-warning-text" v-if="emailValid === false">
-          {{ emailWarning }}
+        <view class="email-input-warning-text" v-if="email.valid === false">
+          {{ email.warning }}
         </view>
       </view>
     </view>
@@ -44,7 +44,7 @@
       </view>
       <view class="username-input">
         <u-input
-          v-model="username"
+          v-model="username.content"
           :placeholder="t('用户名输入框占位符')"
           @blur="checkUsername"
         />
@@ -52,9 +52,9 @@
       <view class="username-input-warning">
         <view
           class="username-input-warning-text"
-          v-if="usernameValid === false"
+          v-if="username.valid === false"
         >
-          {{ usernameWarning }}
+          {{ username.warning }}
         </view>
       </view>
     </view>
@@ -66,9 +66,9 @@
       </view>
       <view class="password-input">
         <u-input
-          v-model="password"
+          v-model="password.content"
           :placeholder="t('密码输入框占位符')"
-          @blur="checkPasswordValid"
+          @blur="password.checkPasswordAll()"
           type="password"
         />
       </view>
@@ -76,8 +76,8 @@
         <view
           class="password-input-warning-text"
           :class="{
-            ok: checkPasswordValid() || password === '',
-            green: Checker.checkPassword(password)[0] === true,
+            ok: password.checkPasswordAll() || password.content === '',
+            green: password.letter,
           }"
         >
           · {{ $t("密码包含字母") }}
@@ -85,8 +85,8 @@
         <view
           class="password-input-warning-text"
           :class="{
-            ok: checkPasswordValid() || password === '',
-            green: Checker.checkPassword(password)[1] === true,
+            ok: password.checkPasswordAll() || password.content === '',
+            green: password.number,
           }"
         >
           · {{ $t("密码包含数字") }}
@@ -94,8 +94,8 @@
         <view
           class="password-input-warning-text"
           :class="{
-            ok: checkPasswordValid() || password === '',
-            green: Checker.checkPassword(password)[2] === true,
+            ok: password.checkPasswordAll() || password.content === '',
+            green: password.symbol,
           }"
         >
           · {{ $t("密码包含特殊符号") }}
@@ -103,8 +103,8 @@
         <view
           class="password-input-warning-text"
           :class="{
-            ok: checkPasswordValid() || password === '',
-            green: Checker.checkPassword(password)[3] === true,
+            ok: password.checkPasswordAll() || password.content === '',
+            green: password.length,
           }"
         >
           · {{ $t("密码长度必须在6-20之间") }}
@@ -119,16 +119,16 @@
       </view>
       <view class="password-input">
         <u-input
-          v-model="confrimedPassword"
+          v-model="password.again"
           :placeholder="t('确认密码输入框占位符')"
-          @blur="checkPasswordSame"
+          @blur="password.checkPasswordAgain"
           type="password"
         />
       </view>
       <view class="password-confirm-input-warning">
         <view
           class="password-input-warning-text"
-          v-if="passwordIsSame === false"
+          v-if="!password.checkPasswordAgain() && password.again !== ''"
         >
           {{ $t("确认密码输入框警告") }}
         </view>
@@ -171,10 +171,13 @@ import universities from "@/config/universities";
 import { useI18n } from "vue-i18n";
 import { ref } from "vue";
 import navbar from "@/components/navbar.vue";
-import Checker from "@/utils/checker";
 import Api from "@/api/api";
 import RouteConfig from "@/config/routes";
 import { ErrorHandler, RequestErrorCode } from "@/utils/requestErrors";
+import { InputContent } from "@/types/inputContent";
+import { checkEmail, checkUsername } from "@/utils/checker";
+import { Password } from "@/types/password";
+import { userInitFromRequest } from "@/utils/userManager";
 
 const { t } = useI18n();
 
@@ -187,66 +190,13 @@ const schools = [
   ),
 ];
 const pickerLoading = ref(false);
-const password = ref("");
-const confrimedPassword = ref("");
-const passwordIsSame = ref();
-const email = ref("");
-const emailValid = ref();
-const emailWarning = ref(t("邮箱格式错误提醒"));
-const username = ref("");
-const usernameValid = ref();
-const usernameWarning = ref(t("用户名格式错误提醒"));
+const password = ref(new Password());
+const username = ref(new InputContent());
+const email = ref(new InputContent());
 const avatarUrl = ref(
   "https://img.ixintu.com/download/jpg/20201201/653c62f6204ba19a0c630206bee5923f_512_512.jpg!ys"
 );
 let size = "8192";
-
-const checkPasswordSame = () => {
-  if (password.value !== confrimedPassword.value) {
-    passwordIsSame.value = false;
-    return false;
-  }
-  passwordIsSame.value = true;
-  return true;
-};
-
-const checkEmail = () => {
-  if (!Checker.checkEmail(email.value)) {
-    emailValid.value = false;
-    return false;
-  }
-  emailValid.value = true;
-  return true;
-};
-
-const checkPasswordValid = () => {
-  let cnt = 0;
-  if (Checker.checkPassword(password.value)[0]) {
-    cnt++;
-  }
-  if (Checker.checkPassword(password.value)[1]) {
-    cnt++;
-  }
-  if (Checker.checkPassword(password.value)[2]) {
-    cnt++;
-  }
-  if (!Checker.checkPassword(password.value)[3]) {
-    cnt = 0;
-  }
-  if (cnt < 1) {
-    return false;
-  }
-  return true;
-};
-
-const checkUsername = () => {
-  if (!Checker.checkUsername(username.value)) {
-    usernameValid.value = false;
-    return false;
-  }
-  usernameValid.value = true;
-  return true;
-};
 
 const cancelPick = () => {
   showSchoolPicker.value = false;
@@ -280,16 +230,18 @@ const onChooseAvatar = (e: any) => {
 };
 
 const commitRegister = () => {
+  checkEmail(email.value);
+  checkUsername(username.value);
   if (
-    checkEmail() &&
-    checkPasswordValid() &&
-    checkPasswordSame() &&
-    checkUsername()
+    password.value.checkPasswordAgain() &&
+    password.value.checkPasswordAll() &&
+    email.value.valid &&
+    username.value.valid
   ) {
     Api.emailRegister(
-      email.value,
-      username.value,
-      password.value,
+      email.value.content,
+      username.value.content,
+      password.value.content,
       schoolId.value,
       size
     )
@@ -300,10 +252,7 @@ const commitRegister = () => {
             icon: "success",
             duration: 2000,
           });
-          uni.setStorageSync("aueduSession", res.data.data.auedu_session);
-          uni.setStorageSync("username", username.value);
-          uni.setStorageSync("school", school.value);
-          uni.setStorageSync("schoolId", schoolId.value);
+          userInitFromRequest(res);
           uni.getFileSystemManager().readFile({
             filePath: avatarUrl.value,
             success: (result) => {
@@ -343,11 +292,11 @@ const commitRegister = () => {
       })
       .catch((err: any) => {
         if (err.code === RequestErrorCode.EmailExistsError) {
-          emailValid.value = false;
-          emailWarning.value = t(err.message);
+          email.value.valid = false;
+          email.value.warning = t(err.message);
         } else if (err.code === RequestErrorCode.UsernameExistsError) {
-          usernameValid.value = false;
-          usernameWarning.value = t(err.message);
+          username.value.valid = false;
+          username.value.warning = t(err.message);
         } else {
           uni.showToast({
             title: t(err.message),
@@ -600,3 +549,4 @@ const commitRegister = () => {
   }
 }
 </style>
+@/types/InputContent @/types/Password

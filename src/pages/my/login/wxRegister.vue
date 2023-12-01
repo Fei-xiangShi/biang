@@ -35,9 +35,9 @@
       <view class="username-input-warning">
         <view
           class="username-input-warning-text"
-          v-if="usernameValid === false"
+          v-if="username.valid === false"
         >
-          {{ usernameWarning }}
+          {{ username.warning }}
         </view>
       </view>
     </view>
@@ -55,10 +55,10 @@
       <view class="email-input-warning">
         <view
           class="email-input-warning-text"
-          v-if="emailValid === false"
+          v-if="email.valid === false"
           :style="{ color: 'rgb(167, 167, 167)' }"
         >
-          {{ emailWarning }}
+          {{ email.warning }}
         </view>
       </view>
     </view>
@@ -99,12 +99,14 @@
 <script setup lang="ts">
 import universities from "@/config/universities";
 import { useI18n } from "vue-i18n";
-import { ref, onMounted } from "vue";
+import { ref } from "vue";
 import navbar from "@/components/navbar.vue";
-import Checker from "@/utils/checker";
 import Api from "@/api/api";
 import RouteConfig from "@/config/routes";
 import { ErrorHandler, RequestErrorCode } from "@/utils/requestErrors";
+import { userWxCode } from "@/utils/userManager";
+import { InputContent } from "@/types/inputContent";
+import { checkUsername, checkEmail } from "@/utils/checker";
 
 const { t } = useI18n();
 
@@ -116,22 +118,13 @@ const schools = [
   ),
 ];
 const pickerLoading = ref(false);
-const username = ref("");
-const usernameValid = ref();
-const usernameWarning = ref(t("用户名格式错误警告"));
+const username = ref(new InputContent());
 const schoolId = ref("1");
-const email = ref();
-const emailValid = ref();
-const emailWarning = ref(t("邮箱格式错误提醒"));
-const code = ref("");
+const email = ref(new InputContent());
 const userAvatarUrl = ref(
   "https://img.ixintu.com/download/jpg/20201201/653c62f6204ba19a0c630206bee5923f_512_512.jpg!ys"
 );
 let size = "8192";
-
-const checkUsername = () => {
-  usernameValid.value = Checker.checkUsername(username.value);
-};
 
 const cancelPick = () => {
   showSchoolPicker.value = false;
@@ -143,15 +136,6 @@ const confirmPick = (selection: any) => {
     universities[uni.getStorageSync("lang") as keyof typeof universities] as any
   )[school.value];
   showSchoolPicker.value = false;
-};
-
-const checkEmail = () => {
-  if (!Checker.checkEmail(email.value)) {
-    emailValid.value = false;
-    return false;
-  }
-  emailValid.value = true;
-  return true;
 };
 
 const closePick = () => {
@@ -174,7 +158,7 @@ const onChooseAvatar = (e: any) => {
 };
 
 const commitRegister = () => {
-  if (!username.value || !schoolId.value || !userAvatarUrl.value) {
+  if (!username.value.content) {
     uni.showToast({
       title: t("请填写完整信息"),
       icon: "none",
@@ -182,41 +166,40 @@ const commitRegister = () => {
     });
     return;
   }
-  if (!usernameValid.value) {
-    uni.showToast({
-      title: t("请填写正确信息"),
-      icon: "none",
-      duration: 2000,
-    });
-    return;
-  }
-  Api.wxRegister(
-    code.value,
-    username.value,
-    schoolId.value,
-    size,
-    email.value ? email.value : null
-  )
-    .then((res: any) => {
-      if (res.data.success === true) {
-        uni.showToast({
-          title: t("注册成功"),
-          icon: "success",
-          duration: 2000,
-        });
-        uni.setStorageSync("aueduSession", res.data.data.auedu_session);
-        uni.setStorageSync("username", username.value);
-        uni.setStorageSync("school", school.value);
-        uni.setStorageSync("schoolId", schoolId.value);
-        uni.getFileSystemManager().readFile({
-          filePath: userAvatarUrl.value,
-          success: (result) => {
-            const headers = {
-              "Content-Type": "image/jpeg",
-              "Content-Length": size,
-            };
-            Api.uploadAvatar(res.data.presigned_url, result.data, headers).then(
-              (res: any) => {
+  checkEmail(email.value);
+  checkUsername(username.value);
+  if (!username.value.valid) return;
+  userWxCode().then((code: string) => {
+    Api.wxRegister(
+      code,
+      username.value.content,
+      schoolId.value,
+      size,
+      email.value.content ? email.value.content : undefined
+    )
+      .then((res: any) => {
+        if (res.data.success === true) {
+          uni.showToast({
+            title: t("注册成功"),
+            icon: "success",
+            duration: 2000,
+          });
+          uni.setStorageSync("aueduSession", res.data.data.auedu_session);
+          uni.setStorageSync("username", username.value);
+          uni.setStorageSync("school", school.value);
+          uni.setStorageSync("schoolId", schoolId.value);
+          uni.getFileSystemManager().readFile({
+            filePath: userAvatarUrl.value,
+            success: (result) => {
+              const headers = {
+                "Content-Type": "image/jpeg",
+                "Content-Length": size,
+              };
+              Api.uploadAvatar(
+                res.data.presigned_url,
+                result.data,
+                headers
+              ).then((res: any) => {
                 if (res.statusCode === 200) {
                   console.log(res);
                   Api.updateAvatarUrl(
@@ -232,46 +215,32 @@ const commitRegister = () => {
                 } else {
                   ErrorHandler(res);
                 }
-              }
-            );
-          },
-        });
-        uni.reLaunch({
-          url: RouteConfig.my.url,
-        });
-      } else {
-        ErrorHandler(res);
-      }
-    })
-    .catch((err: any) => {
-      if (err.code === RequestErrorCode.UserExistsError) {
-        usernameValid.value = false;
-        usernameWarning.value = t(err.message)
-      } else if (err.code === RequestErrorCode.EmailExistsError) {
-        emailValid.value = false;
-        emailWarning.value = t(err.message)
-      } else {
-        uni.showToast({
-          title: t(err.message),
-          icon: "none",
-        });
-      }
-    });
-};
-
-onMounted(() => {
-  uni.login({
-    provider: "weixin",
-    success: (res) => {
-      uni.getUserInfo({
-        provider: "weixin",
-        success: (infoRes) => {
-          code.value = res.code;
-        },
+              });
+            },
+          });
+          uni.reLaunch({
+            url: RouteConfig.my.url,
+          });
+        } else {
+          ErrorHandler(res);
+        }
+      })
+      .catch((err: any) => {
+        if (err.code === RequestErrorCode.UserExistsError) {
+          username.value.valid = false;
+          username.value.warning = t(err.message);
+        } else if (err.code === RequestErrorCode.EmailExistsError) {
+          email.value.valid = false;
+          email.value.warning = t(err.message);
+        } else {
+          uni.showToast({
+            title: t(err.message),
+            icon: "none",
+          });
+        }
       });
-    },
   });
-});
+};
 </script>
 
 <style lang="scss" scoped>
@@ -436,3 +405,4 @@ onMounted(() => {
   }
 }
 </style>
+@/types/InputContent

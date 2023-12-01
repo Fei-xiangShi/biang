@@ -9,15 +9,15 @@
         class="email-login-input"
         :placeholder="t('请输入邮箱')"
         type="text"
-        v-model="email"
-        @blur="Checker.checkEmail(email)"
+        v-model="email.content"
+        @blur="checkEmail(email)"
       />
       <view class="email-login-input-warning">
         <view
           class="email-login-input-warning-text"
-          v-if="emailValid === false"
+          v-if="email.valid === false"
         >
-          {{ t(emailWarning) }}
+          {{ t(email.warning) }}
         </view>
       </view>
     </view>
@@ -56,23 +56,19 @@ import { ref } from "vue";
 import Api from "@/api/api";
 import RouteConfig from "@/config/routes";
 import navbar from "@/components/navbar.vue";
-import Checker from "@/utils/checker";
+import { checkEmail } from "@/utils/checker";
 import { ErrorHandler } from "@/utils/requestErrors";
+import { InputContent } from "@/types/inputContent";
 
 const { t } = useI18n();
 
-const email = ref("");
 const wxLogin = loginMethods.WX;
-const emailValid = ref(true);
-const emailWarning = ref("");
+const email = ref<InputContent>(new InputContent());
 
 const login = () => {
-  if (!Checker.checkEmail(email.value)) {
-    emailValid.value = false;
-    emailWarning.value = "邮箱格式错误";
-    return;
-  }
-  Api.emailExists(email.value)
+  checkEmail(email.value);
+  if (!email.value.valid) return;
+  Api.emailExists(email.value.content)
     .then((res: any) => {
       if (res.data.success === true) {
         navTo(
@@ -83,8 +79,8 @@ const login = () => {
       }
     })
     .catch((err: any) => {
-      emailWarning.value = t(err.message);
-      emailValid.value = true;
+      email.value.warning = t(err.message);
+      email.value.valid = false;
     });
 };
 
@@ -208,3 +204,4 @@ const emit = defineEmits(["loginSuccess", "loginFail", "toggleLogin"]);
   }
 }
 </style>
+@/types/types @/types/InputContent

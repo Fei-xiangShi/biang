@@ -9,10 +9,12 @@
         <text class="title-text">{{ $t("验证您的身份") }}</text>
       </view>
       <view class="email-input">
-        <u-input v-model="email" clearable />
+        <u-input v-model="email.content" clearable @blur="checkEmail(email)" />
       </view>
-      <view class="warning" v-if="warning">
-        <text class="warning-text">{{ $t("邮箱格式错误提示") }}</text>
+      <view class="email.value.warning" v-if="email.warning">
+        <text class="email.value.warning-text">{{
+          $t("邮箱格式错误提示")
+        }}</text>
       </view>
       <view class="tab-notice">
         <text class="tab-notice-text">{{ $t("邮箱验证详细信息") }}</text>
@@ -34,27 +36,21 @@ import navbar from "@/components/navbar.vue";
 import RouteConfig from "@/config/routes";
 import { ErrorHandler } from "@/utils/requestErrors";
 import { useI18n } from "vue-i18n";
+import { InputContent } from "@/types/inputContent";
+import { checkEmail } from "@/utils/checker";
 
 const { t } = useI18n();
 
-const email = ref("");
-const warning = ref(false);
-const loading = ref(false);
-
-const validateEmail = (email: string): boolean => {
-  const emailRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/;
-  return emailRegex.test(email);
-};
+const email = ref<InputContent>(new InputContent());
+const loading = ref<boolean>(false);
 
 const confirm = () => {
   if (loading.value) return;
   loading.value = true;
-  if (!validateEmail(email.value)) {
-    warning.value = true;
-    return;
-  }
+  checkEmail(email.value);
+  if (!email.value.valid) return;
   Api.sendEmail(
-    email.value,
+    email.value.content,
     uni.getStorageSync("aueduSession"),
     uni.getStorageSync("lang")
   )
@@ -127,12 +123,12 @@ const confirm = () => {
     display: flex;
     align-items: center;
   }
-  .warning {
+  .email.value.warning {
     width: 100%;
     height: 10%;
     display: flex;
     align-items: center;
-    .warning-text {
+    .email.value.warning-text {
       font-size: 15px;
       color: rgb(255, 16, 68);
     }
@@ -171,3 +167,4 @@ const confirm = () => {
   }
 }
 </style>
+@/types/InputContent

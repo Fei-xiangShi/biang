@@ -41,9 +41,18 @@ class NullError extends RequestError {
   }
 }
 
+class errorError extends RequestError {
+  constructor() {
+    super("error", RequestErrorCode.DefaultError);
+  }
+}
+
 class UnkownError extends RequestError {
   constructor() {
-    super("Unkown error. Please contact with the admin", RequestErrorCode.UnkownError);
+    super(
+      "Unkown error. Please contact with the admin",
+      RequestErrorCode.UnkownError
+    );
   }
 }
 
@@ -132,6 +141,7 @@ const aueduErrors = {
   blank: new BlankError(),
   null: new NullError(),
   required: new RequiredError(),
+  error: new errorError(),
   1001: new PasswordFormatError(),
   1002: new EmailFormatError(),
   1003: new EmailExistsError(),

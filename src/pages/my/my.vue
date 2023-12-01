@@ -93,7 +93,8 @@ import changeLanguageModal from "@/components/changeLanguageModal.vue";
 import { useI18n } from "vue-i18n";
 import { ref, onMounted } from "vue";
 import Api from "@/api/api";
-import { ErrorHandler } from "@/utils/requestErrors";
+import { ErrorHandler, RequestErrorCode } from "@/utils/requestErrors";
+import { userLogout } from "@/utils/userManager";
 
 const { t, locale } = useI18n();
 
@@ -178,10 +179,21 @@ onMounted(() => {
         }
       })
       .catch((err: any) => {
-        uni.showToast({
-          title: t(err.message),
-          icon: "none",
-        });
+        if (err.code === RequestErrorCode.DefaultError) {
+          uni.showToast({
+            title: t("登录失效"),
+            icon: "none",
+          });
+          userLogout();
+          uni.reLaunch({
+            url: RouteConfig.my.url,
+          });
+        } else {
+          uni.showToast({
+            title: t(err.message),
+            icon: "none",
+          });
+        }
       });
   }
 });

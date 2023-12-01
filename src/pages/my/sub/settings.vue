@@ -13,6 +13,7 @@
 <script setup lang="ts">
 import navbar from "@/components/navbar.vue";
 import RouteConfig from "@/config/routes";
+import { userLogout } from "@/utils/userManager";
 
 const logout = () => {
   uni.showModal({
@@ -20,13 +21,9 @@ const logout = () => {
     content: "确定要退出登录吗？",
     success: (res) => {
       if (res.confirm) {
-        uni.removeStorageSync("classTableUrl");
-        uni.removeStorageSync("aueduSession");
-        uni.removeStorageSync("classTableContent");
-        uni.removeStorageSync("username");
-        uni.removeStorageSync("userAvatarUrl");
+        userLogout();
         uni.reLaunch({
-          url: "/pages/index/index",
+          url: RouteConfig.indexPage.url,
         });
       }
     },
@@ -43,7 +40,7 @@ const logout = () => {
   padding: 0 2rem;
 }
 
-.logoutButton{
+.logoutButton {
   margin-top: 20px;
 }
 </style>

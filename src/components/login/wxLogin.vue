@@ -28,53 +28,52 @@
 import navbar from "@/components/navbar.vue";
 import loginMethods from "@/models/loginMethods";
 import { useI18n } from "vue-i18n";
-import { ref, onMounted } from "vue";
 import Api from "@/api/api";
 import RouteConfig from "@/config/routes";
-import universities from "@/config/universities";
 import { ErrorHandler, RequestErrorCode } from "@/utils/requestErrors";
-
-const language: "zh-Hans" | "en" = uni.getStorageSync("lang");
+import { userInitFromRequest, userWxCode } from "@/utils/userManager";
 
 const { t } = useI18n();
 
 const email = loginMethods.Email;
-const code = ref("");
+let loading = false;
 
 const login = () => {
-  if (!code.value || code.value.length == 0) return;
-  Api.wxLogin(code.value)
-    .then((res: any) => {
-      if (res.data.success === true) {
-        uni.setStorageSync("email", res.data.data.email);
-        uni.setStorageSync("aueduSession", res.data.data.auedu_session);
-        uni.setStorageSync("username", res.data.data.username);
-        uni.setStorageSync("schoolId", res.data.data.university);
-        uni.setStorageSync("classTableUrl", res.data.data.ics_url);
-        uni.setStorageSync(
-          "school",
-          Object.keys(universities[language] as { [key: string]: string }).find(
-            (key) =>
-              (universities[language] as { [key: string]: string })[key] ===
-              res.data.data.university
-          )
-        );
-        uni.reLaunch({
-          url: RouteConfig.my.url,
+  if (loading) return;
+  loading = true;
+  userWxCode()
+    .then((code: string) => {
+      if (!code || code.length == 0) return;
+      Api.wxLogin(code)
+        .then((res: any) => {
+          if (res.data.success === true) {
+            userInitFromRequest(res);
+            uni.reLaunch({
+              url: RouteConfig.my.url,
+            });
+          } else {
+            ErrorHandler(res);
+          }
+        })
+        .catch((err) => {
+          if (err.code === RequestErrorCode.UserNotFoundError) {
+            navTo(RouteConfig.my.login.wxRegister.url);
+          } else {
+            uni.showToast({
+              title: t(err.message),
+              icon: "none",
+            });
+          }
         });
-      } else {
-        ErrorHandler(res);
-      }
     })
-    .catch((err) => {
-      if (err.code === RequestErrorCode.UserNotFoundError) {
-        navTo(RouteConfig.my.login.wxRegister.url);
-      } else {
-        uni.showToast({
-          title: t(err.message),
-          icon: "none",
-        });
-      }
+    .catch(() => {
+      uni.showToast({
+        title: t("登录错误, 请重试"),
+        icon: "none",
+      });
+    })
+    .finally(() => {
+      loading = false;
     });
 };
 
@@ -83,20 +82,6 @@ const navTo = (url: string) => {
     url: url,
   });
 };
-
-onMounted(() => {
-  uni.login({
-    provider: "weixin",
-    success: (res) => {
-      uni.getUserInfo({
-        provider: "weixin",
-        success: () => {
-          code.value = res.code;
-        },
-      });
-    },
-  });
-});
 
 const emit = defineEmits(["toggleLogin"]);
 </script>
