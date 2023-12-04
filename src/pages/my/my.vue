@@ -180,13 +180,13 @@ onMounted(() => {
       })
       .catch((err: any) => {
         if (err.code === RequestErrorCode.NotAuthenticatedError) {
-          uni.showToast({
-            title: t("my.请登录"),
-            icon: "none",
-          });
           userLogout();
           uni.reLaunch({
             url: RouteConfig.my.url,
+          });
+          uni.showToast({
+            title: t("my.请登录"),
+            icon: "none",
           });
         } else {
           uni.showToast({

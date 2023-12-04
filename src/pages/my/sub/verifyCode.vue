@@ -38,13 +38,17 @@
       </view>
       <view
         class="resend-button"
-        :class="[timeleft <= 0 ? 'available' : '']"
+        :class="{ available: timeleft <= 0 }"
         @tap="resendEmail"
       >
-        <view class="resend-text">{{ showTime }} {{ $t("verifyCode.重新发送") }}</view>
+        <view class="resend-text">
+          {{ showTime }} {{ $t("verifyCode.重新发送") }}
+        </view>
       </view>
-      <view class="confirm-button">
-        <view class="button-text" @tap="confirm(code)">{{ $t("verifyCode.验证") }}</view>
+      <view class="confirm-button" :class="{ available: code.length == 6 }">
+        <view class="button-text" @tap="confirm(code)">
+          {{ $t("verifyCode.验证") }}
+        </view>
       </view>
       <view class="bottom">
         <text class="bottom-text">{{ $t("verifyCode.验证码底部提示") }}</text>
@@ -52,7 +56,9 @@
     </view>
     <view class="successPage" :style="{ display: success ? '' : 'none' }">
       <view class="successPage-title">
-        <text class="successPage-title-text">{{ $t("verifyCode.验证成功") }}</text>
+        <text class="successPage-title-text">
+          {{ $t("verifyCode.验证成功") }}
+        </text>
       </view>
       <view class="successPage-notice">
         <view class="icon" :class="{ 'choose-icon-animation': animeShow }">
@@ -62,14 +68,14 @@
             color="#606266"
           />
         </view>
-        <text :class="['successPage-notice-text', 'textFadeInRight']">{{
-          $t("verifyCode.验证成功提示")
-        }}</text>
+        <text :class="['successPage-notice-text', 'textFadeInRight']">
+          {{ $t("verifyCode.验证成功提示") }}
+        </text>
       </view>
       <view class="successPage-button">
-        <view class="successPage-button-text" @tap="redirect">{{
-          $t("verifyCode.返回")
-        }}</view>
+        <view class="successPage-button-text" @tap="redirect">
+          {{ $t("verifyCode.返回") }}
+        </view>
       </view>
     </view>
   </view>
@@ -234,7 +240,9 @@ const redirect = () => {
     justify-content: space-between;
     margin-bottom: 1rem;
     .code-input {
-      display: none;
+      position: absolute;
+      color: transparent;
+      width: 0;
     }
     .code-input-block {
       width: 13%;
@@ -261,10 +269,9 @@ const redirect = () => {
 
   .warning {
     width: 100%;
-    height: 10%;
     display: flex;
     align-items: center;
-    margin-top: 1rem;
+    margin-bottom: 20px;
     .warning-text {
       font-size: 15px;
       color: rgb(255, 16, 68);
@@ -294,12 +301,6 @@ const redirect = () => {
     transition: all 0.3s;
     padding: 0 10px;
   }
-
-  .available {
-    background: rgb(16, 153, 255);
-    color: white;
-  }
-
   .confirm-button {
     width: 80px;
     height: 30px;
@@ -307,8 +308,8 @@ const redirect = () => {
     align-items: center;
     justify-content: center;
     float: right;
-    background: rgb(16, 153, 255);
-    color: white;
+    background: rgba(177, 177, 177, 0.556);
+    transition: all 0.3s; 
   }
   .bottom {
     width: 100%;
@@ -321,6 +322,10 @@ const redirect = () => {
       font-size: 15px;
       color: #666;
     }
+  }
+  .available {
+    background: rgba(16, 153, 255);
+    color: white;
   }
 }
 

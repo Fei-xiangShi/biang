@@ -254,7 +254,7 @@ const commitReply = () => {
         getReplyList();
         replyContent.value = "";
       } else {
-        ErrorHandler(res.statusCode);
+        ErrorHandler(res);
       }
     })
     .catch((err) => {

@@ -328,7 +328,7 @@ const generateWeekDateRange = () => {
 const updateClassTable = () => {
   courses.value = [];
   const allClasses = uni.getStorageSync("classTableContent");
-  allClasses.events.forEach((course: Course) => {
+  allClasses.forEach((course: Course) => {
     if (
       new Date(course.start) >= dayItems.value[0].data &&
       new Date(course.end) <= dayItems.value[dayItems.value.length - 1].data

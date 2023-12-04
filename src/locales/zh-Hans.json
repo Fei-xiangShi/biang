@@ -182,6 +182,7 @@
   "verifyCode.验证成功": "验证成功",
   "verifyCode.验证成功提示": "恭喜您, 邮箱验证成功!",
   "verifyCode.返回": "返回",
+  "verifyCode.请输入完整验证码": "请输入完整验证码",
   "verifyEmail.请输入邮箱提示": "请输入您的邮箱",
   "verifyEmail.验证您的身份": "验证您的身份",
   "verifyEmail.邮箱格式错误提示": "邮箱格式错误",
