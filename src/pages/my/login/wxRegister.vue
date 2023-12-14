@@ -2,10 +2,14 @@
   <navbar />
   <view class="login-container">
     <view class="title-text">{{ $t("wxRegister.微信注册新账号") }}</view>
-    <view class="sub-title-text">{{ $t("wxRegister.微信注册副标题提示") }}</view>
+    <view class="sub-title-text">{{
+      $t("wxRegister.微信注册副标题提示")
+    }}</view>
     <view class="avatar">
       <view class="avatar-title">
-        <view class="avatar-title-text">{{ $t("wxRegister.头像选择框标题") }}</view>
+        <view class="avatar-title-text">{{
+          $t("wxRegister.头像选择框标题")
+        }}</view>
       </view>
       <view class="upload-avatar">
         <button
@@ -27,7 +31,7 @@
       </view>
       <view class="username-input">
         <u-input
-          v-model="username"
+          v-model="username.content"
           :placeholder="t('wxRegister.用户名输入框占位符')"
           @blur="checkUsername(username)"
         />
@@ -43,11 +47,13 @@
     </view>
     <view class="email">
       <view class="email-input-title">
-        <view class="email-input-title-text">{{ $t("wxRegister.邮箱输入框标题") }}</view>
+        <view class="email-input-title-text">{{
+          $t("wxRegister.邮箱输入框标题")
+        }}</view>
       </view>
       <view class="email-input">
         <u-input
-          v-model="email"
+          v-model="email.content"
           :placeholder="t('wxRegister.邮箱输入框占位符')"
           @blur="checkEmail(email)"
         />
@@ -64,7 +70,10 @@
     </view>
     <view class="school-select-input">
       <u-form>
-        <u-form-item :label="t('wxRegister.学校选择框标题') + '*'" @click="hideKeyboard">
+        <u-form-item
+          :label="t('wxRegister.学校选择框标题') + '*'"
+          @click="hideKeyboard"
+        >
           <u-input
             v-model="school"
             disabled
@@ -104,7 +113,7 @@ import navbar from "@/components/navbar.vue";
 import Api from "@/api/api";
 import RouteConfig from "@/config/routes";
 import { ErrorHandler, RequestErrorCode } from "@/utils/requestErrors";
-import { userWxCode } from "@/utils/userManager";
+import { userWxCode, userInitFromRequest } from "@/utils/userManager";
 import { InputContent } from "@/types/inputContent";
 import { checkUsername, checkEmail } from "@/utils/checker";
 
@@ -159,12 +168,13 @@ const onChooseAvatar = (e: any) => {
 
 const commitRegister = () => {
   checkEmail(email.value);
-  if (!email.value.valid) {
+  if (!email.value.valid && email.value.content) {
     uni.showToast({
       title: t(email.value.warning),
       icon: "none",
       duration: 2000,
     });
+    return;
   }
   checkUsername(username.value);
   if (!username.value.valid) {
@@ -173,6 +183,7 @@ const commitRegister = () => {
       icon: "none",
       duration: 2000,
     });
+    return;
   }
   userWxCode().then((code: string) => {
     Api.wxRegister(
@@ -189,10 +200,7 @@ const commitRegister = () => {
             icon: "success",
             duration: 2000,
           });
-          uni.setStorageSync("aueduSession", res.data.data.auedu_session);
-          uni.setStorageSync("username", username.value);
-          uni.setStorageSync("school", school.value);
-          uni.setStorageSync("schoolId", schoolId.value);
+          userInitFromRequest(res);
           uni.getFileSystemManager().readFile({
             filePath: userAvatarUrl.value,
             success: (result) => {
@@ -206,25 +214,14 @@ const commitRegister = () => {
                 headers
               ).then((res: any) => {
                 if (res.statusCode === 200) {
-                  console.log(res);
-                  Api.updateAvatarUrl(
-                    userAvatarUrl.value,
-                    uni.getStorageSync("aueduSession")
-                  ).then((res: any) => {
-                    if (res.data.success === true) {
-                      uni.setStorageSync("userAvatarUrl", userAvatarUrl.value);
-                    } else {
-                      ErrorHandler(res);
-                    }
+                  uni.reLaunch({
+                    url: RouteConfig.my.url,
                   });
                 } else {
                   ErrorHandler(res);
                 }
               });
             },
-          });
-          uni.reLaunch({
-            url: RouteConfig.my.url,
           });
         } else {
           ErrorHandler(res);

@@ -273,25 +273,14 @@ const commitRegister = () => {
                 headers
               ).then((res: any) => {
                 if (res.statusCode === 200) {
-                  console.log(res);
-                  Api.updateAvatarUrl(
-                    avatarUrl.value,
-                    uni.getStorageSync("aueduSession")
-                  ).then((res: any) => {
-                    if (res.data.success === true) {
-                      uni.setStorageSync("avatarUrl", avatarUrl.value);
-                    } else {
-                      ErrorHandler(res);
-                    }
+                  uni.reLaunch({
+                    url: RouteConfig.my.url,
                   });
                 } else {
                   ErrorHandler(res);
                 }
               });
             },
-          });
-          uni.reLaunch({
-            url: RouteConfig.my.url,
           });
         } else {
           ErrorHandler(res);

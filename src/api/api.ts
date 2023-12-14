@@ -20,11 +20,6 @@ const Api = {
     avatarData: string | ArrayBuffer,
     header: object
   ) => http.put(url, avatarData, header),
-  updateAvatarUrl: (avatarUrl: string, aueduSession: string) =>
-    http.post(apiUrl.uploadAvatar, {
-      avatar_url: avatarUrl,
-      auedu_session: aueduSession,
-    }),
   getCourseDetail: (
     course_code: string,
     unit_code: string,
@@ -129,7 +124,7 @@ const Api = {
       code: code,
       username: username,
       university: university,
-      size: avatarSize,
+      avatar_size: avatarSize,
       email: email,
     }),
   emailExists: (email: string) =>

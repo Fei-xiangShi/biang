@@ -14,39 +14,65 @@
                 {{ $t("classDetail.contactDetails-coordinator") }}:
               </span>
               {{ details["ContactDetails"]["Coordinator"] }}
+              {{ details["ContactDetails"]["Lecturer(s)"] }}
+              {{ "\n" + details["ContactDetails"]["Tutor(s)"] }}
             </view>
           </view>
           <view class="course-code">
             <view class="course-code-content">
-              <span class="course-code-title">{{ $t("classDetail.courseCode") }}:</span>
+              <span class="course-code-title">
+                {{ $t("classDetail.courseCode") }}:
+              </span>
               {{ details["CourseCode"] }}
             </view>
           </view>
           <view class="unit-name">
             <view class="unit-name-content">
-              <span class="unit-name-title">{{ $t("classDetail.unitName") }}:</span>
+              <span class="unit-name-title">
+                {{ $t("classDetail.unitName") }}:
+              </span>
               {{ details["Unit name"] }}
+            </view>
+          </view>
+          <view class="unit-code">
+            <view class="unit-code-content">
+              <span class="unit-code-title">
+                {{ $t("classDetail.unitCode") }}:
+              </span>
+              {{ details["UnitCode"] }}
             </view>
           </view>
           <view class="session">
             <view class="session-content">
-              <span class="session-title">{{ $t("classDetail.session") }}:</span>
+              <span class="session-title">
+                {{ $t("classDetail.session") }}:
+              </span>
               {{ details["Session"] }}
             </view>
           </view>
           <view class="academic-unit">
             <view class="academic-unit-content">
-              <span class="academic-unit-title">{{ $t("classDetail.academicUnit") }}:</span>
+              <span class="academic-unit-title">
+                {{ $t("classDetail.academicUnit") }}:
+              </span>
               {{ details["Academic unit"] }}
             </view>
           </view>
           <view class="overview">
             <view class="overview-content">
-              <span class="overview-title">{{ $t("classDetail.overview") }}:</span>
+              <span class="overview-title">
+                {{ $t("classDetail.overview") }}:
+              </span>
               {{ details["Overview"] }}
             </view>
           </view>
-          <view class="assessment-summary-notes">
+          <view
+            class="assessment-summary-notes"
+            v-if="
+              details['AssessmentSummary'] &&
+              details['AssessmentSummary']['Notes']
+            "
+          >
             <view class="assessment-summary-notes-title">
               {{ $t("classDetail.AssessmentSummaryNotes") }}:
             </view>
@@ -77,11 +103,11 @@
                   {{ assessment["Type"] }}
                 </view>
               </view>
-              <view class="assessment-detail-description">
+              <view class="assessment-detail-description" v-if="assessment['Description']">
                 <view class="assessment-detail-description-title">
                   {{ $t("classDetail.Assessment Description") }}
                 </view>
-                <view class="assessment-detail-description-content">
+                <view class="assessment-detail-description-content" >
                   {{ assessment["Description"] }}
                 </view>
               </view>
@@ -93,7 +119,7 @@
                   {{ assessment["Weight"] }}
                 </view>
               </view>
-              <view class="assessment-detail-due">
+              <view class="assessment-detail-due" v-if="assessment['Due']">
                 <view class="assessment-detail-due-title">
                   {{ $t("classDetail.Assessment Due") }}
                 </view>
@@ -101,11 +127,19 @@
                   {{ assessment["Due"] }}
                 </view>
               </view>
-              <view class="assessment-detail-length">
+              <view class="assessment-detail-group-or-individual" v-if="assessment['GroupOrIndividual']">
+                <view class="assessment-detail-group-or-individual-title">
+                  {{ $t("classDetail.GroupOrIndividual") }}
+                </view>
+                <view class="assessment-detail-group-or-individual-content" >
+                  {{ assessment["GroupOrIndividual"] }}
+                </view>
+              </view>
+              <view class="assessment-detail-length" v-if="assessment['Length']">
                 <view class="assessment-detail-length-title">
                   {{ $t("classDetail.Assessment Length") }}
                 </view>
-                <view class="assessment-detail-length-content">
+                <view class="assessment-detail-length-content" >
                   {{ assessment["Length"] }}
                 </view>
               </view>
@@ -127,6 +161,21 @@
     />
   </view>
   <view class="comment">
+    <view class="reply-notify-box">
+      <view
+        class="reply-notify"
+        :class="{ 'reply-notify-inactive': reply.parent == null }"
+      >
+        <view class="reply-notify-text">
+          {{ placeholder }}
+        </view>
+        <view class="reply-notify-cancel" @tap="cancelReply">
+          <view class="reply-notify-cancel-icon">
+            <u-icon name="close" size="20" color="#979191" />
+          </view>
+        </view>
+      </view>
+    </view>
     <form>
       <u-textarea
         :placeholder="placeholder"
@@ -135,9 +184,11 @@
         autoHeight
         maxlength="1000"
         :focus="inputingReply"
-        @blur="cancelReply"
+        :showConfirmBar="false"
+        :disableDefaultPadding="true"
+        confirmType="return"
       />
-      <view class="submit" @tap="commitReply">提交</view>
+      <view class="submit" @tap="commitReply">{{$t("classDetail.提交")}}</view>
     </form>
   </view>
 </template>
@@ -162,7 +213,7 @@ const details = ref();
 const noMore = ref(false);
 const replyContent = ref("");
 const inputingReply = ref(false);
-const placeholder = ref("请输入评论内容");
+const placeholder = ref(t("classDetail.请输入评论内容"));
 const loadFolder = ref(false);
 
 const props = defineProps({
@@ -188,16 +239,16 @@ const getReplyList = () => {
   concatenatingReplyList(res);
 };
 
-const inputReply = (parentReplyId: string, parentReplyName: string) => {
+const inputReply = (parentReplyId: number, parentReplyName: string) => {
   inputingReply.value = true;
   reply.value.parent = parentReplyId;
-  placeholder.value = "回复 " + parentReplyName + ": ";
+  placeholder.value = t("classDetail.回复给") + parentReplyName + ": ";
 };
 
 const cancelReply = () => {
   inputingReply.value = false;
   reply.value.parent = null;
-  placeholder.value = "请输入评论内容";
+  placeholder.value = t("classDetail.请输入评论内容");
 };
 
 const concatenatingReplyList = (response: any) => {
@@ -222,18 +273,22 @@ const concatenatingReplyList = (response: any) => {
     }
     noMore.value = true;
     uni.showToast({
-      title: "没有更多评论了",
+      title: t("classDetail.没有更多评论了"),
       icon: "none",
     });
   });
 };
 
+let committing = false;
 const commitReply = () => {
+  if (committing) return;
+  committing = true;
   if (replyContent.value.length < 10) {
     uni.showToast({
-      title: "评论内容不得小于10个字符",
+      title: t("classDetail.评论内容不得小于10个字符"),
       icon: "none",
     });
+    committing = false;
     return;
   }
   reply.value.content[
@@ -245,7 +300,7 @@ const commitReply = () => {
     .then((res: any) => {
       if (res.statusCode === 201) {
         uni.showToast({
-          title: "评论成功",
+          title: t("classDetail.评论成功"),
           icon: "none",
         });
         replyList.value.results = [];
@@ -253,6 +308,7 @@ const commitReply = () => {
         noMore.value = false;
         getReplyList();
         replyContent.value = "";
+        cancelReply();
       } else {
         ErrorHandler(res);
       }
@@ -262,6 +318,9 @@ const commitReply = () => {
         title: t(err.message),
         icon: "none",
       });
+    })
+    .finally(() => {
+      committing = false;
     });
 };
 
@@ -357,6 +416,7 @@ onReachBottom(() => {
   .contactDetails-coordinator,
   .course-code,
   .unit-name,
+  .unit-code,
   .session,
   .academic-unit,
   .overview,
@@ -372,6 +432,7 @@ onReachBottom(() => {
   .contactDetails-coordinator-title,
   .course-code-title,
   .unit-name-title,
+  .unit-code-title,
   .session-title,
   .academic-unit-title,
   .overview-title,
@@ -386,6 +447,7 @@ onReachBottom(() => {
   .contactDetails-coordinator-content,
   .course-code-content,
   .unit-name-content,
+  .unit-code-content,
   .session-content,
   .academic-unit-content,
   .overview-content,
@@ -411,6 +473,7 @@ onReachBottom(() => {
     .assessment-detail-description,
     .assessment-detail-weight,
     .assessment-detail-due,
+    .assessment-detail-group-or-individual,
     .assessment-detail-length {
       display: flex;
       flex-direction: column;
@@ -418,6 +481,7 @@ onReachBottom(() => {
       .assessment-detail-description-title,
       .assessment-detail-weight-title,
       .assessment-detail-due-title,
+      .assessment-detail-group-or-individual-title,
       .assessment-detail-length-title {
         font-weight: bold;
         line-height: 1.6;
@@ -427,6 +491,7 @@ onReachBottom(() => {
       .assessment-detail-description-content,
       .assessment-detail-weight-content,
       .assessment-detail-due-content,
+      .assessment-detail-group-or-individual-content,
       .assessment-detail-length-content {
         font-family: "Arial", sans-serif;
         color: #333;
@@ -450,6 +515,37 @@ onReachBottom(() => {
   padding: 1rem;
   background: white;
   margin-top: 0.5rem;
+  .reply-notify-box {
+    position: relative;
+    .reply-notify {
+      position: absolute;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0.5rem;
+      border: 1px solid #c9c5c5;
+      border-radius: 20px;
+      transition: all 0.3s;
+      transform: translate(0, -110%);
+      background: white;
+      width: -webkit-fill-available;
+      &-text {
+        font-size: 1rem;
+        color: #979191;
+      }
+      &-cancel {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 1.5rem;
+        height: 1.5rem;
+      }
+      &-inactive {
+        transform: translate(200%, -110%);
+        background: transparent;
+      }
+    }
+  }
   .submit {
     margin: 1rem;
     text-align: center;

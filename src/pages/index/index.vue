@@ -386,7 +386,12 @@ const loadUnits = () => {
   });
 };
 
+let naving = false;
 const searchClass = () => {
+  if (naving) {
+    return;
+  }
+  naving = true
   if (courseCode.value == "" || courseCode.value == null) {
     notify.message = t("index.课程代码为空提示");
     notify.type = "warning";
@@ -402,6 +407,7 @@ const searchClass = () => {
   uni.navigateTo({
     url: `${RouteConfig.classDetail.url}?courseCode=${courseCode.value}&unitCode=${unitCode.value}`,
   });
+  naving = false;
 };
 
 const redirectToClassTable = () => {
