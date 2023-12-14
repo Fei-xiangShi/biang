@@ -378,11 +378,12 @@ const loadUnits = () => {
         ErrorHandler(res);
         pickerTitle.value = t("index.无单元号提示");
       }
-      pickerLoading.value = false;
     }
   ).catch((err: any) => {
     console.log(err);
-  })
+  }).finally(() => {
+    pickerLoading.value = false;
+  });
 };
 
 const searchClass = () => {
@@ -538,6 +539,7 @@ const hideKeyboard = () => {
   .search-title {
     display: flex;
     align-items: center;
+    text-align: center;
     margin: 10px 0px;
     font-size: 1.5rem;
   }

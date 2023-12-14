@@ -158,17 +158,22 @@ const onChooseAvatar = (e: any) => {
 };
 
 const commitRegister = () => {
-  if (!username.value.content) {
+  checkEmail(email.value);
+  if (!email.value.valid) {
     uni.showToast({
-      title: t("wxRegister.请填写完整信息"),
+      title: t(email.value.warning),
       icon: "none",
       duration: 2000,
     });
-    return;
   }
-  checkEmail(email.value);
   checkUsername(username.value);
-  if (!username.value.valid) return;
+  if (!username.value.valid) {
+    uni.showToast({
+      title: t(username.value.warning),
+      icon: "none",
+      duration: 2000,
+    });
+  }
   userWxCode().then((code: string) => {
     Api.wxRegister(
       code,
