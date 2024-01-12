@@ -103,11 +103,14 @@
                   {{ assessment["Type"] }}
                 </view>
               </view>
-              <view class="assessment-detail-description" v-if="assessment['Description']">
+              <view
+                class="assessment-detail-description"
+                v-if="assessment['Description']"
+              >
                 <view class="assessment-detail-description-title">
                   {{ $t("classDetail.Assessment Description") }}
                 </view>
-                <view class="assessment-detail-description-content" >
+                <view class="assessment-detail-description-content">
                   {{ assessment["Description"] }}
                 </view>
               </view>
@@ -127,19 +130,25 @@
                   {{ assessment["Due"] }}
                 </view>
               </view>
-              <view class="assessment-detail-group-or-individual" v-if="assessment['GroupOrIndividual']">
+              <view
+                class="assessment-detail-group-or-individual"
+                v-if="assessment['GroupOrIndividual']"
+              >
                 <view class="assessment-detail-group-or-individual-title">
                   {{ $t("classDetail.GroupOrIndividual") }}
                 </view>
-                <view class="assessment-detail-group-or-individual-content" >
+                <view class="assessment-detail-group-or-individual-content">
                   {{ assessment["GroupOrIndividual"] }}
                 </view>
               </view>
-              <view class="assessment-detail-length" v-if="assessment['Length']">
+              <view
+                class="assessment-detail-length"
+                v-if="assessment['Length']"
+              >
                 <view class="assessment-detail-length-title">
                   {{ $t("classDetail.Assessment Length") }}
                 </view>
-                <view class="assessment-detail-length-content" >
+                <view class="assessment-detail-length-content">
                   {{ assessment["Length"] }}
                 </view>
               </view>
@@ -162,34 +171,38 @@
   </view>
   <view class="comment">
     <view class="reply-notify-box">
-      <view
-        class="reply-notify"
-        :class="{ 'reply-notify-inactive': reply.parent == null }"
-      >
-        <view class="reply-notify-text">
-          {{ placeholder }}
-        </view>
-        <view class="reply-notify-cancel" @tap="cancelReply">
-          <view class="reply-notify-cancel-icon">
-            <u-icon name="close" size="20" color="#979191" />
+        <view
+          class="reply-notify"
+          :class="{ 'reply-notify-inactive': reply.parent == null }"
+        >
+          <view class="reply-notify-text">
+            {{ placeholder }}
+          </view>
+          <view class="reply-notify-cancel" @tap="cancelReply">
+            <view class="reply-notify-cancel-icon">
+              <u-icon name="close" size="20" color="#979191" />
+            </view>
           </view>
         </view>
-      </view>
     </view>
-    <form>
-      <u-textarea
-        :placeholder="placeholder"
-        v-model="replyContent"
-        count
-        autoHeight
-        maxlength="1000"
-        :focus="inputingReply"
-        :showConfirmBar="false"
-        :disableDefaultPadding="true"
-        confirmType="return"
-      />
-      <view class="submit" @tap="commitReply">{{$t("classDetail.提交")}}</view>
-    </form>
+    <view class="reply-form">
+      <form>
+        <u-textarea
+          :placeholder="placeholder"
+          v-model="replyContent"
+          count
+          autoHeight
+          maxlength="1000"
+          :focus="inputingReply"
+          :showConfirmBar="false"
+          :disableDefaultPadding="true"
+          confirmType="return"
+        />
+        <view class="submit" @tap="commitReply">
+          {{ $t("classDetail.提交") }}
+        </view>
+      </form>
+    </view>
   </view>
 </template>
 
@@ -509,15 +522,18 @@ onReachBottom(() => {
 }
 
 .comment {
-  z-index: 233;
+  z-index: 2333;
+  display: flex;
+  width: -webkit-fill-available;
+  flex-direction: column;
   position: sticky;
   bottom: 0;
-  padding: 1rem;
+  padding: 0 1rem 2rem 1rem;
   background: white;
-  margin-top: 0.5rem;
-  overflow: hidden;
   .reply-notify-box {
+    width: -webkit-fill-available;
     position: relative;
+    display: flex;
     .reply-notify {
       position: absolute;
       display: flex;
@@ -527,9 +543,11 @@ onReachBottom(() => {
       border: 1px solid #c9c5c5;
       border-radius: 20px;
       transition: all 0.3s;
-      transform: translate(0, -110%);
       background: white;
       width: -webkit-fill-available;
+      bottom: 0;
+      opacity: 1;
+      margin-bottom: 0.2rem;
       &-text {
         font-size: 1rem;
         color: #979191;
@@ -542,18 +560,27 @@ onReachBottom(() => {
         height: 1.5rem;
       }
       &-inactive {
-        transform: translate(200%, -110%);
-        background: transparent;
+        transform: translate(200%, 0);
+        opacity: 0;
       }
     }
   }
-  .submit {
-    margin: 1rem;
-    text-align: center;
-    color: #979191;
-    border: 1px solid #c9c5c5;
-    border-radius: 20px;
-    padding: 10px;
+  .reply-form {
+    width: -webkit-fill-available;
+    form {
+      display: flex;
+      flex-direction: column;
+      .submit {
+        display: flex;
+        margin-top: 1rem;
+        align-items: center;
+        justify-content: center;
+        color: #979191;
+        border: 1px solid #c9c5c5;
+        border-radius: 20px;
+        height: 40px;
+      }
+    }
   }
 }
 </style>

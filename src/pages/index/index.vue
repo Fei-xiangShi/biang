@@ -227,7 +227,7 @@
     </view>
   </view>
   <u-overlay :show="naving">
-    <view class="overlay-contanier">
+    <view class="overlay-container">
       <view class="login-notice" @tap.stop>
         <u-loading-icon mode="circle" />
         <view class="login-notice-text">
@@ -910,12 +910,13 @@ const hideKeyboard = () => {
   }
 }
 
-.overlay-contanier {
+.overlay-container {
   width: 100%;
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
+  padding: 5px;
   .login-notice {
     width: 50%;
     height: 10%;

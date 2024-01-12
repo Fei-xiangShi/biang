@@ -14,9 +14,9 @@
           <view class="name">{{ reply.user.username }}</view>
         </view>
         <view class="comment-language">
-          <view class="original" @tap="language=reply.lang">{{ $t("comment.原文") }}</view>
-          <view class="chinese" @tap="language='zh-Hans'">{{ $t("comment.中文") }}</view>
-          <view class="english" @tap="language='en'">{{ $t("comment.英文") }}</view>
+          <view class="original" @tap="language=reply.lang" :class="{selected: language==reply.lang}">{{ $t("comment.原文") }}</view>
+          <view class="chinese" @tap="language='zh-Hans'" :class="{selected: language=='zh-Hans'}">{{ $t("comment.中文") }}</view>
+          <view class="english" @tap="language='en'" :class="{selected: language=='en'}">{{ $t("comment.英文") }}</view>
         </view>
       </view>
       <view class="content">
@@ -142,6 +142,7 @@ onMounted(() => {
         display: flex;
         flex-direction: row;
         justify-content: flex-end;
+        transition: all 0.25s ease-in-out;
         .original {
           font-size: 12px;
           color: #999;
@@ -155,6 +156,9 @@ onMounted(() => {
         .english {
           font-size: 12px;
           color: #999;
+        }
+        .selected{
+          color: #7a9adc;
         }
       }
     }
