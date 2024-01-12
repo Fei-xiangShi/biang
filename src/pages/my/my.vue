@@ -39,7 +39,7 @@
         :key="index"
       >
         <view class="myFunctionItem">
-          <i :class="item.icon" />
+          <i :class="item.icon" class="item-icon"/>
           <view class="myFunctionItemText">
             {{ $t(item.text) }}
           </view>
@@ -206,12 +206,7 @@ onMounted(() => {
   height: auto;
   width: 100%;
   min-height: 100vh;
-  background: linear-gradient(
-    135deg,
-    #a6eeee7a 10%,
-    #91d8c84d 40%,
-    #fcfcd491 60%
-  );
+  background: #a6eeee6c;
 }
 
 .head {
@@ -247,9 +242,7 @@ onMounted(() => {
     justify-content: center;
     background-color: rgba(255, 255, 255, 0.324); /* 透明度设置以提高效果 */
     border: 1px solid;
-    border-color: white;
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 5px 6px 0px,
-      rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+    border-color: rgb(255, 255, 255);
     border-radius: 10px;
     margin: 10px 0;
     .myFunctionItem {
@@ -259,6 +252,9 @@ onMounted(() => {
       justify-content: space-between;
       padding: 5px;
       height: 50px;
+      .item-icon {
+        font-size: 1.2rem;
+      }
       .myFunctionItemText {
         font-size: 1.2rem;
       }

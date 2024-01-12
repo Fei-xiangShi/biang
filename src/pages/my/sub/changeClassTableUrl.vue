@@ -14,13 +14,20 @@
           </view>
 
           <view class="acrylic-content">
-            <view class="acrylic-content-Title">{{ $t("classTable.导入课表") }}</view>
+            <view class="acrylic-content-Title">
+              {{ $t("classTable.导入课表") }}
+            </view>
             <view class="input">
-              <input
+              <u-input
                 class="url"
-                :placeholder="t('classTable.课表链接')"
-                type="text"
+                placeholder="请输入内容"
+                border="bottom"
+                clearable
+                color="#d6d6d6"
                 v-model="classTableUrl"
+                placeholderStyle="color: #d6d6d6"
+                confirmType="done"
+                @confirm="getNewClassTable"
               />
             </view>
           </view>
@@ -70,8 +77,8 @@ const getNewClassTable = () => {
   isLoading.value = true;
   Api.receiveCalendar(classTableUrl.value, uni.getStorageSync("aueduSession"))
     .then((res: any) => {
-      if (res.statusCode === 200) {
-        classTableContent.value = res.data;
+      if (res.data.success) {
+        classTableContent.value = res.data.data;
         uni.setStorageSync("classTableContent", classTableContent.value);
         uni.setStorageSync("classTableUrl", classTableUrl.value);
         haveClassTable.value = true;
@@ -133,27 +140,12 @@ const getNewClassTable = () => {
         position: absolute;
         width: 100%;
         .acrylic-content-Title {
+          font-size: 1.5rem;
           margin-left: 2rem;
-          color: black;
+          color: #ededed;
         }
         .input {
-          margin-top: 1rem;
-          margin: 0 2rem;
-          .url {
-            outline: none;
-            height: 2rem;
-            font-size: 1rem;
-            border: none;
-            transition: border-bottom 0.5s;
-            border-bottom: 1px solid black;
-            color: rgb(163, 192, 245);
-            background-color: rgba(0, 0, 0, 0);
-          }
-          .url:focus {
-            outline: none;
-            color: black;
-            border-bottom: 1px solid red;
-          }
+          margin: 2rem 2rem;
         }
       }
     }
