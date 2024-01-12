@@ -79,13 +79,15 @@
         {{ $t("index.课表查询按钮") }}
       </view>
       <view class="search-text">
-        <view class="search-text-title">{{ $t("index.课程逐层查找提示") }}</view>
+        <view class="search-text-title">{{
+          $t("index.课程逐层查找提示")
+        }}</view>
         <view class="search-nav-icon">
           <u-icon name="arrow-right" :size="14" color="black" />
         </view>
       </view>
     </view>
-    <view class="roll-notice">
+    <view class="roll-notice" v-if="notices.text.length != 0">
       <u-notice-bar
         :text="notices.text"
         mode="link"
@@ -369,8 +371,8 @@ const loadUnits = () => {
   }
   showUnitsPicker.value = true;
   pickerLoading.value = true;
-  Api.getUnits(courseCode.value, uni.getStorageSync("schoolId")).then(
-    (res: any) => {
+  Api.getUnits(courseCode.value, uni.getStorageSync("schoolId"))
+    .then((res: any) => {
       if (res.statusCode == 200) {
         pickerTitle.value = t("index.单元号选择框提示");
         unitCodes.value = [res.data.units];
@@ -378,12 +380,13 @@ const loadUnits = () => {
         ErrorHandler(res);
         pickerTitle.value = t("index.无单元号提示");
       }
-    }
-  ).catch((err: any) => {
-    console.log(err);
-  }).finally(() => {
-    pickerLoading.value = false;
-  });
+    })
+    .catch((err: any) => {
+      console.log(err);
+    })
+    .finally(() => {
+      pickerLoading.value = false;
+    });
 };
 
 let naving = false;
@@ -391,7 +394,7 @@ const searchClass = () => {
   if (naving) {
     return;
   }
-  naving = true
+  naving = true;
   if (courseCode.value == "" || courseCode.value == null) {
     notify.message = t("index.课程代码为空提示");
     notify.type = "warning";
@@ -587,9 +590,9 @@ const hideKeyboard = () => {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    .search-text-title{
+    .search-text-title {
       font-size: 0.8rem;
-      color: rgb(116,116,116)
+      color: rgb(116, 116, 116);
     }
   }
 }
@@ -607,7 +610,7 @@ const hideKeyboard = () => {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  margin: 0px 20px;
+  margin: 10px 20px;
   border-radius: var(--borderRadius-medium, 0.375rem);
   .class-query-card {
     display: flex;
@@ -616,26 +619,22 @@ const hideKeyboard = () => {
     background: url("https://img.zcool.cn/community/01662f554243770000019ae9cb94c1.jpg@1280w_1l_2o_100sh.jpg");
     height: 100px;
     border-radius: var(--borderRadius-medium, 0.375rem);
-    box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
-      rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
     .title {
       display: flex;
       align-items: center;
+      justify-content: center;
       .title-text {
-        margin-left: 10px;
         font-size: 1.5rem;
         color: cornflowerblue;
-        font-family: "LXGW WenKai";
       }
     }
     .content {
       display: flex;
       align-items: center;
+      justify-content: center;
       .content-text {
-        margin-left: 4rem;
         font-size: 1rem;
         color: gray;
-        font-family: "LXGW WenKai";
       }
     }
   }
@@ -660,19 +659,20 @@ const hideKeyboard = () => {
       border-radius: var(--borderRadius-medium, 0.375rem);
     }
     .todo {
-      background: linear-gradient(90deg, rgba(255, 0, 0, 0.116) 10%, white 90%);
-      box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
+      background: linear-gradient(90deg, rgba(255, 92, 92, 0.116) 10%, rgba(239, 244, 195, 0.418) 90%);
       display: flex;
       flex-direction: column;
       justify-content: center;
       border-radius: var(--borderRadius-medium, 0.375rem);
+      position: relative;
+      height: auto;
+      margin-bottom: 0.5rem;
       .todo-title {
         display: flex;
         align-items: center;
         font-weight: bold;
-        height: 0.5rem;
         margin-left: 1rem;
-        margin-top: 0.8rem;
+        margin-top: 0.5rem;
         .title-text {
           font-size: 1rem;
           color: black;
@@ -685,11 +685,11 @@ const hideKeyboard = () => {
       }
     }
     .kit {
-      box-shadow: rgba(0, 0, 0, 0.09) 0px 3px 12px;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      height: 4.3rem;
+      height: -webkit-fill-available;
+      max-height: 60px;
       background: linear-gradient(
         90deg,
         rgba(220, 71, 228, 0.442) 40%,
@@ -714,17 +714,15 @@ const hideKeyboard = () => {
     flex-direction: row;
     justify-content: space-between;
     .purchase-card {
-      background: linear-gradient(60deg, #a6eeee6c 50%, #ffffff59 90%);
-      min-height: 60px;
+      background: linear-gradient(60deg, #a6eeee6c 50%, #d6fcc296 90%);
       width: 60%;
       border-radius: var(--borderRadius-medium, 0.375rem);
-      box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
-        rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       .title {
         display: flex;
-        height: 1.5rem;
-        margin-left: 1rem;
-        margin-top: 0.8rem;
+        margin: 0.5rem 1rem 0 1rem;
         .title-text {
           font-size: 1.2rem;
           color: black;
@@ -733,27 +731,23 @@ const hideKeyboard = () => {
       .content {
         display: flex;
         align-items: center;
-        margin: 0 1rem;
+        margin: 0 1rem 0.5rem 1rem;
         .content-text {
           font-size: 0.6rem;
           color: rgb(28, 94, 217);
-          font-family: "LXGW WenKai";
         }
       }
     }
     .store-card {
-      background: linear-gradient(300deg, #ffffff1f 5%, #eeb82f6c 95%);
-      min-height: 60px;
+      background: linear-gradient(300deg, #f0a5a51f 5%, #eeb82f6c 95%);
       width: 38%;
       border-radius: var(--borderRadius-medium, 0.375rem);
-      box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
-        rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
       .title {
         display: flex;
-        /* align-items: center; */
-        height: 1.5rem;
-        margin-left: 1rem;
-        margin-top: 0.8rem;
+        margin: 0.5rem 1rem 0 1rem;
         .title-text {
           font-size: 1.2rem;
         }
@@ -761,11 +755,10 @@ const hideKeyboard = () => {
       .content {
         display: flex;
         align-items: center;
-        margin: 0 1rem;
+        margin: 0 1rem 0.5rem 1rem;
         .content-text {
           font-size: 0.6rem;
           color: chocolate;
-          font-family: "LXGW WenKai";
         }
       }
     }
@@ -797,7 +790,6 @@ const hideKeyboard = () => {
           align-items: center;
           font-size: 1.2rem;
           color: black;
-          font-family: "LXGW WenKai";
         }
         .progress-line {
           display: flex;
@@ -810,7 +802,6 @@ const hideKeyboard = () => {
         align-items: center;
         font-size: 0.8rem;
         color: rgba(116, 116, 116);
-        font-family: "LXGW WenKai";
       }
     }
     .today-class-right {
@@ -839,7 +830,6 @@ const hideKeyboard = () => {
           justify-content: center;
           font-size: 2rem;
           color: black;
-          font-family: "LXGW WenKai";
         }
         .classes {
           display: flex;
@@ -873,7 +863,7 @@ const hideKeyboard = () => {
                 align-items: center;
                 font-size: 1rem;
                 color: black;
-                font-family: "LXGW WenKai";
+
                 font-weight: bold;
               }
               .done-title {

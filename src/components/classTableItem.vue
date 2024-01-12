@@ -33,7 +33,7 @@
                   week.id == curretWeekNum
                     ? '#f56c6c'
                     : week.id == calcWeekNum(nameTime)
-                    ? '#f56c6c7a'
+                    ? 'rgba(255, 100, 100, 0.8)'
                     : '',
                 color: week.id == curretWeekNum ? '#fff' : '',
               }"
@@ -422,12 +422,7 @@ const touchEnd = (e: any) => {
   height: 100vh;
   display: flex;
   flex-direction: column;
-  background: linear-gradient(
-    135deg,
-    #a6eeee7a 10%,
-    #91d8c84d 40%,
-    #fcfcd491 60%
-  );
+  background: #a6eeee6c;
 }
 
 .popup-content {
@@ -447,6 +442,7 @@ const touchEnd = (e: any) => {
       display: flex;
       align-items: center;
       justify-content: center;
+      text-align: center;
       width: 25%;
       height: 40px;
       font-size: 1rem;
@@ -455,8 +451,7 @@ const touchEnd = (e: any) => {
       border-radius: 5px;
       margin: 5px;
       background: rgba($color: #fff, $alpha: 0.4);
-      box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px,
-        rgba(0, 0, 0, 0.06) 0px 0px 0px 1px;
+      box-shadow: rgba(0, 0, 0, 0.16) 0px 2px 5px 0px;
     }
   }
 }
@@ -492,7 +487,7 @@ const touchEnd = (e: any) => {
   border-radius: 5px 5px 0 0;
   flex: 1;
   background: rgba($color: #fff, $alpha: 0.4);
-  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px;
+  box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 10px 0px;
   .date-list {
     display: flex;
     flex-direction: row;
@@ -574,7 +569,7 @@ const touchEnd = (e: any) => {
           flex-direction: column;
           align-items: center;
           overflow: hidden;
-          box-shadow: rgba(0, 0, 0, 0.16) 0px 10px 36px 0px;
+          box-shadow: rgba(0, 0, 0, 0.16) 0px 2px 5px 0px;
           .course-name {
             display: flex;
             align-items: center;
