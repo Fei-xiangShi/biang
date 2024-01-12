@@ -24,9 +24,6 @@ const RouteConfig = {
         url: "languageSetting",
       },
     ],
-    settings: {
-      url: "sub/settings",
-    },
     login: {
       url: "login/login",
       emailRegister: {
@@ -39,7 +36,6 @@ const RouteConfig = {
         url: "emailLoginPassword",
       },
     },
-
     verifyCode: {
       url: "verifyCode",
     },
@@ -60,6 +56,69 @@ const RouteConfig = {
     test: {
       url: "/pages/admin/test/test",
     },
+  },
+  options: {
+    url: "/pages/options/options",
+    optionList: [
+      [
+        {
+          title: "options.账号资料",
+          desc: "",
+          url: "/options/account",
+        },
+      ],
+      [
+        {
+          title: "options.主题设置",
+          desc: "",
+          url: "/options/theme",
+        },
+        {
+          title: "options.清理缓存",
+          desc: "",
+          url: "/options/clearCache",
+        },
+        {
+          title: "options.检查更新",
+          desc: "",
+          url: "/options/checkUpdate",
+        },
+        {
+          title: "options.联系我们",
+          desc: "",
+          url: "/options/contactUs",
+        },
+      ],
+      [
+        {
+          title: "options.隐私政策",
+          desc: "",
+          url: "/options/privacyPolicy",
+        },
+        {
+          title: "options.用户协议",
+          desc: "",
+          url: "/options/userAgreement",
+        },
+        {
+          title: "options.帮助中心",
+          desc: "",
+          url: "/options/helpCenter",
+        },
+      ],
+      [
+        {
+          title: "options.捐赠我们",
+          desc: "",
+          url: "/options/donateUs",
+        },
+        {
+          title: "options.关于",
+          desc: "version-2.3.3",
+          url: "/options/aboutUs",
+        },
+      ],
+    ],
   },
 };
 

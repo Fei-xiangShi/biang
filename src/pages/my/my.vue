@@ -20,7 +20,7 @@
         </view>
       </view>
     </view>
-    <view class="head" @tap="navTo(RouteConfig.my.settings.url)" v-else>
+    <view class="head" @tap="navTo(RouteConfig.options.url)" v-else>
       <view class="avatar">
         <up-avatar :src="userAvatarUrl" />
       </view>

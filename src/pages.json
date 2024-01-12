@@ -41,13 +41,6 @@
           }
         },
         {
-          "path": "settings",
-          "style": {
-            "navigationBarTitleText": "设置",
-            "navigationStyle": "custom"
-          }
-        },
-        {
           "path": "verifyEmail",
           "style": {
             "navigationBarTitleText": "邮箱绑定",
@@ -142,6 +135,18 @@
           "path": "test",
           "style": {
             "navigationBarTitleText": "测试"
+          }
+        }
+      ]
+    },
+    {
+      "root": "pages/options",
+      "pages": [
+        {
+          "path": "options",
+          "style": {
+            "navigationBarTitleText": "设置",
+            "navigationStyle": "custom"
           }
         }
       ]

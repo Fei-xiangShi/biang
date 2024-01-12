@@ -1,16 +1,23 @@
 <template>
   <view class="reply-item" :class="{ 'son-reply': replyType !== 'root' }">
     <view class="root">
-      <view class="author">
-        <view class="reply-avatar">
-          <u-avatar
-            :src="reply.user.avatar_url"
-            width="50px"
-            height="50px"
-            mode="aspectFill"
-          />
+      <view class="head">
+        <view class="author">
+          <view class="reply-avatar">
+            <u-avatar
+              :src="reply.user.avatar_url"
+              width="50px"
+              height="50px"
+              mode="aspectFill"
+            />
+          </view>
+          <view class="name">{{ reply.user.username }}</view>
         </view>
-        <view class="name">{{ reply.user.username }}</view>
+        <view class="comment-language">
+          <view class="original" @tap="language=reply.lang">{{ $t("comment.原文") }}</view>
+          <view class="chinese" @tap="language='zh-Hans'">{{ $t("comment.中文") }}</view>
+          <view class="english" @tap="language='en'">{{ $t("comment.英文") }}</view>
+        </view>
       </view>
       <view class="content">
         <view class="reply-content">
@@ -29,7 +36,7 @@
           class="open-reply-box"
           @tap="emit('onReply', reply.id, reply.user.username)"
         >
-          回复
+          {{ $t("comment.回复") }}
         </view>
       </view>
     </view>
@@ -72,7 +79,7 @@ const props = defineProps({
 
 const emit = defineEmits(["onReply"]);
 
-const language = uni.getStorageSync("lang");
+const language = ref(uni.getStorageSync("lang"));
 const sons = ref<any>([]);
 
 const extractSons = (reply: any) => {
@@ -110,19 +117,45 @@ onMounted(() => {
     display: flex;
     flex-direction: column;
     align-items: center;
-    .author {
+    .head {
       width: 100%;
       display: flex;
       flex-direction: row;
-      align-items: center;
-      .reply-avatar {
-        border-radius: 50%;
-        overflow: hidden;
-        margin-right: 10px;
+      justify-content: space-between;
+      .author {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        .reply-avatar {
+          border-radius: 50%;
+          overflow: hidden;
+          margin-right: 10px;
+        }
+        .name {
+          font-size: 14px;
+          font-weight: bold;
+        }
       }
-      .name {
-        font-size: 14px;
-        font-weight: bold;
+      .comment-language {
+        width: 100%;
+        display: flex;
+        flex-direction: row;
+        justify-content: flex-end;
+        .original {
+          font-size: 12px;
+          color: #999;
+          margin-right: 10px;
+        }
+        .chinese {
+          font-size: 12px;
+          color: #999;
+          margin-right: 10px;
+        }
+        .english {
+          font-size: 12px;
+          color: #999;
+        }
       }
     }
     .content {

@@ -47,9 +47,9 @@
     </view>
     <view class="email">
       <view class="email-input-title">
-        <view class="email-input-title-text">{{
-          $t("wxRegister.邮箱输入框标题")
-        }}</view>
+        <view class="email-input-title-text">
+          {{ $t("wxRegister.邮箱输入框标题") }}
+        </view>
       </view>
       <view class="email-input">
         <u-input
@@ -127,6 +127,7 @@ const schools = [
   ),
 ];
 const pickerLoading = ref(false);
+const registering = ref(false);
 const username = ref(new InputContent());
 const schoolId = ref("1");
 const email = ref(new InputContent());
@@ -185,6 +186,10 @@ const commitRegister = () => {
     });
     return;
   }
+  if (registering.value) {
+    return;
+  }
+  registering.value = true;
   userWxCode().then((code: string) => {
     Api.wxRegister(
       code,
@@ -240,6 +245,9 @@ const commitRegister = () => {
             icon: "none",
           });
         }
+      })
+      .finally(() => {
+        registering.value = false;
       });
   });
 };

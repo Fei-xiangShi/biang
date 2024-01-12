@@ -1,8 +1,8 @@
-export class InputContent{
+export class InputContent {
   content: string;
   valid: boolean;
   warning: string;
-  constructor(content: string = '') {
+  constructor(content: string = "") {
     this.content = content;
     this.valid = false;
     this.warning = "";
@@ -11,7 +11,9 @@ export class InputContent{
     this.valid = regex.test(this.content);
     if (!this.valid) {
       this.warning = warning;
+      return;
     }
+    this.warning = "";
   }
   checkContentAll(regex: RegExp, warning: string) {
     this.checkContent(regex, warning);

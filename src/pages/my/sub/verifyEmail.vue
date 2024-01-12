@@ -11,25 +11,28 @@
       <view class="email-input">
         <u-input v-model="email.content" clearable @blur="checkEmail(email)" />
       </view>
-      <view class="email.value.warning" v-if="email.warning">
-        <text class="email.value.warning-text">{{
-          $t("verifyEmail.邮箱格式错误提示")
-        }}</text>
+      <view class="email.value.warning" v-if="!email.valid && email.warning">
+        <text class="email.value.warning-text">
+          {{ $t(email.warning) }}
+        </text>
       </view>
       <view class="tab-notice">
-        <text class="tab-notice-text">{{
-          $t("verifyEmail.邮箱验证详细信息")
-        }}</text>
+        <text class="tab-notice-text">
+          {{ $t("verifyEmail.邮箱验证详细信息") }}
+        </text>
       </view>
-      <view class="confirm-button">
-        <view class="button-text" @tap="confirm">{{
-          $t("verifyEmail.确认")
-        }}</view>
+      <view
+        class="confirm-button"
+        :class="{ loading: loading || !email.valid }"
+      >
+        <view class="button-text" @tap="confirm">
+          {{ $t("verifyEmail.确认") }}
+        </view>
       </view>
       <view class="bottom">
-        <text class="bottom-text">{{
-          $t("verifyEmail.邮箱验证底部提示")
-        }}</text>
+        <text class="bottom-text">
+          {{ $t("verifyEmail.邮箱验证底部提示") }}
+        </text>
       </view>
     </view>
   </view>
@@ -51,29 +54,33 @@ const email = ref<InputContent>(new InputContent());
 const loading = ref<boolean>(false);
 
 const confirm = () => {
-  if (loading.value) return;
-  loading.value = true;
   checkEmail(email.value);
-  if (!email.value.valid) return;
+  if (!email.value.valid || loading.value) return;
+  loading.value = true;
   Api.sendEmail(
     email.value.content,
     uni.getStorageSync("aueduSession"),
     uni.getStorageSync("lang")
   )
     .then((res: any) => {
-      if (res.statusCode === 200) {
+      if (res.data.success) {
         uni.navigateTo({
-          url: `${RouteConfig.my.verifyCode.url}?email=${email.value}&redirectTo=${RouteConfig.my.url}`,
+          url: `${RouteConfig.my.verifyCode.url}?email=${email.value.content}&redirectTo=${RouteConfig.my.url}`,
         });
       } else {
         ErrorHandler(res);
       }
     })
     .catch((err: any) => {
-      uni.showToast({
-        title: t(err.message),
-        icon: "none",
-      });
+      if (err.code === RequestErrorCode.UnkownError) {
+        uni.showToast({
+          title: t(err.message),
+          icon: "none",
+        });
+      } else {
+        email.value.valid = false;
+        email.value.warning = err.message;
+      }
     })
     .finally(() => {
       loading.value = false;
@@ -89,7 +96,7 @@ const confirm = () => {
   display: flex;
   overflow: hidden;
   flex-direction: column;
-  background: rgb(243, 147, 147);
+  background: rgba(166, 238, 238, 0.4235294118);
 }
 
 .verifyEmail {
@@ -101,6 +108,8 @@ const confirm = () => {
   height: 40%;
   padding: 5%;
   background: white;
+  display: flex;
+  flex-direction: column;
   .title {
     width: 100%;
     height: 10%;
@@ -152,20 +161,27 @@ const confirm = () => {
     }
   }
   .confirm-button {
+    position: relative;
     width: 80px;
     height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
-    float: right;
+    color: aliceblue;
+    background: rgb(16, 163, 255);
+    transition: all 0.3s;
+  }
+  .loading {
     background: rgb(177, 177, 177);
+    color: black;
   }
   .bottom {
+    position: relative;
     width: 100%;
     height: 10%;
     display: flex;
     align-items: center;
-    margin-top: 1rem;
+    margin-top: 2rem;
     .bottom-text {
       font-size: 15px;
       color: #666;

@@ -132,7 +132,7 @@ const resendEmail = () => {
     uni.getStorageSync("lang")
   )
     .then((res: any) => {
-      if (res.data.success === true) {
+      if (res.data.success) {
         timeleft.value = 60;
       } else {
         ErrorHandler(res);
@@ -153,14 +153,13 @@ const focusToInput = () => {
 
 const confirm = (code: string) => {
   focus.value = false;
-  disabled.value = true;
   if (code.length < 6) {
-    disabled.value = false;
     return;
   }
+  disabled.value = true;
   Api.verifyEmail(uni.getStorageSync("aueduSession"), code)
     .then((res: any) => {
-      if (res.statusCode === 200) {
+      if (res.data.success) {
         success.value = true;
         uni.setStorageSync("email", props.email);
         setTimeout(() => {
@@ -197,7 +196,7 @@ const redirect = () => {
   display: flex;
   overflow: hidden;
   flex-direction: column;
-  background: rgb(243, 147, 147);
+  background: rgba(166, 238, 238, 0.4235294118);
 }
 
 .verifyCode {
