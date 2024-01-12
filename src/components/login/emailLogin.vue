@@ -22,7 +22,11 @@
       </view>
     </view>
     <view class="email-login-button-container">
-      <view class="email-login-button" @tap="login">
+      <view
+        class="email-login-button"
+        :class="{ disabled: loggingin }"
+        @tap="login"
+      >
         {{ $t("emailLogin.下一步") }}
       </view>
     </view>
@@ -66,10 +70,12 @@ const { t } = useI18n();
 
 const wxLogin = loginMethods.WX;
 const email = ref<InputContent>(new InputContent());
+const loggingin = ref(false);
 
 const login = () => {
   checkEmail(email.value);
-  if (!email.value.valid) return;
+  if (!email.value.valid || loggingin.value) return;
+  loggingin.value = true;
   Api.emailExists(email.value.content)
     .then((res: any) => {
       if (res.data.success === true) {
@@ -87,6 +93,9 @@ const login = () => {
         email.value.warning = t(err.message);
       }
       email.value.valid = false;
+    })
+    .finally(() => {
+      loggingin.value = false;
     });
 };
 
@@ -156,6 +165,9 @@ const emit = defineEmits(["loginSuccess", "loginFail", "toggleLogin"]);
       align-items: center;
       justify-content: center;
     }
+    .disabled {
+      background-color: #999;
+    }
   }
   .nav-to-register {
     width: 100%;
@@ -209,5 +221,6 @@ const emit = defineEmits(["loginSuccess", "loginFail", "toggleLogin"]);
     }
   }
 }
+
 </style>
-@/types/types @/types/InputContent
+

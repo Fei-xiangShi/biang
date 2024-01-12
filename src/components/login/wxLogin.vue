@@ -22,9 +22,20 @@
       </view>
     </view>
   </view>
+  <u-overlay :show="loading">
+    <view class="overlay-contanier">
+      <view class="login-notice" @tap.stop>
+        <u-loading-icon mode="circle" />
+        <view class="login-notice-text">
+          {{ $t("emailLoginPassword.登录中") }}
+        </view>
+      </view>
+    </view>
+  </u-overlay>
 </template>
 
 <script setup lang="ts">
+import { ref } from "vue";
 import navbar from "@/components/navbar.vue";
 import loginMethods from "@/models/loginMethods";
 import { useI18n } from "vue-i18n";
@@ -36,11 +47,11 @@ import { userInitFromRequest, userWxCode } from "@/utils/userManager";
 const { t } = useI18n();
 
 const email = loginMethods.Email;
-let loading = false;
+const loading = ref(false);
 
 const login = () => {
-  if (loading) return;
-  loading = true;
+  if (loading.value) return;
+  loading.value = true;
   userWxCode()
     .then((code: string) => {
       if (!code || code.length == 0) return;
@@ -73,7 +84,7 @@ const login = () => {
       });
     })
     .finally(() => {
-      loading = false;
+      loading.value = false;
     });
 };
 
@@ -149,6 +160,29 @@ const emit = defineEmits(["toggleLogin"]);
           color: #999;
         }
       }
+    }
+  }
+}
+
+
+.overlay-contanier {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .login-notice {
+    width: 50%;
+    height: 10%;
+    background-color: #fff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .login-notice-text {
+      margin-left: 10px;
+      font-size: 16px;
+      color: #000;
     }
   }
 }

@@ -2,9 +2,13 @@
   <navbar :title="t('emailLoginPassword.邮箱登录')" />
   <view class="email-login-container">
     <img src="../../static/icons/logo.png" class="icon" />
-    <view class="email-login-title">{{ $t("emailLoginPassword.邮箱登录") }}</view>
+    <view class="email-login-title">{{
+      $t("emailLoginPassword.邮箱登录")
+    }}</view>
     <view class="email-login-input-container">
-      <view class="email-login-input-title">{{ $t("emailLoginPassword.密码") }}</view>
+      <view class="email-login-input-title">{{
+        $t("emailLoginPassword.密码")
+      }}</view>
       <input
         class="email-login-input"
         :placeholder="t('emailLoginPassword.请输入密码')"
@@ -21,6 +25,16 @@
       </view>
     </view>
   </view>
+  <u-overlay :show="loggingin">
+    <view class="overlay-contanier">
+      <view class="login-notice" @tap.stop>
+        <u-loading-icon mode="circle" />
+        <view class="login-notice-text">
+          {{ $t("emailLoginPassword.登录中") }}
+        </view>
+      </view>
+    </view>
+  </u-overlay>
 </template>
 
 <script setup lang="ts">
@@ -36,8 +50,20 @@ const { t } = useI18n();
 
 const password = ref("");
 const passwordWrong = ref(false);
+const loggingin = ref(false);
 
 const login = () => {
+  if (password.value === "") {
+    uni.showToast({
+      title: t("emailLoginPassword.请输入密码"),
+      icon: "none",
+    });
+    return;
+  }
+  if (loggingin.value) {
+    return;
+  }
+  loggingin.value = true;
   Api.emailLogin(props.email, password.value)
     .then((res: any) => {
       if (res.statusCode === 200) {
@@ -55,6 +81,9 @@ const login = () => {
         title: t(err.message),
         icon: "none",
       });
+    })
+    .finally(() => {
+      loggingin.value = false;
     });
 };
 
@@ -116,6 +145,28 @@ const props = defineProps({
       display: flex;
       align-items: center;
       justify-content: center;
+    }
+  }
+}
+
+.overlay-contanier {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .login-notice {
+    width: 50%;
+    height: 10%;
+    background-color: #fff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .login-notice-text {
+      margin-left: 10px;
+      font-size: 16px;
+      color: #000;
     }
   }
 }

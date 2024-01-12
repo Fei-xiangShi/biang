@@ -221,9 +221,19 @@
       </view>
     </view>
     <view class="tail">
-      <view class="pic" />
+      <!-- <view class="pic" /> -->
     </view>
   </view>
+  <u-overlay :show="naving">
+    <view class="overlay-contanier">
+      <view class="login-notice" @tap.stop>
+        <u-loading-icon mode="circle" />
+        <view class="login-notice-text">
+          {{ $t("index.加载中") }}
+        </view>
+      </view>
+    </view>
+  </u-overlay>
 </template>
 
 <script setup lang="ts">
@@ -386,12 +396,12 @@ const loadUnits = () => {
   });
 };
 
-let naving = false;
+const naving = ref(false);
 const searchClass = () => {
-  if (naving) {
+  if (naving.value) {
     return;
   }
-  naving = true
+  naving.value = true
   if (courseCode.value == "" || courseCode.value == null) {
     notify.message = t("index.课程代码为空提示");
     notify.type = "warning";
@@ -407,7 +417,7 @@ const searchClass = () => {
   uni.navigateTo({
     url: `${RouteConfig.classDetail.url}?courseCode=${courseCode.value}&unitCode=${unitCode.value}`,
   });
-  naving = false;
+  naving.value = false;
 };
 
 const redirectToClassTable = () => {
@@ -907,6 +917,28 @@ const hideKeyboard = () => {
     background-size: cover;
     background-repeat: no-repeat;
     background-position: center;
+  }
+}
+
+.overlay-contanier {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .login-notice {
+    width: 50%;
+    height: 10%;
+    background-color: #fff;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    .login-notice-text {
+      margin-left: 10px;
+      font-size: 16px;
+      color: #000;
+    }
   }
 }
 </style>

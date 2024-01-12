@@ -515,6 +515,7 @@ onReachBottom(() => {
   padding: 1rem;
   background: white;
   margin-top: 0.5rem;
+  overflow: hidden;
   .reply-notify-box {
     position: relative;
     .reply-notify {
