@@ -8,6 +8,7 @@ export const userInitFromRequest = (res: any) => {
   uni.setStorageSync("username", res.data.data.username);
   uni.setStorageSync("schoolId", res.data.data.university);
   uni.setStorageSync("classTableUrl", res.data.data.ics_url);
+  uni.setStorageSync("avatarUrl", res.data.avatar_url)
   uni.setStorageSync(
     "school",
     Object.keys(universities[language] as { [key: string]: string }).find(

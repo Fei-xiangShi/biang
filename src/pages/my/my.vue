@@ -174,6 +174,7 @@ onMounted(() => {
           }
           username.value = res.data.username;
           userAvatarUrl.value = res.data.avatar_url;
+          uni.setStorageSync("avatarUrl", res.data.avatar_url)
         } else {
           ErrorHandler(res);
         }

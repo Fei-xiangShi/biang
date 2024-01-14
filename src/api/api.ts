@@ -129,6 +129,24 @@ const Api = {
     }),
   emailExists: (email: string) =>
     http.post(apiUrl.emailExists, { email: email }),
+  setPassword: (auedu_session: string, old_password: string, new_password: string) =>
+    http.post(apiUrl.setPassword, {
+      auedu_session: auedu_session,
+      old_password: old_password,
+      new_password: new_password,
+    }),
+  changeAvatar: (auedu_session: string, avatar_size: string) =>
+    http.post(apiUrl.changeAvatar, {
+      auedu_session: auedu_session,
+      avatar_size: avatar_size,
+    }),
+  changeUsername: (auedu_session: string, username: string) =>
+    http.post(apiUrl.changeUsername, {
+      auedu_session: auedu_session,
+      username: username,
+    }),
+  allUnits: (university_id: number) =>
+    http.get(`${apiUrl.allUnits}?university_id=${university_id}`),
 };
 
 export default Api;

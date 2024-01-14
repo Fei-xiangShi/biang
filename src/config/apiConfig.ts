@@ -33,6 +33,14 @@ const apiUrl = {
   wxRegister: `${baseUrl}/wxRegister`,
   // 检查邮箱是否存在
   emailExists: `${baseUrl}/emailExists`,
+  // 修改密码
+  setPassword: `${baseUrl}/setPassword`,
+  // 头像预签名url获得
+  changeAvatar: `${baseUrl}/changeAvatar`,
+  // 修改昵称
+  changeUsername: `${baseUrl}/changeUsername`,
+  // 获得所有Units
+  allUnits: `${baseUrl}/allUnits`,
 };
 
 export default apiUrl;

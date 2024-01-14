@@ -31,7 +31,10 @@
         </view>
       </view>
       <view class="tab">
-        <view class="floor">{{ index + 1 }}楼</view>
+        <view class="left">
+          <view class="floor" v-if="language=='zh-Hans'">{{ index + 1 }}楼</view>
+          <view class="time">{{ new Date(reply.created_at).toLocaleDateString() }}</view>
+        </view>
         <view
           class="open-reply-box"
           @tap="emit('onReply', reply.id, reply.user.username)"
@@ -187,9 +190,19 @@ onMounted(() => {
       display: flex;
       flex-direction: row;
       justify-content: space-between;
-      .floor {
-        font-size: 12px;
-        color: #999;
+      .left {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        .floor {
+          font-size: 12px;
+          color: #999;
+          margin-right: 10px;
+        }
+        .time {
+          font-size: 12px;
+          color: #999;
+        }
       }
       .open-reply-box {
         font-size: 12px;

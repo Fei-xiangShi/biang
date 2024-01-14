@@ -1,3 +1,5 @@
+import constant from "./constant";
+
 const RouteConfig = {
   indexPage: {
     url: "/pages/index/index",
@@ -64,61 +66,70 @@ const RouteConfig = {
         {
           title: "options.账号资料",
           desc: "",
-          url: "/options/account",
+          url: "account",
         },
       ],
       [
         {
           title: "options.主题设置",
           desc: "",
-          url: "/options/theme",
+          url: "theme",
         },
         {
           title: "options.清理缓存",
           desc: "",
-          url: "/options/clearCache",
+          url: "clearCache",
         },
         {
           title: "options.检查更新",
           desc: "",
-          url: "/options/checkUpdate",
+          url: "checkUpdate",
         },
         {
           title: "options.联系我们",
           desc: "",
-          url: "/options/contactUs",
+          url: "contactUs",
         },
       ],
       [
         {
           title: "options.隐私政策",
           desc: "",
-          url: "/options/privacyPolicy",
+          url: "privacyPolicy",
         },
         {
           title: "options.用户协议",
           desc: "",
-          url: "/options/userAgreement",
+          url: "userAgreement",
         },
         {
           title: "options.帮助中心",
           desc: "",
-          url: "/options/helpCenter",
+          url: "helpCenter",
         },
       ],
       [
         {
           title: "options.捐赠我们",
           desc: "",
-          url: "/options/donateUs",
+          url: "donateUs",
         },
         {
           title: "options.关于",
-          desc: "version-2.3.3",
-          url: "/options/aboutUs",
+          desc: `version-${constant.version}`,
+          url: "aboutUs",
         },
       ],
     ],
+    changeUsername: {
+      url: "changeUsername",
+    },
+    changeEmail: {
+      url: "/pages/my/sub/verifyEmail",
+    },
+    changePassword: {
+      url: "changePassword",
+    },
   },
 };
 

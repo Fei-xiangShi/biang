@@ -1,41 +1,41 @@
 <template>
   <view class="page">
-  <view class="navbar">
-    <navbar :title="t('options.设置')" />
-  </view>
-  <view class="container">
-    <view
-      class="options-list"
-      v-for="(list, index) in RouteConfig.options.optionList"
-      :key="index"
-    >
+    <view class="navbar">
+      <navbar :title="t('options.设置')" />
+    </view>
+    <view class="container">
       <view
-        class="options-list-item"
-        v-for="(item, index) in list"
-        @tap="navTo(item.url)"
+        class="options-list"
+        v-for="(list, index) in RouteConfig.options.optionList"
         :key="index"
       >
-        <view v-if="index != 0" class="options-list-item-block" />
-        <view class="content">
-          <view class="options-list-item-text">
-            <view class="options-list-item-title">{{ $t(item.title) }}</view>
-            <view class="options-list-item-desc" v-if="item.desc">{{
-              $t(item.desc)
-            }}</view>
-          </view>
-          <view class="options-list-item-arrow">
-            <u-icon name="arrow-right" :size="20" />
+        <view
+          class="options-list-item"
+          v-for="(item, index) in list"
+          @tap="navTo(item.url)"
+          :key="index"
+        >
+          <view v-if="index != 0" class="options-list-item-block" />
+          <view class="content">
+            <view class="options-list-item-text">
+              <view class="options-list-item-title">{{ $t(item.title) }}</view>
+              <view class="options-list-item-desc" v-if="item.desc">
+                {{ $t(item.desc) }}
+              </view>
+            </view>
+            <view class="options-list-item-arrow">
+              <u-icon name="arrow-right" :size="20" />
+            </view>
           </view>
         </view>
       </view>
-    </view>
-    <view class="logoutButton">
-      <view class="logoutButton" @tap="logout">
-        {{ $t("options.退出登录") }}
+      <view class="logoutButton">
+        <view class="logoutButton" @tap="logout">
+          {{ $t("options.退出登录") }}
+        </view>
       </view>
     </view>
   </view>
-</view>
 </template>
 
 <script setup lang="ts">
@@ -71,13 +71,13 @@ const logout = () => {
 </script>
 
 <style scoped lang="scss">
-.page{
+.page {
   background-color: #f0f0f0;
   height: 100vh;
 }
 
 .navbar {
-  box-shadow: 0 0px 5px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 0px 5px rgba(0, 0, 0, 0.2);
   position: relative;
 }
 

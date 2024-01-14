@@ -226,6 +226,7 @@ const details = ref();
 const noMore = ref(false);
 const replyContent = ref("");
 const inputingReply = ref(false);
+const hideReplyNotify = ref("hidden");
 const placeholder = ref(t("classDetail.请输入评论内容"));
 const loadFolder = ref(false);
 
@@ -256,12 +257,16 @@ const inputReply = (parentReplyId: number, parentReplyName: string) => {
   inputingReply.value = true;
   reply.value.parent = parentReplyId;
   placeholder.value = t("classDetail.回复给") + parentReplyName + ": ";
+  hideReplyNotify.value = "visible";
 };
 
 const cancelReply = () => {
   inputingReply.value = false;
   reply.value.parent = null;
   placeholder.value = t("classDetail.请输入评论内容");
+  setTimeout(() => {
+    hideReplyNotify.value = "hidden";
+  }, 1000);
 };
 
 const concatenatingReplyList = (response: any) => {
@@ -562,6 +567,7 @@ onReachBottom(() => {
       &-inactive {
         transform: translate(200%, 0);
         opacity: 0;
+        display: v-bind('hideReplyNotify');
       }
     }
   }

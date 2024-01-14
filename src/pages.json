@@ -148,6 +148,76 @@
             "navigationBarTitleText": "设置",
             "navigationStyle": "custom"
           }
+        },
+        {
+          "path": "aboutUs",
+          "style": {
+            "navigationBarTitleText": "关于",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "account",
+          "style": {
+            "navigationBarTitleText": "账户资料",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "checkUpdate",
+          "style": {
+            "navigationBarTitleText": "检查更新",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "clearCache",
+          "style": {
+            "navigationBarTitleText": "清理缓存",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "contactUs",
+          "style": {
+            "navigationBarTitleText": "联系我们",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "donateUs",
+          "style": {
+            "navigationBarTitleText": "赞助我们",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "helpCenter",
+          "style": {
+            "navigationBarTitleText": "帮助中心",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "privacyPolicy",
+          "style": {
+            "navigationBarTitleText": "隐私政策",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "theme",
+          "style": {
+            "navigationBarTitleText": "主题管理",
+            "navigationStyle": "custom"
+          }
+        },
+        {
+          "path": "userAgreement",
+          "style": {
+            "navigationBarTitleText": "用户协议",
+            "navigationStyle": "custom"
+          }
         }
       ]
     }
