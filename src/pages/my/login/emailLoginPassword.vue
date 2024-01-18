@@ -2,13 +2,13 @@
   <navbar :title="t('emailLoginPassword.邮箱登录')" />
   <view class="email-login-container">
     <img src="../../static/icons/logo.png" class="icon" />
-    <view class="email-login-title">{{
-      $t("emailLoginPassword.邮箱登录")
-    }}</view>
+    <view class="email-login-title">
+      {{ $t("emailLoginPassword.邮箱登录") }}
+    </view>
     <view class="email-login-input-container">
-      <view class="email-login-input-title">{{
-        $t("emailLoginPassword.密码")
-      }}</view>
+      <view class="email-login-input-title">
+        {{ $t("emailLoginPassword.密码") }}
+      </view>
       <input
         class="email-login-input"
         :placeholder="t('emailLoginPassword.请输入密码')"

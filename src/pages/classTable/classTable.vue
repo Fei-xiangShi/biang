@@ -5,7 +5,7 @@
     </view>
     <view class="await" v-else>
       <navbar :show-change-school-button="true" />
-      <image src="../../static/images/4k.webp" class="background" />
+      <image src="../../static/images/4k.webp" class="background" :webp="true"/>
       <view class="beautiful-sence">
         <view class="acrylic">
           <view class="gaussian-blur">

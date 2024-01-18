@@ -2,7 +2,7 @@
   <navbar />
   <view class="class-detail">
     <view class="class-name">
-      <view class="class-name-title">{{ details["Academic unit"] }}</view>
+      <view class="class-name-title">{{ details["Unit name"] }}</view>
       <view class="class-name-content">{{ details["Attendance mode"] }}</view>
     </view>
     <view class="read-more-details">
@@ -227,6 +227,7 @@ const noMore = ref(false);
 const replyContent = ref("");
 const inputingReply = ref(false);
 const hideReplyNotify = ref("hidden");
+const notifyTransform = ref("translateY(0)");
 const placeholder = ref(t("classDetail.请输入评论内容"));
 const loadFolder = ref(false);
 
@@ -258,14 +259,17 @@ const inputReply = (parentReplyId: number, parentReplyName: string) => {
   reply.value.parent = parentReplyId;
   placeholder.value = t("classDetail.回复给") + parentReplyName + ": ";
   hideReplyNotify.value = "visible";
+  notifyTransform.value = "translateY(0)";
 };
 
 const cancelReply = () => {
   inputingReply.value = false;
   reply.value.parent = null;
   placeholder.value = t("classDetail.请输入评论内容");
+  notifyTransform.value = "translate(110%, 0)";
   setTimeout(() => {
     hideReplyNotify.value = "hidden";
+    notifyTransform.value = "translateY(0)";
   }, 1000);
 };
 
@@ -366,50 +370,8 @@ onReachBottom(() => {
 </script>
 
 <style lang="scss" scoped>
-.article {
-  padding: 10px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-  .title-content {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 20px;
-    .title {
-      text-align: center;
-      font-size: 2rem;
-      font-weight: bold;
-      color: #303133;
-    }
-    .author {
-      margin-top: 10px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: medium;
-      color: rgb(131, 129, 126);
-      .avatar {
-        margin-right: 10px;
-      }
-    }
-    .view-count {
-      margin-left: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-  }
-  .content {
-    margin: 10px;
-    font-size: large;
-  }
-  .time {
-    margin: 10px;
-    font-size: small;
-    color: rgb(131, 129, 126);
-  }
-}
-
 .class-detail {
-  padding: 1rem;
+  margin: 1rem;
   box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.1);
   .class-name {
     display: flex;
@@ -441,7 +403,7 @@ onReachBottom(() => {
   .assessment-summary-notes,
   .assessment-details {
     border-bottom: 1px solid #ddd;
-    padding: 15px;
+    padding: 5px;
     margin-bottom: 10px;
     background-color: #f9f9f9;
   }
@@ -514,16 +476,12 @@ onReachBottom(() => {
         font-family: "Arial", sans-serif;
         color: #333;
         line-height: 1.6;
-        padding: 10px;
+        padding: 5px;
         background-color: white;
         box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
       }
     }
   }
-}
-
-.class-discussion {
-  margin: 1rem;
 }
 
 .comment {
@@ -533,7 +491,7 @@ onReachBottom(() => {
   flex-direction: column;
   position: sticky;
   bottom: 0;
-  padding: 0 1rem 2rem 1rem;
+  margin: 0 1rem 2rem 1rem;
   background: white;
   .reply-notify-box {
     width: -webkit-fill-available;
@@ -565,7 +523,7 @@ onReachBottom(() => {
         height: 1.5rem;
       }
       &-inactive {
-        transform: translate(200%, 0);
+        transform: v-bind('notifyTransform');
         opacity: 0;
         display: v-bind('hideReplyNotify');
       }
@@ -573,6 +531,7 @@ onReachBottom(() => {
   }
   .reply-form {
     width: -webkit-fill-available;
+    margin-bottom: 2rem;
     form {
       display: flex;
       flex-direction: column;

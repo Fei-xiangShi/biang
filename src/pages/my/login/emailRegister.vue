@@ -138,6 +138,38 @@
         </view>
       </view>
     </view>
+    <view class="code">
+      <view class="code-input-title">
+        <view class="code-input-title-text">
+          {{ $t("emailRegister.验证码输入框标题") }}*
+        </view>
+      </view>
+      <view class="code-input">
+        <u-input
+          v-model="code.content"
+          :placeholder="t('emailRegister.验证码输入框占位符')"
+        >
+          <template v-slot:suffix>
+            <u-code
+              :seconds="60"
+              :start-text="t('emailRegister.获取验证码')"
+              :changeText="t('emailRegister.等待重新获取验证码')"
+              @end="end"
+              @start="start"
+              @change="codeChange"
+              keep-running
+              ref="Code"
+            />
+            <view class="tips" @tap="getCode">{{ $t(tips) }}</view>
+          </template>
+        </u-input>
+      </view>
+      <view class="code-input-warning">
+        <view class="code-input-warning-text" v-if="code.valid === false">
+          {{ $t(code.warning) }}
+        </view>
+      </view>
+    </view>
     <view class="school-select-input">
       <u-form>
         <u-form-item
@@ -151,7 +183,6 @@
             :placeholder="t('emailRegister.学校选择框占位符')"
             shape="circle"
           />
-          <u-icon slot="right" name="arrow-right" />
         </u-form-item>
       </u-form>
       <u-picker
@@ -204,6 +235,9 @@ const avatarUrl = ref(
   "https://img.ixintu.com/download/jpg/20201201/653c62f6204ba19a0c630206bee5923f_512_512.jpg!ys"
 );
 let size = "8192";
+const tips = ref("emailRegister.获取验证码");
+const code = ref(new InputContent());
+const Code = ref();
 
 const cancelPick = () => {
   showSchoolPicker.value = false;
@@ -236,6 +270,41 @@ const onChooseAvatar = (e: any) => {
   });
 };
 
+const start = () => {
+  tips.value = t("emailRegister.正在获取验证码");
+};
+
+const end = () => {
+  tips.value = t("emailRegister.重新获取验证码");
+};
+
+const codeChange = (text: string) => {
+  tips.value = text;
+};
+
+const getCode = () => {
+  checkEmail(email.value);
+  if (email.value.valid) {
+    if (Code.value.canGetCode) {
+      uni.showLoading({
+        title: t("emailRegister.正在获取验证码"),
+      });
+      setTimeout(() => {
+        uni.hideLoading();
+        uni.showToast({
+          title: t("emailRegister.验证码已发送"),
+          icon: "none",
+          duration: 2000,
+        });
+      }, 2000);
+      Code.value.start();
+    }
+  } else {
+    email.value.valid = false;
+    email.value.warning = t("emailRegister.请输入邮箱警告");
+  }
+};
+
 const commitRegister = () => {
   checkEmail(email.value);
   checkUsername(username.value);
@@ -250,7 +319,8 @@ const commitRegister = () => {
       username.value.content,
       password.value.content,
       schoolId.value,
-      size
+      size,
+      uni.getStorageSync("lang")
     )
       .then((res: any) => {
         if (res.data.success === true) {
@@ -501,6 +571,44 @@ const commitRegister = () => {
   }
 }
 
+.code {
+  width: 100%;
+  margin-top: 20px;
+  .code-input-title {
+    width: 100%;
+    .code-input-title-text {
+      font-size: 14px;
+      color: #999;
+    }
+  }
+  .code-input {
+    width: 100%;
+    u-input {
+      width: 100%;
+      height: 40px;
+      font-size: 14px;
+      color: #333;
+      background-color: #f5f5f5;
+      border-radius: 20px;
+      padding: 0 20px;
+      margin-top: 10px;
+    }
+    .tips {
+      font-size: 12px;
+      color: #007aff;
+      margin-left: 10px;
+    }
+  }
+  .code-input-warning {
+    width: 100%;
+    .code-input-warning-text {
+      font-size: 12px;
+      color: #ff0000;
+      margin-top: 5px;
+    }
+  }
+}
+
 .school-select-input {
   width: 100%;
   margin-top: 20px;
@@ -545,4 +653,3 @@ const commitRegister = () => {
   }
 }
 </style>
-@/types/InputContent @/types/Password

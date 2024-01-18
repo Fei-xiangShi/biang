@@ -112,7 +112,7 @@ onMounted(() => {
   flex-direction: column;
   align-items: center;
   padding: 10px;
-  margin: 10px;
+  margin: 10px 20px;
   border: 1px solid #ccc;
   border-radius: 10px;
   .root {
@@ -169,9 +169,7 @@ onMounted(() => {
       display: flex;
       flex-direction: row;
       width: 100%;
-      margin-top: 10px;
-      margin-bottom: 10px;
-      flex-wrap: nowrap;
+      margin: 10px 0; 
       align-items: center;
       .reply-content {
         font-size: 14px;

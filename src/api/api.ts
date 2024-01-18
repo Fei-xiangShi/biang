@@ -104,7 +104,8 @@ const Api = {
     username: string,
     password: string,
     university: string,
-    avatarSize: string
+    avatarSize: string,
+    lang: string
   ) =>
     http.post(apiUrl.emailRegister, {
       email: email,
@@ -112,6 +113,7 @@ const Api = {
       password: password,
       university: university,
       avatar_size: avatarSize,
+      lang: lang,
     }),
   wxRegister: (
     code: string,

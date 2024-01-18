@@ -2,7 +2,7 @@
   <view class="container">
     <view class="await">
       <navbar :show-change-school-button="true" returnButtonIconColor="white" />
-      <image src="../../static/images/4k.webp" class="background" />
+      <image src="../../static/images/4k.webp" class="background" :webp="true"/>
       <view class="beautiful-sence">
         <view class="acrylic">
           <view class="gaussian-blur">

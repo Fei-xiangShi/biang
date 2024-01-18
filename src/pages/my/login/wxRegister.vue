@@ -81,7 +81,6 @@
             :placeholder="t('wxRegister.学校选择框占位符')"
             shape="circle"
           />
-          <u-icon slot="right" name="arrow-right" />
         </u-form-item>
       </u-form>
       <u-picker

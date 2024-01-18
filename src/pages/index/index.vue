@@ -57,7 +57,6 @@
                 :placeholder="t('index.单元号选择框提示')"
                 border="none"
               />
-              <u-icon slot="right" name="arrow-right" />
             </u-form-item>
           </u-form>
           <u-picker
