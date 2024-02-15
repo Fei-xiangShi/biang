@@ -249,7 +249,8 @@ const getReplyList = () => {
   let res = Api.getComments(
     uni.getStorageSync("schoolId"),
     props.courseCode,
-    replyList.value.page
+    replyList.value.page,
+    uni.getStorageSync("aueduSession")
   );
   concatenatingReplyList(res);
 };

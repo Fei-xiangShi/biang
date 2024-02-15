@@ -167,7 +167,7 @@
         </view>
       </view>
 
-      <view class="three-cards">
+      <!-- <view class="three-cards">
         <view class="swipe-card">
           <u-swiper
             :list="swipeCard"
@@ -198,9 +198,9 @@
             <view class="kit-content">{{ $t("index.校园好礼按钮内容") }}</view>
           </view>
         </view>
-      </view>
+      </view> -->
 
-      <view class="two-cards">
+      <!-- <view class="two-cards">
         <view class="purchase-card">
           <view class="title">
             <view class="title-text">{{ $t("index.特惠按钮标题") }}</view>
@@ -219,7 +219,7 @@
             <u-icon name="arrow-right" :size="8" color="black" />
           </view>
         </view>
-      </view>
+      </view> -->
     </view>
     <view class="tail">
       <!-- <view class="pic" /> -->

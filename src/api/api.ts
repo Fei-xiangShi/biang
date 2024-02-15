@@ -88,9 +88,10 @@ const Api = {
   notice: (id: number) => http.get(apiUrl.notices + id + "/"),
   allNotices: () => http.get(apiUrl.notices + "?mode=all"),
   getUser: (auedu_session: string) => http.post(apiUrl.user, { auedu_session }),
-  getComments: (university_id: number, course_code: string, page: number) =>
-    http.get(
-      `${apiUrl.comments}university/${university_id}/${course_code}/?page=${page}`
+  getComments: (university_id: number, course_code: string, page: number, auedu_session: string) =>
+    http.post(
+      `${apiUrl.comments}university/${university_id}/${course_code}/?page=${page}`,
+      { auedu_session: auedu_session }
     ),
   postComment: (auedu_session: string, comment: object) =>
     http.post(apiUrl.comments, {
@@ -149,6 +150,10 @@ const Api = {
     }),
   allUnits: (university_id: number) =>
     http.get(`${apiUrl.allUnits}?university_id=${university_id}`),
+  likeComment: (id: number, auedu_session: string) => 
+    http.post(`${apiUrl.comments}${id}/like/`, { auedu_session: auedu_session }),
+  dislikeComment: (id: number, auedu_session: string) => 
+    http.post(`${apiUrl.comments}${id}/dislike/`, {auedu_session: auedu_session})
 };
 
 export default Api;

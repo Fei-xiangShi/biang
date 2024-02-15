@@ -14,9 +14,27 @@
           <view class="name">{{ reply.user.username }}</view>
         </view>
         <view class="comment-language">
-          <view class="original" @tap="language=reply.lang" :class="{selected: language==reply.lang}">{{ $t("comment.原文") }}</view>
-          <view class="chinese" @tap="language='zh-Hans'" :class="{selected: language=='zh-Hans'}">{{ $t("comment.中文") }}</view>
-          <view class="english" @tap="language='en'" :class="{selected: language=='en'}">{{ $t("comment.英文") }}</view>
+          <view
+            class="original"
+            @tap="language = reply.lang"
+            :class="{ selected: language == reply.lang }"
+          >
+            {{ $t("comment.原文") }}
+          </view>
+          <view
+            class="chinese"
+            @tap="language = 'zh-Hans'"
+            :class="{ selected: language == 'zh-Hans' }"
+          >
+            {{ $t("comment.中文") }}
+          </view>
+          <view
+            class="english"
+            @tap="language = 'en'"
+            :class="{ selected: language == 'en' }"
+          >
+            {{ $t("comment.英文") }}
+          </view>
         </view>
       </view>
       <view class="content">
@@ -32,8 +50,26 @@
       </view>
       <view class="tab">
         <view class="left">
-          <view class="floor" v-if="language=='zh-Hans'">{{ index + 1 }}楼</view>
-          <view class="time">{{ new Date(reply.created_at).toLocaleDateString() }}</view>
+          <view class="floor" v-if="language == 'zh-Hans'"
+            >{{ index + 1 }}楼</view
+          >
+          <view class="time">
+            {{ new Date(reply.created_at).toLocaleDateString() }}
+          </view>
+          <view class="like">
+            <view
+              class="liked"
+              v-if="reply.is_liked"
+              @tap="dislikeComment(reply)"
+            >
+              <u-icon name="thumb-up" size="20px" color="#7a9adc"/>
+              <view>{{ reply.likes }}</view>
+            </view>
+            <view class="unliked" v-else @tap="likeComment(reply)">
+              <u-icon name="thumb-up" size="20px" />
+              <view>{{ reply.likes }}</view>
+            </view>
+          </view>
         </view>
         <view
           class="open-reply-box"
@@ -64,6 +100,8 @@
 import { ref, onMounted } from "vue";
 // import uaMarkdown from "@/components/ua-markdown/ua-markdown.vue";
 import Comment from "@/components/comment.vue";
+import { ErrorHandler } from "@/utils/requestErrors";
+import Api from "@/api/api";
 
 const props = defineProps({
   reply: {
@@ -96,6 +134,38 @@ const extractSons = (reply: any) => {
       extractSons(reply.replies[i]);
     }
   }
+};
+
+const likeComment = (reply: any) => {
+  reply.is_liked = true;
+  reply.likes++;
+  Api.likeComment(reply.id, uni.getStorageSync("aueduSession"))
+    .then((res: any) => {
+      if (res.data.success) {
+      }
+    })
+    .catch((err: any) => {
+      reply.is_liked = false;
+      reply.likes--;
+      ErrorHandler(err);
+    })
+    .finally(() => {});
+};
+
+const dislikeComment = (reply: any) => {
+  reply.is_liked = false;
+  reply.likes--;
+  Api.dislikeComment(reply.id, uni.getStorageSync("aueduSession"))
+    .then((res: any) => {
+      if (res.data.success) {
+      }
+    })
+    .catch((err: any) => {
+      reply.is_liked = true;
+      reply.likes++;
+      ErrorHandler(err);
+    })
+    .finally(() => {});
 };
 
 onMounted(() => {
@@ -160,7 +230,7 @@ onMounted(() => {
           font-size: 12px;
           color: #999;
         }
-        .selected{
+        .selected {
           color: #7a9adc;
         }
       }
@@ -169,7 +239,7 @@ onMounted(() => {
       display: flex;
       flex-direction: row;
       width: 100%;
-      margin: 10px 0; 
+      margin: 10px 0;
       align-items: center;
       .reply-content {
         font-size: 14px;
@@ -200,6 +270,25 @@ onMounted(() => {
         .time {
           font-size: 12px;
           color: #999;
+        }
+        .like {
+          font-size: 12px;
+          margin-left: 10px;
+          u-icon {
+            margin-right: 5px;
+          }
+          .liked {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            color: #7a9adc;
+          }
+          .unliked {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            color: #999;
+          }
         }
       }
       .open-reply-box {
