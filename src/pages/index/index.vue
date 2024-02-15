@@ -18,11 +18,6 @@
   </view>
   <u-notify ref="Notify" />
   <view class="container">
-    <scroll-view
-      :scroll-y="true"
-      :scroll-with-animation="true"
-      style="height: 100%"
-    >
     <navbar :showChangeSchoolButton="true" />
       <!-- <view class="swiper">
         <u-swiper
