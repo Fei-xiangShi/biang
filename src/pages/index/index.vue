@@ -1,230 +1,4 @@
 <template>
-  <u-notify ref="Notify" />
-  <view class="changeLanguageModal">
-    <changeLanguageModal
-      :show="showChooseLangualge"
-      @confirm="confirmLang"
-      @cancel="cancelLang"
-    />
-  </view>
-  <view class="container">
-    <view class="navbar">
-      <navbar :showChangeSchoolButton="true" />
-    </view>
-
-    <view class="swiper">
-      <u-swiper
-        :list="swiperList"
-        keyName="image"
-        showTitle
-        :autoplay="true"
-        circular
-        indicator
-        indicatorMode="line"
-        previousMargin="30"
-        nextMargin="30"
-        radius="5"
-        bgColor="rgba(0,0,0,0)"
-      />
-    </view>
-    <view class="search-class white-blur">
-      <view class="search-title">
-        {{ $t("index.课程查找标题") }}
-      </view>
-      <view class="search-input-area">
-        <view class="course_code">
-          <u-input
-            :placeholder="t('index.课程代码输入框提示')"
-            border="bottom"
-            clearable
-            v-model="courseCode"
-          />
-        </view>
-        <view class="unit_code">
-          <u-form>
-            <u-form-item
-              :label="t('index.单元')"
-              borderBottom
-              @click="
-                loadUnits();
-                hideKeyboard();
-              "
-            >
-              <u-input
-                v-model="unitCode"
-                disabled
-                disabledColor="rgb(0,0,0,0)"
-                :placeholder="t('index.单元号选择框提示')"
-                border="none"
-              />
-            </u-form-item>
-          </u-form>
-          <u-picker
-            :show="showUnitsPicker"
-            :columns="unitCodes"
-            closeOnClickOverlay
-            @cancel="cancelPick"
-            @confirm="confirmPick"
-            @close="closePick"
-            @change="changePick"
-            :loading="pickerLoading"
-            :title="pickerTitle"
-            :confirmText="t('index.确认')"
-            :cancelText="t('index.取消')"
-          />
-        </view>
-      </view>
-      <view class="search-button" @tap="searchClass">
-        {{ $t("index.课表查询按钮") }}
-      </view>
-      <view class="search-text">
-        <view class="search-text-title">{{
-          $t("index.课程逐层查找提示")
-        }}</view>
-        <view class="search-nav-icon">
-          <u-icon name="arrow-right" :size="14" color="black" />
-        </view>
-      </view>
-    </view>
-    <view class="roll-notice" v-if="notices.text.length != 0">
-      <u-notice-bar
-        :text="notices.text"
-        mode="link"
-        direction="row"
-        :step="true"
-      />
-    </view>
-    <view class="cards">
-      <view class="class-query" v-if="!haveClassTable">
-        <view class="class-query-card" @tap="redirectToClassTable">
-          <view class="title">
-            <view class="title-text">{{ $t("index.课表查询按钮标题") }}</view>
-          </view>
-          <view class="content">
-            <view class="content-text">{{ $t("index.课表查询按钮内容") }}</view>
-          </view>
-        </view>
-      </view>
-      <view class="today-class" v-else>
-        <view class="today-class-left">
-          <view class="head">
-            <view class="date">
-              {{ new Date().toLocaleDateString() }}
-            </view>
-            <view class="progress-line" v-if="classCount">
-              <u-line-progress
-                :percentage="classPercentage"
-                activeColor="green"
-              />
-            </view>
-          </view>
-
-          <view class="class-count">
-            {{ $t("index.日程数量") + `: ` + classCount }}
-          </view>
-        </view>
-        <view class="today-class-right" @tap="redirectToClassTable">
-          <view class="today-class-area">
-            <view class="no-class" v-if="todayClass.length <= 0">
-              {{ $t("index.今日无课") }}
-            </view>
-            <view
-              class="classes"
-              v-for="(course, index) in todayClass"
-              :key="index"
-              v-else
-            >
-              <view class="course">
-                <view class="course-status" :class="{ done: course.finised }" />
-                <view class="course-text">
-                  <view
-                    class="course-name"
-                    :class="{ 'done-title': course.finised }"
-                  >
-                    {{ course.summary[lang] }}
-                  </view>
-                  <view class="course-time">
-                    {{
-                      new Date(course.start).toLocaleTimeString("zh-CN", {
-                        hour12: false,
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })
-                    }}
-                    -
-                    {{
-                      new Date(course.end).toLocaleTimeString("zh-CN", {
-                        hour12: false,
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })
-                    }}
-                  </view>
-                </view>
-              </view>
-            </view>
-          </view>
-        </view>
-      </view>
-
-      <view class="three-cards">
-        <view class="swipe-card">
-          <u-swiper
-            :list="swipeCard"
-            keyName="image"
-            radius="5"
-            bgColor="rgba(0,0,0,0)"
-            :autoplay="true"
-            circular
-            indicator
-            indicatorMode="line"
-          />
-        </view>
-        <view class="column-two">
-          <view class="todo">
-            <view class="todo-title">{{ $t("index.待办按钮标题") }}</view>
-            <view class="todo-content">
-              <u-notice-bar
-                :text="todoList"
-                direction="column"
-                color="black"
-                bgColor="rgba(0,0,0,0)"
-                icon=""
-              />
-            </view>
-          </view>
-          <view class="kit">
-            <view class="kit-title">{{ $t("index.校园好礼按钮标题") }}</view>
-            <view class="kit-content">{{ $t("index.校园好礼按钮内容") }}</view>
-          </view>
-        </view>
-      </view>
-
-      <view class="two-cards">
-        <view class="purchase-card">
-          <view class="title">
-            <view class="title-text">{{ $t("index.特惠按钮标题") }}</view>
-          </view>
-          <view class="content">
-            <view class="content-text">{{ $t("index.特惠按钮内容") }}</view>
-            <u-icon name="arrow-right" :size="8" color="black" />
-          </view>
-        </view>
-        <view class="store-card">
-          <view class="title">
-            <view class="title-text">{{ $t("index.商店按钮标题") }}</view>
-          </view>
-          <view class="content">
-            <view class="content-text">{{ $t("index.商店按钮内容") }}</view>
-            <u-icon name="arrow-right" :size="8" color="black" />
-          </view>
-        </view>
-      </view>
-    </view>
-    <view class="tail">
-      <!-- <view class="pic" /> -->
-    </view>
-  </view>
   <u-overlay :show="naving">
     <view class="overlay-container">
       <view class="login-notice" @tap.stop>
@@ -235,6 +9,245 @@
       </view>
     </view>
   </u-overlay>
+  <view class="changeLanguageModal">
+    <changeLanguageModal
+      :show="showChooseLangualge"
+      @confirm="confirmLang"
+      @cancel="cancelLang"
+    />
+  </view>
+  <u-notify ref="Notify" />
+  <view class="container">
+    <scroll-view
+      :scroll-y="true"
+      :scroll-with-animation="true"
+      style="height: 100%"
+    >
+    <navbar :showChangeSchoolButton="true" />
+      <!-- <view class="swiper">
+        <u-swiper
+          :list="swiperList"
+          keyName="image"
+          showTitle
+          :autoplay="true"
+          circular
+          indicator
+          indicatorMode="line"
+          previousMargin="30"
+          nextMargin="30"
+          radius="5"
+          bgColor="rgba(0,0,0,0)"
+        />
+      </view> -->
+      <view class="search-class white-blur">
+        <view class="search-title">
+          {{ $t("index.课程查找标题") }}
+        </view>
+        <view class="search-input-area">
+          <view class="course_code">
+            <u-input
+              :placeholder="t('index.课程代码输入框提示')"
+              border="bottom"
+              clearable
+              v-model="courseCode"
+              @change="courseCode = courseCode.toUpperCase();"
+            />
+          </view>
+          <view class="unit_code">
+            <u-form>
+              <u-form-item
+                :label="t('index.单元')"
+                borderBottom
+                @click="
+                  loadUnits();
+                  hideKeyboard();
+                "
+              >
+                <u-input
+                  v-model="unitCode"
+                  disabled
+                  disabledColor="rgb(0,0,0,0)"
+                  :placeholder="t('index.单元号选择框提示')"
+                  border="none"
+                />
+              </u-form-item>
+            </u-form>
+            <u-picker
+              :show="showUnitsPicker"
+              :columns="unitCodes"
+              closeOnClickOverlay
+              @cancel="cancelPick"
+              @confirm="confirmPick"
+              @close="closePick"
+              @change="changePick"
+              :loading="pickerLoading"
+              :title="pickerTitle"
+              :confirmText="t('index.确认')"
+              :cancelText="t('index.取消')"
+            />
+          </view>
+        </view>
+        <view class="search-button" @tap="searchClass">
+          {{ $t("index.课表查询按钮") }}
+        </view>
+        <view class="search-text">
+          <view class="search-text-title">
+            {{ $t("index.课程逐层查找提示") }}
+          </view>
+          <view class="search-nav-icon">
+            <u-icon name="arrow-right" :size="14" color="black" />
+          </view>
+        </view>
+      </view>
+      <view class="roll-notice" v-if="notices.text.length != 0">
+        <u-notice-bar
+          :text="notices.text"
+          mode="link"
+          direction="row"
+          :step="true"
+        />
+      </view>
+      <view class="cards">
+        <view class="class-query" v-if="!haveClassTable">
+          <view class="class-query-card" @tap="redirectToClassTable">
+            <view class="title">
+              <view class="title-text">{{ $t("index.课表查询按钮标题") }}</view>
+            </view>
+            <view class="content">
+              <view class="content-text">
+                {{ $t("index.课表查询按钮内容") }}</view
+              >
+            </view>
+          </view>
+        </view>
+        <view class="today-class" v-else>
+          <view class="today-class-left">
+            <view class="head">
+              <view class="date">
+                {{ new Date().toLocaleDateString() }}
+              </view>
+              <view class="progress-line" v-if="classCount">
+                <u-line-progress
+                  :percentage="classPercentage"
+                  activeColor="green"
+                />
+              </view>
+            </view>
+
+            <view class="class-count">
+              {{ $t("index.日程数量") + `: ` + classCount }}
+            </view>
+          </view>
+          <view class="today-class-right" @tap="redirectToClassTable">
+            <view class="today-class-area">
+              <view class="no-class" v-if="todayClass.length <= 0">
+                {{ $t("index.今日无课") }}
+              </view>
+              <view
+                class="classes"
+                v-for="(course, index) in todayClass"
+                :key="index"
+                v-else
+              >
+                <view class="course">
+                  <view
+                    class="course-status"
+                    :class="{ done: course.finised }"
+                  />
+                  <view class="course-text">
+                    <view
+                      class="course-name"
+                      :class="{ 'done-title': course.finised }"
+                    >
+                      {{ course.summary[lang] }}
+                    </view>
+                    <view class="course-time">
+                      {{
+                        new Date(course.start).toLocaleTimeString("zh-CN", {
+                          hour12: false,
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
+                      }}
+                      -
+                      {{
+                        new Date(course.end).toLocaleTimeString("zh-CN", {
+                          hour12: false,
+                          hour: "2-digit",
+                          minute: "2-digit",
+                        })
+                      }}
+                    </view>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view class="three-cards">
+          <view class="swipe-card">
+            <u-swiper
+              :list="swipeCard"
+              keyName="image"
+              radius="5"
+              bgColor="rgba(0,0,0,0)"
+              :autoplay="true"
+              circular
+              indicator
+              indicatorMode="line"
+            />
+          </view>
+          <view class="column-two">
+            <view class="todo">
+              <view class="todo-title">{{ $t("index.待办按钮标题") }}</view>
+              <view class="todo-content">
+                <u-notice-bar
+                  :text="todoList"
+                  direction="column"
+                  color="black"
+                  bgColor="rgba(0,0,0,0)"
+                  icon=""
+                />
+              </view>
+            </view>
+            <view class="kit">
+              <view class="kit-title">
+                {{ $t("index.校园好礼按钮标题") }}
+              </view>
+              <view class="kit-content">
+                {{ $t("index.校园好礼按钮内容") }}
+              </view>
+            </view>
+          </view>
+        </view>
+
+        <view class="two-cards">
+          <view class="purchase-card">
+            <view class="title">
+              <view class="title-text">{{ $t("index.特惠按钮标题") }}</view>
+            </view>
+            <view class="content">
+              <view class="content-text">{{ $t("index.特惠按钮内容") }}</view>
+              <u-icon name="arrow-right" :size="8" color="black" />
+            </view>
+          </view>
+          <view class="store-card">
+            <view class="title">
+              <view class="title-text">{{ $t("index.商店按钮标题") }}</view>
+            </view>
+            <view class="content">
+              <view class="content-text">{{ $t("index.商店按钮内容") }}</view>
+              <u-icon name="arrow-right" :size="8" color="black" />
+            </view>
+          </view>
+        </view>
+      </view>
+      <view class="tail">
+        <!-- <view class="pic" /> -->
+      </view>
+    </scroll-view>
+  </view>
 </template>
 
 <script setup lang="ts">
@@ -311,22 +324,6 @@ const swipeCard = [
 ];
 
 const notices = ref({ text: [] as string[] });
-
-const swiperList = [
-  {
-    image: "https://cdn.uviewui.com/uview/swiper/swiper2.png",
-    title: "昨夜星辰昨夜风，画楼西畔桂堂东",
-  },
-  {
-    image: "https://cdn.uviewui.com/uview/swiper/swiper1.png",
-    title: "身无彩凤双飞翼，心有灵犀一点通",
-  },
-  {
-    image: "https://cdn.uviewui.com/uview/swiper/swiper3.png",
-    title: "谁念西风独自凉，萧萧黄叶闭疏窗，沉思往事立残阳",
-  },
-];
-
 const courseCode = ref("");
 const unitCodes = ref();
 const unitCode = ref("");
@@ -382,12 +379,13 @@ const loadUnits = () => {
   pickerLoading.value = true;
   Api.getUnits(courseCode.value, uni.getStorageSync("schoolId"))
     .then((res: any) => {
-      if (res.statusCode == 200) {
+      if (res.data.success) {
         pickerTitle.value = t("index.单元号选择框提示");
         unitCodes.value = [res.data.units];
       } else {
-        ErrorHandler(res);
         pickerTitle.value = t("index.无单元号提示");
+        unitCodes.value = [];
+        ErrorHandler(res);
       }
     })
     .catch((err: any) => {
@@ -403,7 +401,7 @@ const searchClass = () => {
   if (naving.value) {
     return;
   }
-  naving.value = true
+  naving.value = true;
   if (courseCode.value == "" || courseCode.value == null) {
     notify.message = t("index.课程代码为空提示");
     notify.type = "warning";
@@ -494,10 +492,8 @@ const hideKeyboard = () => {
 
 <style scoped lang="scss">
 .container {
-  display: flex;
-  flex-direction: column;
-  height: auto;
-  min-height: 100vh;
+  height: 100vh;
+  width: 100vw;
   background: linear-gradient(
     135deg,
     #a6eeeea3 10%,
@@ -565,7 +561,7 @@ const hideKeyboard = () => {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
-    margin: 0px 0px;
+    margin: 0;
     .course_code {
       display: flex;
       flex-direction: column;
@@ -653,6 +649,7 @@ const hideKeyboard = () => {
     justify-content: space-between;
     margin: 10px 0px;
     border-radius: var(--borderRadius-medium, 0.375rem);
+    height: auto;
     .swipe-card {
       display: flex;
       width: 35%;
@@ -668,7 +665,11 @@ const hideKeyboard = () => {
       border-radius: var(--borderRadius-medium, 0.375rem);
     }
     .todo {
-      background: linear-gradient(90deg, rgba(255, 92, 92, 0.116) 10%, rgba(239, 244, 195, 0.418) 90%);
+      background: linear-gradient(
+        90deg,
+        rgba(255, 92, 92, 0.116) 10%,
+        rgba(239, 244, 195, 0.418) 90%
+      );
       display: flex;
       flex-direction: column;
       justify-content: center;
@@ -722,6 +723,7 @@ const hideKeyboard = () => {
     display: flex;
     flex-direction: row;
     justify-content: space-between;
+    height: auto;
     .purchase-card {
       background: linear-gradient(60deg, #a6eeee6c 50%, #d6fcc296 90%);
       width: 60%;

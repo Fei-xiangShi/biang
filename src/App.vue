@@ -37,5 +37,11 @@ onHide(() => {
 </script>
 
 <style lang="scss">
+.body{
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+}
+
 @import "../node_modules/uview-plus/index.scss";
 </style>

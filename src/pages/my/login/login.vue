@@ -27,7 +27,7 @@ const toggleLogin = (method: loginMethods) => {
 
 <style lang="scss" scoped>
 .container {
-  position: absolute;
+  position: relative;
   width: 100%;
   height: 100%;
   display: flex;

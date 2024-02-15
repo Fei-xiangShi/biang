@@ -1,67 +1,75 @@
 <template>
-  <navbar :title="t('account.账户资料')" />
-  <view class="container">
-    <view class="list">
-      <view class="avatar" @tap="changeAvatar">
-        <view class="title">
-          {{ $t("account.头像") }}
-        </view>
-        <view class="right">
-          <view class="avatar-img">
-            <u-avatar :src="avatarUrl" />
+  <view class="body">
+    <navbar :title="t('account.账户资料')" />
+    <scroll-view
+      :scroll-y="true"
+      :scroll-with-animation="true"
+      style="height: 100%"
+    >
+      <view class="container">
+        <view class="list">
+          <view class="avatar" @tap="changeAvatar">
+            <view class="title">
+              {{ $t("account.头像") }}
+            </view>
+            <view class="right">
+              <view class="avatar-img">
+                <u-avatar :src="avatarUrl" />
+              </view>
+              <view class="arrow">
+                <u-icon name="arrow-right" :size="20" />
+              </view>
+            </view>
           </view>
-          <view class="arrow">
-            <u-icon name="arrow-right" :size="20" />
+          <view class="username" @tap="changeUsername">
+            <view class="title">
+              {{ $t("account.昵称") }}
+            </view>
+            <view class="right">
+              <view class="username-text">
+                {{ username }}
+              </view>
+              <view class="arrow">
+                <u-icon name="arrow-right" :size="20" />
+              </view>
+            </view>
+          </view>
+          <view class="email">
+            <view class="title">
+              {{ $t("account.邮箱") }}
+            </view>
+            <view class="right">
+              <view class="email-text" @tap="changeEmail">
+                {{ email }}
+              </view>
+              <view class="arrow">
+                <u-icon name="arrow-right" :size="20" />
+              </view>
+            </view>
+          </view>
+          <view class="school">
+            <view class="title">
+              {{ $t("account.学校") }}
+            </view>
+            <view class="right">
+              <view class="school-text">
+                {{ school }}
+              </view>
+            </view>
+          </view>
+          <view class="change-password" @tap="changePassword">
+            <view class="title">
+              {{ $t("account.修改密码") }}
+            </view>
+            <view class="right">
+              <view class="arrow">
+                <u-icon name="arrow-right" :size="20" />
+              </view>
+            </view>
           </view>
         </view>
       </view>
-      <view class="username" @tap="changeUsername">
-        <view class="title">
-          {{ $t("account.昵称") }}
-        </view>
-        <view class="right">
-          <view class="username-text">
-            {{ username }}
-          </view>
-          <view class="arrow">
-            <u-icon name="arrow-right" :size="20" />
-          </view>
-        </view>
-      </view>
-      <view class="email">
-        <view class="title">
-          {{ $t("account.邮箱") }}
-        </view>
-        <view class="right">
-          <view class="email-text" @tap="changeEmail">
-            {{ email }}
-          </view>
-          <view class="arrow">
-            <u-icon name="arrow-right" :size="20" />
-          </view>
-        </view>
-      </view>
-      <view class="school">
-        <view class="title">
-          {{ $t("account.学校") }}
-        </view>
-        <view class="right">
-          <view class="school-text">
-            {{ school }}
-          </view>
-        </view>
-      </view>
-      <view class="change-password" @tap="changePassword">
-        <view class="title">
-          {{ $t("account.修改密码") }}
-        </view>
-        <view class="right">
-          <view class="arrow">
-            <u-icon name="arrow-right" :size="20" />
-          </view>
-        </view>
-      </view>
-    </view>
+    </scroll-view>
   </view>
 </template>
 
@@ -92,35 +100,37 @@ const changeAvatar = () => {
               Api.changeAvatar(
                 uni.getStorageSync("aueduSession"),
                 String(getFileInfoResult.size)
-              ).then((changeAvatarResult: any) => {
-                if (changeAvatarResult.data.success) {
-                  const headers = {
-                    "Content-Type": "image/jpeg",
-                    "Content-Length": String(getFileInfoResult.size),
-                  };
-                  Api.uploadAvatar(
-                    changeAvatarResult.data.presigned_url,
-                    result.data,
-                    headers
-                  ).then((res: any) => {
-                    if (res.statusCode === 200) {
-                      uni.showToast({
-                        title: t("account.修改成功"),
-                        icon: "success",
-                      });
-                    } else {
-                      ErrorHandler(res);
-                    }
+              )
+                .then((changeAvatarResult: any) => {
+                  if (changeAvatarResult.data.success) {
+                    const headers = {
+                      "Content-Type": "image/jpeg",
+                      "Content-Length": String(getFileInfoResult.size),
+                    };
+                    Api.uploadAvatar(
+                      changeAvatarResult.data.presigned_url,
+                      result.data,
+                      headers
+                    ).then((res: any) => {
+                      if (res.statusCode === 200) {
+                        uni.showToast({
+                          title: t("account.修改成功"),
+                          icon: "success",
+                        });
+                      } else {
+                        ErrorHandler(res);
+                      }
+                    });
+                  } else {
+                    ErrorHandler(changeAvatarResult);
+                  }
+                })
+                .catch((err) => {
+                  uni.showToast({
+                    title: t("account.修改失败"),
+                    icon: "none",
                   });
-                } else {
-                  ErrorHandler(changeAvatarResult);
-                }
-              }).catch((err) => {
-                uni.showToast({
-                  title: t("account.修改失败"),
-                  icon: "none",
                 });
-              });
             },
           });
         },
@@ -137,18 +147,24 @@ const changeUsername = () => {
 
 const changeEmail = () => {
   uni.navigateTo({
-    url: RouteConfig.my.myItemList[2].url
+    url: RouteConfig.my.myItemList[2].url,
   });
 };
 
 const changePassword = () => {
   uni.navigateTo({
-    url: RouteConfig.my.myItemList[3].url
+    url: RouteConfig.my.myItemList[3].url,
   });
 };
 </script>
 
 <style scoped lang="scss">
+.body {
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+}
+
 .container {
   background-color: #f5f5f5;
   height: 100vh;

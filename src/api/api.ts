@@ -131,7 +131,11 @@ const Api = {
     }),
   emailExists: (email: string) =>
     http.post(apiUrl.emailExists, { email: email }),
-  setPassword: (auedu_session: string, old_password: string, new_password: string) =>
+  setPassword: (
+    auedu_session: string,
+    old_password: string,
+    new_password: string
+  ) =>
     http.post(apiUrl.setPassword, {
       auedu_session: auedu_session,
       old_password: old_password,
@@ -149,6 +153,17 @@ const Api = {
     }),
   allUnits: (university_id: number) =>
     http.get(`${apiUrl.allUnits}?university_id=${university_id}`),
+  sendEmailVerificationCode: (email: string, lang: string) =>
+    http.post(apiUrl.sendEmailVerificationCode, {
+      email: email,
+      lang: lang,
+    }),
+  codeVertify: (email: string, verification_code: string, type: string) =>
+    http.post(apiUrl.codeVertify, {
+      email: email,
+      verification_code: verification_code,
+      type: type,
+    }),
 };
 
 export default Api;

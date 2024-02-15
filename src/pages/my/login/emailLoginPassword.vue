@@ -1,40 +1,48 @@
 <template>
-  <navbar :title="t('emailLoginPassword.邮箱登录')" />
-  <view class="email-login-container">
-    <img src="../../static/icons/logo.png" class="icon" />
-    <view class="email-login-title">
-      {{ $t("emailLoginPassword.邮箱登录") }}
-    </view>
-    <view class="email-login-input-container">
-      <view class="email-login-input-title">
-        {{ $t("emailLoginPassword.密码") }}
-      </view>
-      <input
-        class="email-login-input"
-        :placeholder="t('emailLoginPassword.请输入密码')"
-        type="password"
-        v-model="password"
-      />
-      <view class="password-wrong-warning-text" v-if="passwordWrong">
-        {{ $t("emailLoginPassword.密码错误提醒") }}
-      </view>
-    </view>
-    <view class="email-login-button-container">
-      <view class="email-login-button" @tap="login()">
-        {{ $t("emailLoginPassword.登录") }}
-      </view>
-    </view>
-  </view>
-  <u-overlay :show="loggingin">
-    <view class="overlay-container">
-      <view class="login-notice" @tap.stop>
-        <u-loading-icon mode="circle" />
-        <view class="login-notice-text">
-          {{ $t("emailLoginPassword.登录中") }}
+  <view class="body">
+    <scroll-view
+      :scroll-y="true"
+      :scroll-with-animation="true"
+      style="height: 100%"
+    >
+      <navbar :title="t('emailLoginPassword.邮箱登录')" />
+      <view class="email-login-container">
+        <img src="../../static/icons/logo.png" class="icon" />
+        <view class="email-login-title">
+          {{ $t("emailLoginPassword.邮箱登录") }}
+        </view>
+        <view class="email-login-input-container">
+          <view class="email-login-input-title">
+            {{ $t("emailLoginPassword.密码") }}
+          </view>
+          <input
+            class="email-login-input"
+            :placeholder="t('emailLoginPassword.请输入密码')"
+            type="password"
+            v-model="password"
+          />
+          <view class="password-wrong-warning-text" v-if="passwordWrong">
+            {{ $t("emailLoginPassword.密码错误提醒") }}
+          </view>
+        </view>
+        <view class="email-login-button-container">
+          <view class="email-login-button" @tap="login()">
+            {{ $t("emailLoginPassword.登录") }}
+          </view>
         </view>
       </view>
-    </view>
-  </u-overlay>
+      <u-overlay :show="loggingin">
+        <view class="overlay-container">
+          <view class="login-notice" @tap.stop>
+            <u-loading-icon mode="circle" />
+            <view class="login-notice-text">
+              {{ $t("emailLoginPassword.登录中") }}
+            </view>
+          </view>
+        </view>
+      </u-overlay>
+    </scroll-view>
+  </view>
 </template>
 
 <script setup lang="ts">
@@ -96,6 +104,12 @@ const props = defineProps({
 </script>
 
 <style lang="scss" scoped>
+.body {
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+}
+
 .email-login-container {
   display: flex;
   flex-direction: column;

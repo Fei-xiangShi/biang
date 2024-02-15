@@ -1,20 +1,30 @@
 enum RequestErrorCode {
-  DefaultError = 0,
-  UnkownError = 1,
-  PasswordFormatError = 1001,
-  EmailFormatError = 1002,
-  EmailExistsError = 1003,
-  UsernameExistsError = 1004,
-  UsernameFormatError = 1005,
-  UniversityNotFoundError = 1006,
-  AvatarSizeError = 1007,
-  IncorrectPasswordError = 1008,
-  OpenIDNotFoundError = 1009,
-  UserExistsError = 1010,
-  UserNotFoundError = 1011,
-  EmailNotFoundError = 1012,
-  NotAuthenticatedError = 1013,
-  NoPermissionError = 1014,
+  DefaultError = 1000,
+  NotAuthenticatedError = 1001,
+  NoPermissionError = 1002,
+  ServerNetworkError = 1003,
+  UnitNotFoundError = 1004,
+  CourseNotFoundError = 1005,
+  ICSFileFormatError = 1006,
+  UserNotFoundError = 1007,
+  PasswordFormatError = 1008,
+  EmailFormatError = 1009,
+  EmailExistsError = 1010,
+  UsernameExistsError = 1011,
+  UsernameFormatError = 1012,
+  IncorrectPasswordError = 1013,
+  OpenIDNotFoundError = 1014,
+  UserExistsError = 1015,
+  EmailNotFoundError = 1016,
+  EmailVerificationCodeError = 1017,
+  EmailVerificationCodeExpiredError = 1018,
+  EmailVerificationCodeSentError = 1019,
+  EmailNotVerifiedError = 1020,
+  LanguageNotSupportedError = 1021,
+  VerificationTypeNotSupportedError = 1022,
+  FieldNotProvidedError = 1023,
+  UniversityNotFoundError = 1024,
+  AvatarSizeError = 1025,
 }
 
 class RequestError extends Error {
@@ -52,8 +62,8 @@ class errorError extends RequestError {
 class UnkownError extends RequestError {
   constructor() {
     super(
-      "Unkown error. Please contact with the admin",
-      RequestErrorCode.UnkownError
+      "Unkown error. Please contact with admin",
+      RequestErrorCode.DefaultError
     );
   }
 }
@@ -151,25 +161,112 @@ class NoPermissionError extends RequestError {
   }
 }
 
+class EmailVerificationCodeError extends RequestError {
+  constructor() {
+    super(
+      "Email verification code is incorrect.",
+      RequestErrorCode.EmailVerificationCodeError
+    );
+  }
+}
+
+class EmailVerificationCodeExpiredError extends RequestError {
+  constructor() {
+    super(
+      "Email verification code has expired.",
+      RequestErrorCode.EmailVerificationCodeExpiredError
+    );
+  }
+}
+
+class EmailVerificationCodeSentError extends RequestError {
+  constructor() {
+    super(
+      "Email verification code has been sent. Please try again in 1 minute.",
+      RequestErrorCode.EmailVerificationCodeSentError
+    );
+  }
+}
+
+class EmailNotVerifiedError extends RequestError {
+  constructor() {
+    super("Email not verified.", RequestErrorCode.EmailNotVerifiedError);
+  }
+}
+
+class LanguageNotSupportedError extends RequestError {
+  constructor() {
+    super(
+      "Language not supported.",
+      RequestErrorCode.LanguageNotSupportedError
+    );
+  }
+}
+
+class VerificationTypeNotSupportedError extends RequestError {
+  constructor() {
+    super(
+      "Verification type not supported.",
+      RequestErrorCode.VerificationTypeNotSupportedError
+    );
+  }
+}
+
+class FieldNotProvidedError extends RequestError {
+  constructor() {
+    super("This field is required.", RequestErrorCode.FieldNotProvidedError);
+  }
+}
+
+class UnitNotFoundError extends RequestError {
+  constructor() {
+    super("Unit not found.", RequestErrorCode.UnitNotFoundError);
+  }
+}
+
+class CourseNotFoundError extends RequestError {
+  constructor() {
+    super("Course not found.", RequestErrorCode.CourseNotFoundError);
+  }
+}
+
+class ICSFileFormatError extends RequestError {
+  constructor() {
+    super("ICS file format error.", RequestErrorCode.ICSFileFormatError);
+  }
+}
+
 const aueduErrors = {
   blank: new BlankError(),
   null: new NullError(),
   required: new RequiredError(),
   error: new errorError(),
-  1001: new PasswordFormatError(),
-  1002: new EmailFormatError(),
-  1003: new EmailExistsError(),
-  1004: new UsernameExistsError(),
-  1005: new UsernameFormatError(),
-  1006: new UniversityNotFoundError(),
-  1007: new AvatarSizeError(),
-  1008: new IncorrectPasswordError(),
-  1009: new OpenIDNotFoundError(),
-  1010: new UserExistsError(),
-  1011: new UserNotFoundError(),
-  1012: new EmailNotFoundError(),
-  1013: new NotAuthenticatedError(),
-  1014: new NoPermissionError(),
+  [RequestErrorCode.DefaultError]: new UnkownError(),
+  [RequestErrorCode.NotAuthenticatedError]: new NotAuthenticatedError(),
+  [RequestErrorCode.NoPermissionError]: new NoPermissionError(),
+  [RequestErrorCode.ServerNetworkError]: new UnkownError(),
+  [RequestErrorCode.UnitNotFoundError]: new UnitNotFoundError(),
+  [RequestErrorCode.CourseNotFoundError]: new CourseNotFoundError(),
+  [RequestErrorCode.ICSFileFormatError]: new ICSFileFormatError(),
+  [RequestErrorCode.UserNotFoundError]: new UserNotFoundError(),
+  [RequestErrorCode.PasswordFormatError]: new PasswordFormatError(),
+  [RequestErrorCode.EmailFormatError]: new EmailFormatError(),
+  [RequestErrorCode.EmailExistsError]: new EmailExistsError(),
+  [RequestErrorCode.UsernameExistsError]: new UsernameExistsError(),
+  [RequestErrorCode.UsernameFormatError]: new UsernameFormatError(),
+  [RequestErrorCode.IncorrectPasswordError]: new IncorrectPasswordError(),
+  [RequestErrorCode.OpenIDNotFoundError]: new OpenIDNotFoundError(),
+  [RequestErrorCode.UserExistsError]: new UserExistsError(),
+  [RequestErrorCode.EmailNotFoundError]: new EmailNotFoundError(),
+  [RequestErrorCode.EmailVerificationCodeError]: new EmailVerificationCodeError(),
+  [RequestErrorCode.EmailVerificationCodeExpiredError]: new EmailVerificationCodeExpiredError(),
+  [RequestErrorCode.EmailVerificationCodeSentError]: new EmailVerificationCodeSentError(),
+  [RequestErrorCode.EmailNotVerifiedError]: new EmailNotVerifiedError(),
+  [RequestErrorCode.LanguageNotSupportedError]: new LanguageNotSupportedError(),
+  [RequestErrorCode.VerificationTypeNotSupportedError]: new VerificationTypeNotSupportedError(),
+  [RequestErrorCode.FieldNotProvidedError]: new FieldNotProvidedError(),
+  [RequestErrorCode.UniversityNotFoundError]: new UniversityNotFoundError(),
+  [RequestErrorCode.AvatarSizeError]: new AvatarSizeError(),
 };
 
 const ErrorHandler = (res: any) => {

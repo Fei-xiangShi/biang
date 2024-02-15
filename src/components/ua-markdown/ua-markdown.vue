@@ -1,5 +1,6 @@
 <!-- uniapp vue3 markdown解析 -->
 <template>
+<view class="body">
   <view class="ua__markdown">
     <rich-text
       space="nbsp"
@@ -7,6 +8,7 @@
       @itemclick="handleItemClick"
     />
   </view>
+</view>
 </template>
 
 <script setup>
@@ -118,6 +120,12 @@ const handleItemClick = (e) => {
 </script>
 
 <style lang="scss" scoped>
+.body{
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+}
+
 .ua__markdown {
   font-size: 14px;
   line-height: 1.5;

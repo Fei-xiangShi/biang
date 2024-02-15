@@ -1,82 +1,99 @@
 <template>
-  <view class="container">
-    <navbar />
-    <view class="verifyCode" :style="{ display: success ? 'none' : '' }">
-      <view class="notice">
-        <text class="notice-text">{{ $t("verifyCode.请输入验证码提示") }}</text>
-      </view>
-      <view class="title">
-        <text class="title-text">{{ $t("verifyCode.输入验证码提示") }}</text>
-      </view>
-      <view class="code-inputs">
-        <input
-          class="code-input"
-          adjust-position="false"
-          auto-blur="true"
-          @blur="confirm(code)"
-          :focus="focus"
-          v-model="code"
-          type="number"
-          maxlength="6"
-        />
-        <view
-          class="code-input-block"
-          v-for="i in 6"
-          :key="i"
-          @tap="focusToInput"
-        >
-          <view class="single-code" :class="{ inputing: code.length == i - 1 }">
-            {{ code[i - 1] }}
+  <view class="body">
+    <view class="container">
+      <navbar />
+      <scroll-view
+        :scroll-y="true"
+        :scroll-with-animation="true"
+        style="height: 100%"
+      >
+        <view class="verifyCode" :style="{ display: success ? 'none' : '' }">
+          <view class="notice">
+            <text class="notice-text">{{
+              $t("verifyCode.请输入验证码提示")
+            }}</text>
+          </view>
+          <view class="title">
+            <text class="title-text">{{
+              $t("verifyCode.输入验证码提示")
+            }}</text>
+          </view>
+          <view class="code-inputs">
+            <input
+              class="code-input"
+              adjust-position="false"
+              auto-blur="true"
+              @blur="confirm(code)"
+              :focus="focus"
+              v-model="code"
+              type="number"
+              maxlength="6"
+            />
+            <view
+              class="code-input-block"
+              v-for="i in 6"
+              :key="i"
+              @tap="focusToInput"
+            >
+              <view
+                class="single-code"
+                :class="{ inputing: code.length == i - 1 }"
+              >
+                {{ code[i - 1] }}
+              </view>
+            </view>
+          </view>
+          <view class="warning" v-if="warning">
+            <text class="warning-text">{{ $t("verifyCode.验证码错误") }}</text>
+          </view>
+          <view class="tab-notice">
+            <text class="tab-notice-text">{{ $t("verifyCode.遇到问题") }}</text>
+          </view>
+          <view
+            class="resend-button"
+            :class="{ available: timeleft <= 0 }"
+            @tap="resendEmail"
+          >
+            <view class="resend-text">
+              {{ showTime }} {{ $t("verifyCode.重新发送") }}
+            </view>
+          </view>
+          <view class="confirm-button" :class="{ available: code.length == 6 }">
+            <view class="button-text" @tap="confirm(code)">
+              {{ $t("verifyCode.验证") }}
+            </view>
+          </view>
+          <view class="bottom">
+            <text class="bottom-text">{{
+              $t("verifyCode.验证码底部提示")
+            }}</text>
           </view>
         </view>
-      </view>
-      <view class="warning" v-if="warning">
-        <text class="warning-text">{{ $t("verifyCode.验证码错误") }}</text>
-      </view>
-      <view class="tab-notice">
-        <text class="tab-notice-text">{{ $t("verifyCode.遇到问题") }}</text>
-      </view>
-      <view
-        class="resend-button"
-        :class="{ available: timeleft <= 0 }"
-        @tap="resendEmail"
-      >
-        <view class="resend-text">
-          {{ showTime }} {{ $t("verifyCode.重新发送") }}
+        <view class="successPage" :style="{ display: success ? '' : 'none' }">
+          <view class="successPage-title">
+            <text class="successPage-title-text">
+              {{ $t("verifyCode.验证成功") }}
+            </text>
+          </view>
+          <view class="successPage-notice">
+            <view class="icon" :class="{ 'choose-icon-animation': animeShow }">
+              <u-icon
+                :name="animeShow ? 'checkmark-circle' : ''"
+                size="30"
+                color="#606266"
+              />
+            </view>
+            <text :class="['successPage-notice-text', 'textFadeInRight']">
+              {{ $t("verifyCode.验证成功提示") }}
+            </text>
+          </view>
+          <view class="successPage-button">
+            <view class="successPage-button-text" @tap="redirect">
+              {{ $t("verifyCode.返回") }}
+            </view>
+          </view>
         </view>
-      </view>
-      <view class="confirm-button" :class="{ available: code.length == 6 }">
-        <view class="button-text" @tap="confirm(code)">
-          {{ $t("verifyCode.验证") }}
-        </view>
-      </view>
-      <view class="bottom">
-        <text class="bottom-text">{{ $t("verifyCode.验证码底部提示") }}</text>
-      </view>
-    </view>
-    <view class="successPage" :style="{ display: success ? '' : 'none' }">
-      <view class="successPage-title">
-        <text class="successPage-title-text">
-          {{ $t("verifyCode.验证成功") }}
-        </text>
-      </view>
-      <view class="successPage-notice">
-        <view class="icon" :class="{ 'choose-icon-animation': animeShow }">
-          <u-icon
-            :name="animeShow ? 'checkmark-circle' : ''"
-            size="30"
-            color="#606266"
-          />
-        </view>
-        <text :class="['successPage-notice-text', 'textFadeInRight']">
-          {{ $t("verifyCode.验证成功提示") }}
-        </text>
-      </view>
-      <view class="successPage-button">
-        <view class="successPage-button-text" @tap="redirect">
-          {{ $t("verifyCode.返回") }}
-        </view>
-      </view>
+      </scroll-view>
     </view>
   </view>
 </template>
@@ -189,6 +206,12 @@ const redirect = () => {
 </script>
 
 <style scoped lang="scss">
+.body {
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+}
+
 .container {
   position: absolute;
   width: 100%;
@@ -308,7 +331,7 @@ const redirect = () => {
     justify-content: center;
     float: right;
     background: rgba(177, 177, 177, 0.556);
-    transition: all 0.3s; 
+    transition: all 0.3s;
   }
   .bottom {
     width: 100%;

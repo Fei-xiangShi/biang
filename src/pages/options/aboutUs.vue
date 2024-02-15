@@ -1,64 +1,74 @@
 <template>
-  <navbar :title="t('aboutUs.关于与帮助')" />
-  <view class="content">
-    <view class="head">
-      <view class="logo" />
-      <view class="list">
-        <view class="version">
-          <view class="left">
-            <view class="icon">
-              <u-icon name="info-circle" :size="20" />
+  <view class="body">
+    <navbar :title="t('aboutUs.关于与帮助')" />
+    <scroll-view
+      :scroll-y="true"
+      :scroll-with-animation="true"
+      style="height: 100%"
+    >
+      <view class="content">
+        <view class="head">
+          <view class="logo" />
+          <view class="list">
+            <view class="version">
+              <view class="left">
+                <view class="icon">
+                  <u-icon name="info-circle" :size="20" />
+                </view>
+                <view class="text">
+                  {{ $t("aboutUs.当前版本") }}
+                </view>
+              </view>
+              <view class="desc">
+                {{ consts.version }}
+              </view>
             </view>
-            <view class="text">
-              {{ $t("aboutUs.当前版本") }}
+            <view class="update" @tap="checkUpdate">
+              <view class="left">
+                <view class="icon">
+                  <u-icon name="reload" :size="20" />
+                </view>
+                <view class="text">
+                  {{ $t("aboutUs.检查更新") }}
+                </view>
+              </view>
+              <view class="right">
+                <view class="desc"></view>
+                <view class="arrow">
+                  <u-icon name="arrow-right" :size="20" />
+                </view>
+              </view>
             </view>
-          </view>
-          <view class="desc">
-            {{ consts.version }}
+            <view class="functionsIntro">
+              <view class="left">
+                <view class="icon">
+                  <u-icon name="coupon" :size="20" />
+                </view>
+                <view class="text">
+                  {{ $t("aboutUs.功能介绍") }}
+                </view>
+              </view>
+              <view class="right">
+                <view class="desc"></view>
+                <view class="arrow">
+                  <u-icon name="arrow-right" :size="20" />
+                </view>
+              </view>
+            </view>
           </view>
         </view>
-        <view class="update" @tap="checkUpdate">
-          <view class="left">
-            <view class="icon">
-              <u-icon name="reload" :size="20" />
-            </view>
-            <view class="text">
-              {{ $t("aboutUs.检查更新") }}
-            </view>
+        <view class="tail">
+          <view class="PP-UA">
+            <span class="PP">{{ $t("aboutUs.隐私政策") }}</span>
+            <span class="block"> | </span>
+            <span class="UA">{{ $t("aboutUs.用户协议") }}</span>
           </view>
-          <view class="right">
-            <view class="desc"></view>
-            <view class="arrow">
-              <u-icon name="arrow-right" :size="20" />
-            </view>
-          </view>
-        </view>
-        <view class="functionsIntro">
-          <view class="left">
-            <view class="icon">
-              <u-icon name="coupon" :size="20" />
-            </view>
-            <view class="text">
-              {{ $t("aboutUs.功能介绍") }}
-            </view>
-          </view>
-          <view class="right">
-            <view class="desc"></view>
-            <view class="arrow">
-              <u-icon name="arrow-right" :size="20" />
-            </view>
+          <view class="copyright">
+            Copyright © 2024. All Rights Reserved.
           </view>
         </view>
       </view>
-    </view>
-    <view class="tail">
-      <view class="PP-UA">
-        <span class="PP">{{ $t("aboutUs.隐私政策") }}</span>
-        <span class="block"> | </span>
-        <span class="UA">{{ $t("aboutUs.用户协议") }}</span>
-      </view>
-      <view class="copyright"> Copyright © 2024. All Rights Reserved. </view>
-    </view>
+    </scroll-view>
   </view>
 </template>
 
@@ -95,6 +105,12 @@ const checkUpdate = () => {
 </script>
 
 <style scoped lang="scss">
+.body {
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+}
+
 .content {
   display: flex;
   flex-direction: column;
@@ -187,7 +203,7 @@ const checkUpdate = () => {
     color: #0011ff;
     font-size: 12px;
   }
-  .copyright{
+  .copyright {
     color: #999;
     font-size: 12px;
   }

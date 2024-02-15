@@ -1,57 +1,71 @@
 <template>
-  <view class="container">
-    <view class="classtable" v-if="haveClassTable">
-      <classTableItem />
-    </view>
-    <view class="await" v-else>
-      <navbar :show-change-school-button="true" />
-      <image src="../../static/images/4k.webp" class="background" :webp="true"/>
-      <view class="beautiful-sence">
-        <view class="acrylic">
-          <view class="gaussian-blur">
-            <view class="luminosity-blend">
-              <view class="color-blend">
-                <view class="noise-texture" />
+  <view class="body">
+    <view class="container">
+      <view class="classtable" v-if="haveClassTable">
+        <classTableItem />
+      </view>
+      <view class="await" v-else>
+        <navbar :show-change-school-button="true" />
+        <scroll-view
+          :scroll-y="true"
+          :scroll-with-animation="true"
+          style="height: 100%"
+        >
+          <image
+            src="https://auclass.3li.top/static/4k.webp"
+            class="background"
+            :webp="true"
+          />
+          <view class="beautiful-sence">
+            <view class="acrylic">
+              <view class="gaussian-blur">
+                <view class="luminosity-blend">
+                  <view class="color-blend">
+                    <view class="noise-texture" />
+                  </view>
+                </view>
+              </view>
+
+              <view class="acrylic-content">
+                <view class="acrylic-content-Title">
+                  {{ $t("classTable.导入课表") }}
+                </view>
+                <view class="input">
+                  <u-input
+                    class="url"
+                    :placeholder="t('classTable.请输入课表链接')"
+                    border="bottom"
+                    clearable
+                    color="#d6d6d6"
+                    v-model="classTableUrl"
+                    placeholderStyle="color: #d6d6d6"
+                    confirmType="done"
+                    @confirm="getNewClassTable"
+                  />
+                </view>
               </view>
             </view>
           </view>
-
-          <view class="acrylic-content">
-            <view class="acrylic-content-Title">
-              {{ $t("classTable.导入课表") }}
-            </view>
-            <view class="input">
-              <u-input
-                class="url"
-                placeholder="请输入内容"
-                border="bottom"
-                clearable
-                color="#d6d6d6"
-                v-model="classTableUrl"
-                placeholderStyle="color: #d6d6d6"
-                confirmType="done"
-                @confirm="getNewClassTable"
-              />
-            </view>
+          <view class="submit-btn">
+            <button
+              class="confirm-btn"
+              @click="getNewClassTable"
+              :class="[
+                classTableUrl == '' || classTableUrl == null
+                  ? 'hidden'
+                  : 'show',
+              ]"
+              :style="{
+                transform:
+                  classTableUrl == '' || classTableUrl == null
+                    ? 'scale(0)'
+                    : 'scale(1)',
+                display: isLoading ? 'none' : 'block',
+              }"
+            />
+            <u-loading-icon mode="semicircle" size="45" v-if="isLoading" />
           </view>
-        </view>
-      </view>
-      <view class="submit-btn">
-        <button
-          class="confirm-btn"
-          @click="getNewClassTable"
-          :class="[
-            classTableUrl == '' || classTableUrl == null ? 'hidden' : 'show',
-          ]"
-          :style="{
-            transform:
-              classTableUrl == '' || classTableUrl == null
-                ? 'scale(0)'
-                : 'scale(1)',
-            display: isLoading ? 'none' : 'block',
-          }"
-        />
-        <u-loading-icon mode="semicircle" size="45" v-if="isLoading" />
+        </scroll-view>
       </view>
     </view>
   </view>
@@ -110,6 +124,12 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+.body {
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+}
+
 .await {
   overflow: hidden;
   width: 100%;

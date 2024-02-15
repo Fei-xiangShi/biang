@@ -1,42 +1,50 @@
 <template>
-  <navbar />
-  <view class="add">
-    <view class="title">
-      <view class="title-text">修改公告</view>
-    </view>
-    <view class="form">
-      <u-form>
-        <u-form-item label="简体中文">
-          <u-input placeholder="请输入内容" v-model="hans" />
-        </u-form-item>
-        <u-form-item label="英文">
-          <u-input placeholder="请输入内容" v-model="en" />
-        </u-form-item>
-        <u-form-item label="繁体中文">
-          <u-input placeholder="请输入内容" v-model="hant" />
-        </u-form-item>
-        <u-form-item label="发布时间" @tap="openDatePicker">
-          <u-input
-            :placeholder="new Date(date).toLocaleString()"
-            disabled
-            disabledColor="rgb(0,0,0,0)"
+  <view class="body">
+    <navbar />
+    <scroll-view
+      :scroll-y="true"
+      :scroll-with-animation="true"
+      style="height: 100%"
+    >
+      <view class="add">
+        <view class="title">
+          <view class="title-text">修改公告</view>
+        </view>
+        <view class="form">
+          <u-form>
+            <u-form-item label="简体中文">
+              <u-input placeholder="请输入内容" v-model="hans" />
+            </u-form-item>
+            <u-form-item label="英文">
+              <u-input placeholder="请输入内容" v-model="en" />
+            </u-form-item>
+            <u-form-item label="繁体中文">
+              <u-input placeholder="请输入内容" v-model="hant" />
+            </u-form-item>
+            <u-form-item label="发布时间" @tap="openDatePicker">
+              <u-input
+                :placeholder="new Date(date).toLocaleString()"
+                disabled
+                disabledColor="rgb(0,0,0,0)"
+              />
+            </u-form-item>
+          </u-form>
+          <u-datetime-picker
+            :show="showDatePicker"
+            v-model="date"
+            mode="datetime"
+            closeOnClickOverlay
+            @confirm="confirmDate"
+            @close="close"
           />
-        </u-form-item>
-      </u-form>
-      <u-datetime-picker
-        :show="showDatePicker"
-        v-model="date"
-        mode="datetime"
-        closeOnClickOverlay
-        @confirm="confirmDate"
-        @close="close"
-      />
-    </view>
-    <view class="buttons">
-      <view class="button">
-        <u-button type="primary" @tap="modifyNotice">修改</u-button>
+        </view>
+        <view class="buttons">
+          <view class="button">
+            <u-button type="primary" @tap="modifyNotice">修改</u-button>
+          </view>
+        </view>
       </view>
-    </view>
+    </scroll-view>
   </view>
 </template>
 
@@ -114,6 +122,12 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+.body {
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+}
+
 .add {
   display: flex;
   flex-direction: column;

@@ -1,37 +1,41 @@
 <template>
-  <navbar :title="t('wxLogin.一键登录')" />
-  <view class="wx-login-container">
-    <img src="../../static/icons/logo.png" class="icon" />
-    <view class="wx-login-title">{{ $t("wxLogin.微信登录标题") }}</view>
-    <view class="wx-login-content">{{ $t("wxLogin.微信登录提示") }}</view>
-    <view class="wx-login-button" @tap="login">
-      {{ $t("wxLogin.微信一键登录按钮") }}
-    </view>
-    <view class="toggle-to-email" @tap="emit('toggleLogin', email)">
-      <view class="toggle-to-email-text">{{ $t("wxLogin.使用邮箱登录") }}</view>
-    </view>
-    <view class="user-agreement">
-      <view class="user-agreement-text">
-        {{ $t("wxLogin.登录即代表同意") }}
-        <text class="user-agreement-text-highlight">
-          {{ $t("wxLogin.服务条款") }}
-          <text class="and">{{ $t("wxLogin.和") }}</text>
-          {{ $t("wxLogin.用户协议") }}
-        </text>
-        {{ $t("wxLogin.并使用微信登录") }}
+  <view class="body">
+    <navbar :title="t('wxLogin.一键登录')" />
+    <view class="wx-login-container">
+      <img src="../../static/icons/logo.png" class="icon" />
+      <view class="wx-login-title">{{ $t("wxLogin.微信登录标题") }}</view>
+      <view class="wx-login-content">{{ $t("wxLogin.微信登录提示") }}</view>
+      <view class="wx-login-button" @tap="login">
+        {{ $t("wxLogin.微信一键登录按钮") }}
       </view>
-    </view>
-  </view>
-  <u-overlay :show="loading">
-    <view class="overlay-container">
-      <view class="login-notice" @tap.stop>
-        <u-loading-icon mode="circle" />
-        <view class="login-notice-text">
-          {{ $t("emailLoginPassword.登录中") }}
+      <view class="toggle-to-email" @tap="emit('toggleLogin', email)">
+        <view class="toggle-to-email-text">
+          {{ $t("wxLogin.使用邮箱登录") }}
+        </view>
+      </view>
+      <view class="user-agreement">
+        <view class="user-agreement-text">
+          {{ $t("wxLogin.登录即代表同意") }}
+          <text class="user-agreement-text-highlight">
+            {{ $t("wxLogin.服务条款") }}
+            <text class="and">{{ $t("wxLogin.和") }}</text>
+            {{ $t("wxLogin.用户协议") }}
+          </text>
+          {{ $t("wxLogin.并使用微信登录") }}
         </view>
       </view>
     </view>
-  </u-overlay>
+    <u-overlay :show="loading">
+      <view class="overlay-container">
+        <view class="login-notice" @tap.stop>
+          <u-loading-icon mode="circle" />
+          <view class="login-notice-text">
+            {{ $t("emailLoginPassword.登录中") }}
+          </view>
+        </view>
+      </view>
+    </u-overlay>
+  </view>
 </template>
 
 <script setup lang="ts">
@@ -98,12 +102,17 @@ const emit = defineEmits(["toggleLogin"]);
 </script>
 
 <style lang="scss" scoped>
+.body {
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+}
+
 .wx-login-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  height: 100%;
   padding: 0 2rem;
   .icon {
     height: 70px;
@@ -148,7 +157,7 @@ const emit = defineEmits(["toggleLogin"]);
     display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
+    position: fixed;
     bottom: 50px;
     .user-agreement-text {
       font-size: 12px;

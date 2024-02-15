@@ -1,206 +1,216 @@
 <template>
-  <navbar />
-  <view class="login-container">
-    <view class="title-text">{{ $t("emailRegister.注册新账号") }}</view>
-    <view class="sub-title-text">{{ $t("emailRegister.注册副标题提示") }}</view>
-    <view class="avatar">
-      <view class="avatar-title">
-        <view class="avatar-title-text">
-          {{ $t("emailRegister.头像选择框标题") }}
+  <view class="body">
+    <scroll-view
+      :scroll-y="true"
+      :scroll-with-animation="true"
+      style="height: 100vh"
+    >
+      <navbar background-color="white"/>
+      <view class="login-container">
+        <view class="title-text">{{ $t("emailRegister.注册新账号") }}</view>
+        <view class="sub-title-text">
+          {{ $t("emailRegister.注册副标题提示") }}
         </view>
-      </view>
-      <view class="upload-avatar">
-        <button
-          class="avatar-wrapper"
-          open-type="chooseAvatar"
-          @chooseavatar="onChooseAvatar"
-        >
-          <view class="avatarShow">
-            <image class="avatar-image" :src="avatarUrl" />
+        <view class="avatar">
+          <view class="avatar-title">
+            <view class="avatar-title-text">
+              {{ $t("emailRegister.头像选择框标题") }}
+            </view>
           </view>
-        </button>
-      </view>
-    </view>
-    <view class="email">
-      <view class="email-input-title">
-        <view class="email-input-title-text"
-          >{{ $t("emailRegister.邮箱输入框标题") }}*</view
-        >
-      </view>
-      <view class="email-input">
-        <u-input
-          v-model="email.content"
-          :placeholder="t('emailRegister.邮箱输入框占位符')"
-          @blur="checkEmail(email)"
-        />
-      </view>
-      <view class="email-input-warning">
-        <view class="email-input-warning-text" v-if="email.valid === false">
-          {{ $t(email.warning) }}
+          <view class="upload-avatar">
+            <button
+              class="avatar-wrapper"
+              open-type="chooseAvatar"
+              @chooseavatar="onChooseAvatar"
+            >
+              <view class="avatarShow">
+                <image class="avatar-image" :src="avatarUrl" />
+              </view>
+            </button>
+          </view>
         </view>
-      </view>
-    </view>
-    <view class="username">
-      <view class="username-input-title">
-        <view class="username-input-title-text">
-          {{ $t("emailRegister.用户名输入框标题") }}*
-        </view>
-      </view>
-      <view class="username-input">
-        <u-input
-          v-model="username.content"
-          :placeholder="t('emailRegister.用户名输入框占位符')"
-          @blur="checkUsername(username)"
-        />
-      </view>
-      <view class="username-input-warning">
-        <view
-          class="username-input-warning-text"
-          v-if="username.valid === false"
-        >
-          {{ $t(username.warning) }}
-        </view>
-      </view>
-    </view>
-    <view class="password">
-      <view class="password-input-title">
-        <view class="password-input-title-text">
-          {{ $t("emailRegister.密码输入框标题") }}*
-        </view>
-      </view>
-      <view class="password-input">
-        <u-input
-          v-model="password.content"
-          :placeholder="t('emailRegister.密码输入框占位符')"
-          @blur="password.checkPasswordAll()"
-          type="password"
-        />
-      </view>
-      <view class="password-input-warning">
-        <view
-          class="password-input-warning-text"
-          :class="{
-            ok: password.checkPasswordAll() || password.content === '',
-            green: password.letter,
-          }"
-        >
-          · {{ $t("emailRegister.密码包含字母") }}
-        </view>
-        <view
-          class="password-input-warning-text"
-          :class="{
-            ok: password.checkPasswordAll() || password.content === '',
-            green: password.number,
-          }"
-        >
-          · {{ $t("emailRegister.密码包含数字") }}
-        </view>
-        <view
-          class="password-input-warning-text"
-          :class="{
-            ok: password.checkPasswordAll() || password.content === '',
-            green: password.symbol,
-          }"
-        >
-          · {{ $t("emailRegister.密码包含特殊符号") }}
-        </view>
-        <view
-          class="password-input-warning-text"
-          :class="{
-            ok: password.checkPasswordAll() || password.content === '',
-            green: password.length,
-          }"
-        >
-          · {{ $t("emailRegister.密码长度必须在6-20之间") }}
-        </view>
-      </view>
-    </view>
-    <view class="password-confirm">
-      <view class="password-confirm-input-title">
-        <view class="password-confirm-input-title-text">
-          {{ $t("emailRegister.确认密码输入框标题") }}*
-        </view>
-      </view>
-      <view class="password-input">
-        <u-input
-          v-model="password.again"
-          :placeholder="t('emailRegister.确认密码输入框占位符')"
-          @blur="password.checkPasswordAgain()"
-          type="password"
-        />
-      </view>
-      <view class="password-confirm-input-warning">
-        <view
-          class="password-input-warning-text"
-          v-if="!password.checkPasswordAgain() && password.again !== ''"
-        >
-          {{ $t("emailRegister.确认密码输入框警告") }}
-        </view>
-      </view>
-    </view>
-    <view class="code">
-      <view class="code-input-title">
-        <view class="code-input-title-text">
-          {{ $t("emailRegister.验证码输入框标题") }}*
-        </view>
-      </view>
-      <view class="code-input">
-        <u-input
-          v-model="code.content"
-          :placeholder="t('emailRegister.验证码输入框占位符')"
-        >
-          <template v-slot:suffix>
-            <u-code
-              :seconds="60"
-              :start-text="t('emailRegister.获取验证码')"
-              :changeText="t('emailRegister.等待重新获取验证码')"
-              @end="end"
-              @start="start"
-              @change="codeChange"
-              keep-running
-              ref="Code"
+        <view class="email">
+          <view class="email-input-title">
+            <view class="email-input-title-text">
+              {{ $t("emailRegister.邮箱输入框标题") }}*
+            </view>
+          </view>
+          <view class="email-input">
+            <u-input
+              v-model="email.content"
+              :placeholder="t('emailRegister.邮箱输入框占位符')"
+              @blur="checkEmail(email)"
             />
-            <view class="tips" @tap="getCode">{{ $t(tips) }}</view>
-          </template>
-        </u-input>
-      </view>
-      <view class="code-input-warning">
-        <view class="code-input-warning-text" v-if="code.valid === false">
-          {{ $t(code.warning) }}
+          </view>
+          <view class="email-input-warning">
+            <view class="email-input-warning-text" v-if="email.valid === false">
+              {{ $t(email.warning) }}
+            </view>
+          </view>
+        </view>
+        <view class="username">
+          <view class="username-input-title">
+            <view class="username-input-title-text">
+              {{ $t("emailRegister.用户名输入框标题") }}*
+            </view>
+          </view>
+          <view class="username-input">
+            <u-input
+              v-model="username.content"
+              :placeholder="t('emailRegister.用户名输入框占位符')"
+              @blur="checkUsername(username)"
+            />
+          </view>
+          <view class="username-input-warning">
+            <view
+              class="username-input-warning-text"
+              v-if="username.valid === false"
+            >
+              {{ $t(username.warning) }}
+            </view>
+          </view>
+        </view>
+        <view class="password">
+          <view class="password-input-title">
+            <view class="password-input-title-text">
+              {{ $t("emailRegister.密码输入框标题") }}*
+            </view>
+          </view>
+          <view class="password-input">
+            <u-input
+              v-model="password.content"
+              :placeholder="t('emailRegister.密码输入框占位符')"
+              @blur="password.checkPasswordAll()"
+              type="password"
+            />
+          </view>
+          <view class="password-input-warning">
+            <view
+              class="password-input-warning-text"
+              :class="{
+                ok: password.checkPasswordAll() || password.content === '',
+                green: password.letter,
+              }"
+            >
+              · {{ $t("emailRegister.密码包含字母") }}
+            </view>
+            <view
+              class="password-input-warning-text"
+              :class="{
+                ok: password.checkPasswordAll() || password.content === '',
+                green: password.number,
+              }"
+            >
+              · {{ $t("emailRegister.密码包含数字") }}
+            </view>
+            <view
+              class="password-input-warning-text"
+              :class="{
+                ok: password.checkPasswordAll() || password.content === '',
+                green: password.symbol,
+              }"
+            >
+              · {{ $t("emailRegister.密码包含特殊符号") }}
+            </view>
+            <view
+              class="password-input-warning-text"
+              :class="{
+                ok: password.checkPasswordAll() || password.content === '',
+                green: password.length,
+              }"
+            >
+              · {{ $t("emailRegister.密码长度必须在6-20之间") }}
+            </view>
+          </view>
+        </view>
+        <view class="password-confirm">
+          <view class="password-confirm-input-title">
+            <view class="password-confirm-input-title-text">
+              {{ $t("emailRegister.确认密码输入框标题") }}*
+            </view>
+          </view>
+          <view class="password-input">
+            <u-input
+              v-model="password.again"
+              :placeholder="t('emailRegister.确认密码输入框占位符')"
+              @blur="password.checkPasswordAgain()"
+              type="password"
+            />
+          </view>
+          <view class="password-confirm-input-warning">
+            <view
+              class="password-input-warning-text"
+              v-if="!password.checkPasswordAgain() && password.again !== ''"
+            >
+              {{ $t("emailRegister.确认密码输入框警告") }}
+            </view>
+          </view>
+        </view>
+        <view class="code">
+          <view class="code-input-title">
+            <view class="code-input-title-text">
+              {{ $t("emailRegister.验证码输入框标题") }}*
+            </view>
+          </view>
+          <view class="code-input">
+            <u-input
+              v-model="code.content"
+              :placeholder="t('emailRegister.验证码输入框占位符')"
+            >
+              <template v-slot:suffix>
+                <u-code
+                  :seconds="60"
+                  :start-text="t('emailRegister.获取验证码')"
+                  :changeText="t('emailRegister.等待重新获取验证码')"
+                  @end="end"
+                  @start="start"
+                  @change="codeChange"
+                  keep-running
+                  ref="Code"
+                />
+                <view class="tips" @tap="getCode">{{ $t(tips) }}</view>
+              </template>
+            </u-input>
+          </view>
+          <view class="code-input-warning">
+            <view class="code-input-warning-text" v-if="code.valid === false">
+              {{ $t(code.warning) }}
+            </view>
+          </view>
+        </view>
+        <view class="school-select-input">
+          <u-form>
+            <u-form-item
+              :label="t('emailRegister.学校选择框标题') + '*'"
+              @click="hideKeyboard"
+            >
+              <u-input
+                v-model="school"
+                disabled
+                disabledColor="rgb(0,0,0,0)"
+                :placeholder="t('emailRegister.学校选择框占位符')"
+                shape="circle"
+              />
+            </u-form-item>
+          </u-form>
+          <u-picker
+            :show="showSchoolPicker"
+            :columns="schools"
+            closeOnClickOverlay
+            @cancel="cancelPick"
+            @confirm="confirmPick"
+            @close="closePick"
+            :loading="pickerLoading"
+            :title="t('emailRegister.学校选择')"
+          />
+        </view>
+        <view class="next">
+          <view class="next-step" @tap="commitRegister">
+            <view class="next-step-text">{{ $t("emailRegister.下一步") }}</view>
+          </view>
         </view>
       </view>
-    </view>
-    <view class="school-select-input">
-      <u-form>
-        <u-form-item
-          :label="t('emailRegister.学校选择框标题') + '*'"
-          @click="hideKeyboard"
-        >
-          <u-input
-            v-model="school"
-            disabled
-            disabledColor="rgb(0,0,0,0)"
-            :placeholder="t('emailRegister.学校选择框占位符')"
-            shape="circle"
-          />
-        </u-form-item>
-      </u-form>
-      <u-picker
-        :show="showSchoolPicker"
-        :columns="schools"
-        closeOnClickOverlay
-        @cancel="cancelPick"
-        @confirm="confirmPick"
-        @close="closePick"
-        :loading="pickerLoading"
-        :title="t('emailRegister.学校选择')"
-      />
-    </view>
-    <view class="next">
-      <view class="next-step" @tap="commitRegister">
-        <view class="next-step-text">{{ $t("emailRegister.下一步") }}</view>
-      </view>
-    </view>
+    </scroll-view>
   </view>
 </template>
 
@@ -289,15 +299,33 @@ const getCode = () => {
       uni.showLoading({
         title: t("emailRegister.正在获取验证码"),
       });
-      setTimeout(() => {
-        uni.hideLoading();
-        uni.showToast({
-          title: t("emailRegister.验证码已发送"),
-          icon: "none",
-          duration: 2000,
+      Api.sendEmailVerificationCode(
+        email.value.content,
+        uni.getStorageSync("lang")
+      )
+        .then((res: any) => {
+          if (res.data.success) {
+            setTimeout(() => {
+              uni.hideLoading();
+              uni.showToast({
+                title: t("emailRegister.验证码已发送"),
+                icon: "none",
+                duration: 2000,
+              });
+            }, 2000);
+            Code.value.start();
+          } else {
+            uni.hideLoading();
+            ErrorHandler(res);
+          }
+        })
+        .catch((err: any) => {
+          uni.showToast({
+            title: t(err.message),
+            icon: "none",
+            duration: 2000,
+          });
         });
-      }, 2000);
-      Code.value.start();
     }
   } else {
     email.value.valid = false;
@@ -314,6 +342,24 @@ const commitRegister = () => {
     email.value.valid &&
     username.value.valid
   ) {
+    Api.codeVertify(email.value.content, code.value.content, "email")
+      .then((res: any) => {
+        if (res.data.success) {
+          code.value.valid = true;
+        } else {
+          code.value.valid = false;
+          code.value.warning = t("emailRegister.验证码错误");
+          ErrorHandler(res);
+          return;
+        }
+      })
+      .catch((err: any) => {
+        uni.showToast({
+          title: t(err.message),
+          icon: "none",
+          duration: 2000,
+        });
+      });
     Api.emailRegister(
       email.value.content,
       username.value.content,
@@ -376,11 +422,16 @@ const commitRegister = () => {
 </script>
 
 <style lang="scss" scoped>
+.body {
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+}
+
 .login-container {
   display: flex;
   flex-direction: column;
   justify-content: center;
-  height: 100%;
   padding: 0 2rem;
 }
 
