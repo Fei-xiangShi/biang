@@ -45,8 +45,6 @@ const apiUrl = {
   sendEmailVerificationCode: `${baseUrl}/sendEmailVerificationCode`,
   // 验证通用验证码
   codeVertify: `${baseUrl}/codeVertify`,
-  // 点赞评论
-  like: `${baseUrl}/like`,
 };
 
 export default apiUrl;

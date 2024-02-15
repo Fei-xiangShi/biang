@@ -56,15 +56,6 @@
           <view class="time">
             {{ new Date(reply.created_at).toLocaleDateString() }}
           </view>
-          <view class="like">
-            <u-icon
-              :name="reply.is_liked ? 'thumb-up-fill' : 'thumb-up'"
-              size="20px"
-              color="#999"
-              @tap="likeReply()"
-            />
-            <view class="like-count">{{ reply.like_count }}</view>
-          </view>
         </view>
         <view
           class="open-reply-box"
