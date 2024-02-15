@@ -39,20 +39,17 @@
       </view>
       <view class="content">
         <view class="reply-content">
-          <view class="raw-text">
-            <span class="alt" v-if="replyType !== 'root'">
-              @ {{ reply.parentReplyName }}:
-            </span>
-            {{ reply?.content[language] }}
-          </view>
-          <!-- <uaMarkdown :source="reply?.content[language]" /> -->
+          <span class="alt" v-if="replyType !== 'root'">
+            @ {{ reply.parentReplyName }}:
+          </span>
+          <uaMarkdown :source="reply?.content[language]" />
         </view>
       </view>
       <view class="tab">
         <view class="left">
-          <view class="floor" v-if="language == 'zh-Hans'"
-            >{{ index + 1 }}楼</view
-          >
+          <view class="floor" v-if="language == 'zh-Hans'">
+            {{ index + 1 }}楼
+          </view>
           <view class="time">
             {{ new Date(reply.created_at).toLocaleDateString() }}
           </view>
@@ -62,7 +59,7 @@
               v-if="reply.is_liked"
               @tap="dislikeComment(reply)"
             >
-              <u-icon name="thumb-up" size="20px" color="#7a9adc"/>
+              <u-icon name="thumb-up" size="20px" color="#7a9adc" />
               <view>{{ reply.likes }}</view>
             </view>
             <view class="unliked" v-else @tap="likeComment(reply)">
@@ -98,7 +95,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from "vue";
-// import uaMarkdown from "@/components/ua-markdown/ua-markdown.vue";
+import uaMarkdown from "@/components/ua-markdown/ua-markdown.vue";
 import Comment from "@/components/comment.vue";
 import { ErrorHandler } from "@/utils/requestErrors";
 import Api from "@/api/api";
@@ -142,12 +139,13 @@ const likeComment = (reply: any) => {
   Api.likeComment(reply.id, uni.getStorageSync("aueduSession"))
     .then((res: any) => {
       if (res.data.success) {
+      } else {
+        ErrorHandler(res);
       }
     })
     .catch((err: any) => {
       reply.is_liked = false;
       reply.likes--;
-      ErrorHandler(err);
     })
     .finally(() => {});
 };
@@ -158,12 +156,13 @@ const dislikeComment = (reply: any) => {
   Api.dislikeComment(reply.id, uni.getStorageSync("aueduSession"))
     .then((res: any) => {
       if (res.data.success) {
+      } else {
+        ErrorHandler(res);
       }
     })
     .catch((err: any) => {
       reply.is_liked = true;
       reply.likes++;
-      ErrorHandler(err);
     })
     .finally(() => {});
 };

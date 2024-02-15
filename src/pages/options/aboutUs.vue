@@ -129,9 +129,9 @@ const checkUpdate = () => {
     margin-bottom: 20px;
   }
   .logo {
-    width: 100px;
-    height: 100px;
-    background: url("https://ts3.cn.mm.bing.net/th?id=OIP-C.eRYzlCa3_4jy3sI1QTuY7gAAAA&w=212&h=141&c=8&rs=1&qlt=90&o=6&pid=3.1&rm=2");
+    width: 300px;
+    height: 300px;
+    background: url("https://auclass.3li.top/static/logo.png");
     background-size: cover;
     background-position: center;
     border-radius: 10px;

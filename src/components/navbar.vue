@@ -1,9 +1,12 @@
 <template>
   <view class="navBarBox">
     <!-- 状态栏占位 -->
-    <view class="statusBar" :style="{ paddingTop: statusBarHeight + 'px' }" />
+    <view
+      class="statusBar"
+      :style="{ paddingTop: H5gap + (statusBarHeight || 0) + 'px' }"
+    />
     <!-- 真正的导航栏内容 -->
-    <view class="navBar">
+    <view class="navBar" :style="{ marginBottom: H5gap / 2 + 'px' }">
       <slot />
       <view class="return-button" @tap="goBack" v-if="!isRootPage()">
         <u-icon name="arrow-left" :size="20" :color="returnButtonIconColor" />
@@ -43,6 +46,11 @@ const schoolname = ref(uni.getStorageSync("school")) || t("悉尼大学");
 const showChangeSchool = ref(false);
 const language: "zh-Hans" | "en" = uni.getStorageSync("lang");
 const schools = [Object.keys(universities["zh-Hans"])];
+let H5gap = 0;
+
+// #ifdef H5
+H5gap = 10;
+// #endif
 
 schools.forEach((element) => {
   element.forEach((item, index) => {
@@ -107,7 +115,7 @@ const closeChangeSchool = () => {
   position: relative;
   width: 100%;
   height: 0;
-  background: v-bind('props.backgroundColor');
+  background: v-bind("props.backgroundColor");
 }
 
 .navBarBox {
@@ -118,7 +126,7 @@ const closeChangeSchool = () => {
   .navBar {
     display: flex;
     align-items: center;
-    background-color: v-bind('props.backgroundColor');
+    background-color: v-bind("props.backgroundColor");
     color: #fff;
     height: 44px;
     width: -webkit-fill-available;

@@ -19,9 +19,9 @@
   <u-notify ref="Notify" />
   <view class="container">
     <navbar :showChangeSchoolButton="true" />
-      <!-- <view class="swiper">
+      <view class="swiper">
         <u-swiper
-          :list="swiperList"
+          :list="swipeCard"
           keyName="image"
           showTitle
           :autoplay="true"
@@ -33,7 +33,7 @@
           radius="5"
           bgColor="rgba(0,0,0,0)"
         />
-      </view> -->
+      </view>
       <view class="search-class white-blur">
         <view class="search-title">
           {{ $t("index.课程查找标题") }}
@@ -396,12 +396,14 @@ const searchClass = () => {
     notify.message = t("index.课程代码为空提示");
     notify.type = "warning";
     Notify.value.show(notify);
+    naving.value = false;
     return;
   }
   if (unitCode.value == "" || unitCode.value == null) {
     notify.message = t("index.单元号为空提示");
     notify.type = "warning";
     Notify.value.show(notify);
+    naving.value = false;
     return;
   }
   uni.navigateTo({
@@ -552,18 +554,19 @@ const hideKeyboard = () => {
     flex-direction: row;
     justify-content: space-between;
     margin: 0;
+    width: 100%;
     .course_code {
+      width: 40%;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      width: 40%;
       border-radius: var(--borderRadius-medium, 0.375rem);
     }
     .unit_code {
+      width: 55%;
       display: flex;
       flex-direction: column;
       justify-content: center;
-      width: 40%;
       border-radius: var(--borderRadius-medium, 0.375rem);
     }
   }

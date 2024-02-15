@@ -2,7 +2,7 @@
   <view class="body">
     <navbar :title="t('wxLogin.一键登录')" />
     <view class="wx-login-container">
-      <img src="../../static/icons/logo.png" class="icon" />
+      <img src="https://auclass.3li.top/static/logo.png" class="icon" />
       <view class="wx-login-title">{{ $t("wxLogin.微信登录标题") }}</view>
       <view class="wx-login-content">{{ $t("wxLogin.微信登录提示") }}</view>
       <view class="wx-login-button" @tap="login">
@@ -115,16 +115,16 @@ const emit = defineEmits(["toggleLogin"]);
   align-items: center;
   padding: 0 2rem;
   .icon {
-    height: 70px;
-    width: 70px;
+    height: 200px;
+    width: 200px;
     border-radius: 50%;
-    margin-top: 5rem;
+    margin-top: 2rem;
     background-size: contain;
   }
   .wx-login-title {
     font-size: 24px;
     font-weight: bold;
-    margin-top: 40px;
+    margin-top: 10px;
   }
   .wx-login-content {
     font-size: 14px;

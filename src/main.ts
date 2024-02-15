@@ -17,6 +17,7 @@ let i18nConfig = {
   locale: uni.getLocale(),
   globalInjection: true,
   messages: Messages,
+  legacy: false,
 };
 
 const i18n = createI18n(i18nConfig);

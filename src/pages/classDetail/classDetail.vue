@@ -4,6 +4,7 @@
       :scroll-y="true"
       :scroll-with-animation="true"
       style="height: 100%"
+      @scrolltolower="getReplyList"
     >
       <navbar />
       <view class="class-detail" v-if="!error">
@@ -336,7 +337,7 @@ const commitReply = () => {
   }
   reply.value.content[
     uni.getStorageSync("lang") as keyof typeof reply.value.content
-  ] = replyContent.value;
+  ] = replyContent.value.replace("↵", "\n");
   reply.value.course = props.courseCode;
   reply.value.lang = uni.getStorageSync("lang");
   Api.postComment(uni.getStorageSync("aueduSession"), reply.value)

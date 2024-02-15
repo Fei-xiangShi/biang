@@ -7,7 +7,7 @@
     >
       <navbar :title="t('emailLoginPassword.邮箱登录')" />
       <view class="email-login-container">
-        <img src="../../static/icons/logo.png" class="icon" />
+        <img src="https://auclass.3li.top/static/logo.png" class="icon" />
         <view class="email-login-title">
           {{ $t("emailLoginPassword.邮箱登录") }}
         </view>
@@ -116,16 +116,16 @@ const props = defineProps({
   align-items: center;
   padding: 0 2rem;
   .icon {
-    height: 70px;
-    width: 70px;
+    height: 200px;
+    width: 200px;
     border-radius: 50%;
-    margin-top: 5rem;
+    margin-top: 2rem;
     background-size: contain;
   }
   .email-login-title {
     font-size: 24px;
     font-weight: bold;
-    margin-top: 40px;
+    margin-top: 10px;
   }
   .email-login-input-container {
     width: 100%;

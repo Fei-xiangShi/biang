@@ -1,7 +1,7 @@
 <template>
   <navbar :title="t('emailLogin.邮箱登录')" />
   <view class="email-login-container">
-    <img src="../../static/icons/logo.png" class="icon" />
+    <img src="https://auclass.3li.top/static/logo.png" class="icon" />
     <view class="email-login-title">{{ $t("emailLogin.邮箱登录") }}</view>
     <view class="email-login-input-container">
       <view class="email-login-input-title">
@@ -40,7 +40,7 @@
         {{ $t("emailLogin.没有账号？去注册") }}
       </view>
     </view>
-    <view class="toggle-to-wx" @tap="emit('toggleLogin', wxLogin)">
+    <view class="toggle-to-wx" @tap="emit('toggleLogin', wxLogin)" v-if="isWX">
       <view class="toggle-to-wx-text">
         {{ $t("emailLogin.使用微信登录") }}
       </view>
@@ -75,6 +75,11 @@ const { t } = useI18n();
 const wxLogin = loginMethods.WX;
 const email = ref<InputContent>(new InputContent());
 const loggingin = ref(false);
+const isWX = ref(false);
+
+// #ifdef MP-WEIXIN
+isWX.value = true;
+// #endif
 
 const login = () => {
   checkEmail(email.value);
@@ -120,16 +125,16 @@ const emit = defineEmits(["loginSuccess", "loginFail", "toggleLogin"]);
   align-items: center;
   padding: 0 2rem;
   .icon {
-    height: 70px;
-    width: 70px;
+    height: 200px;
+    width: 200px;
     border-radius: 50%;
-    margin-top: 5rem;
+    margin-top: 2rem;
     background-size: contain;
   }
   .email-login-title {
     font-size: 24px;
     font-weight: bold;
-    margin-top: 40px;
+    margin-top: 10px;
   }
   .email-login-input-container {
     width: 100%;

@@ -17,8 +17,15 @@ import loginMethods from "@/models/loginMethods";
 
 const wxLogin = loginMethods.WX;
 const emailLogin = loginMethods.Email;
+const login = ref<loginMethods>()
 
-const login = ref(wxLogin);
+// #ifdef H5
+login.value = emailLogin;
+// #endif
+
+// #ifdef MP-WEIXIN
+login.value = wxLogin;
+// #endif
 
 const toggleLogin = (method: loginMethods) => {
   login.value = method;
