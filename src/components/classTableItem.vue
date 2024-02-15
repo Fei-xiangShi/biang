@@ -70,7 +70,9 @@
     >
       <view class="date-list">
         <view class="month-and-monthname">
-          <view class="month">{{ $t(`classTableItem.${calcMonthNum()}月`) }}</view>
+          <view class="month">{{
+            $t(`classTableItem.${calcMonthNum()}月`)
+          }}</view>
         </view>
         <view
           class="weekday-and-date"
@@ -88,8 +90,9 @@
             class="time-table-item"
             v-for="(item, index) in timeTable"
             :key="index"
-            >{{ item }}</view
           >
+            {{ item }}
+          </view>
         </view>
         <view class="courses">
           <view
@@ -130,13 +133,17 @@
         :closeOnClickOverlay="true"
       >
         <view class="modal-header">
-          <view class="modal-title">{{ $t("classTableItem.课程详情标题") }}</view>
+          <view class="modal-title">
+            {{ $t("classTableItem.课程详情标题") }}
+          </view>
           <view class="class-name">{{ showCourse.summary[language] }}</view>
         </view>
         <view class="block-line" />
         <view class="modal-body">
           <view class="course-id">
-            <view class="course-id-title">{{ $t("classTableItem.课程号") }}</view>
+            <view class="course-id-title">
+              {{ $t("classTableItem.课程号") }}
+            </view>
             <view class="course-id-content">
               {{ showCourse.description.slice(0, 8) }}
             </view>
@@ -419,7 +426,9 @@ const touchEnd = (e: any) => {
 
 <style scoped lang="scss">
 .container {
+  position: relative;
   height: 100vh;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   background: #a6eeee6c;

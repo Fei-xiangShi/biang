@@ -1,208 +1,231 @@
 <template>
-  <navbar />
-  <view class="class-detail">
-    <view class="class-name">
-      <view class="class-name-title">{{ details["Unit name"] }}</view>
-      <view class="class-name-content">{{ details["Attendance mode"] }}</view>
-    </view>
-    <view class="read-more-details">
-      <textfolder :load="loadFolder">
-        <view class="class-details">
-          <view class="contactDetails-coordinator">
-            <view class="contactDetails-coordinator-content">
-              <span class="contactDetails-coordinator-title">
-                {{ $t("classDetail.contactDetails-coordinator") }}:
-              </span>
-              {{ details["ContactDetails"]["Coordinator"] }}
-              {{ details["ContactDetails"]["Lecturer(s)"] }}
-              {{ "\n" + details["ContactDetails"]["Tutor(s)"] }}
-            </view>
-          </view>
-          <view class="course-code">
-            <view class="course-code-content">
-              <span class="course-code-title">
-                {{ $t("classDetail.courseCode") }}:
-              </span>
-              {{ details["CourseCode"] }}
-            </view>
-          </view>
-          <view class="unit-name">
-            <view class="unit-name-content">
-              <span class="unit-name-title">
-                {{ $t("classDetail.unitName") }}:
-              </span>
-              {{ details["Unit name"] }}
-            </view>
-          </view>
-          <view class="unit-code">
-            <view class="unit-code-content">
-              <span class="unit-code-title">
-                {{ $t("classDetail.unitCode") }}:
-              </span>
-              {{ details["UnitCode"] }}
-            </view>
-          </view>
-          <view class="session">
-            <view class="session-content">
-              <span class="session-title">
-                {{ $t("classDetail.session") }}:
-              </span>
-              {{ details["Session"] }}
-            </view>
-          </view>
-          <view class="academic-unit">
-            <view class="academic-unit-content">
-              <span class="academic-unit-title">
-                {{ $t("classDetail.academicUnit") }}:
-              </span>
-              {{ details["Academic unit"] }}
-            </view>
-          </view>
-          <view class="overview">
-            <view class="overview-content">
-              <span class="overview-title">
-                {{ $t("classDetail.overview") }}:
-              </span>
-              {{ details["Overview"] }}
-            </view>
-          </view>
-          <view
-            class="assessment-summary-notes"
-            v-if="
-              details['AssessmentSummary'] &&
-              details['AssessmentSummary']['Notes']
-            "
-          >
-            <view class="assessment-summary-notes-title">
-              {{ $t("classDetail.AssessmentSummaryNotes") }}:
-            </view>
-            <view
-              class="assessment-summary-notes-content"
-              v-for="(notes, index) in details['AssessmentSummary']['Notes']"
-              :key="index"
-            >
-              <view class="assessment-summary-note">
-                {{ notes }}
-              </view>
-            </view>
-          </view>
-          <view class="assessment-details">
-            <view class="assessment-details-title">
-              {{ $t("classDetail.AssessmentDetails") }}:
-            </view>
-            <view
-              class="assessment-details-content"
-              v-for="(assessment, index) in details['AssessmentDetails']"
-              :key="index"
-            >
-              <view class="assessment-detail-type">
-                <view class="assessment-detail-type-title">
-                  {{ $t("classDetail.Assessment Type") }}
-                </view>
-                <view class="assessment-detail-type-content">
-                  {{ assessment["Type"] }}
-                </view>
-              </view>
-              <view
-                class="assessment-detail-description"
-                v-if="assessment['Description']"
-              >
-                <view class="assessment-detail-description-title">
-                  {{ $t("classDetail.Assessment Description") }}
-                </view>
-                <view class="assessment-detail-description-content">
-                  {{ assessment["Description"] }}
-                </view>
-              </view>
-              <view class="assessment-detail-weight">
-                <view class="assessment-detail-weight-title">
-                  {{ $t("classDetail.Assessment Weight") }}
-                </view>
-                <view class="assessment-detail-weight-content">
-                  {{ assessment["Weight"] }}
-                </view>
-              </view>
-              <view class="assessment-detail-due" v-if="assessment['Due']">
-                <view class="assessment-detail-due-title">
-                  {{ $t("classDetail.Assessment Due") }}
-                </view>
-                <view class="assessment-detail-due-content">
-                  {{ assessment["Due"] }}
-                </view>
-              </view>
-              <view
-                class="assessment-detail-group-or-individual"
-                v-if="assessment['GroupOrIndividual']"
-              >
-                <view class="assessment-detail-group-or-individual-title">
-                  {{ $t("classDetail.GroupOrIndividual") }}
-                </view>
-                <view class="assessment-detail-group-or-individual-content">
-                  {{ assessment["GroupOrIndividual"] }}
-                </view>
-              </view>
-              <view
-                class="assessment-detail-length"
-                v-if="assessment['Length']"
-              >
-                <view class="assessment-detail-length-title">
-                  {{ $t("classDetail.Assessment Length") }}
-                </view>
-                <view class="assessment-detail-length-content">
-                  {{ assessment["Length"] }}
-                </view>
-              </view>
-            </view>
+  <view class="body">
+    <scroll-view
+      :scroll-y="true"
+      :scroll-with-animation="true"
+      style="height: 100%"
+    >
+      <navbar />
+      <view class="class-detail" v-if="!error">
+        <view class="class-name">
+          <view class="class-name-title">{{ details["Unit name"] }}</view>
+          <view class="class-name-content">
+            {{ details["Attendance mode"] }}
           </view>
         </view>
-      </textfolder>
-    </view>
-  </view>
+        <view class="read-more-details">
+          <textfolder :load="loadFolder">
+            <view class="class-details">
+              <view class="contactDetails-coordinator">
+                <view
+                  class="contactDetails-coordinator-content"
+                  v-if="details['ContactDetails']"
+                >
+                  <span class="contactDetails-coordinator-title">
+                    {{ $t("classDetail.contactDetails-coordinator") }}:
+                  </span>
+                  {{ details["ContactDetails"]["Coordinator"] }}
+                  {{ details["ContactDetails"]["Lecturer(s)"] }}
+                  {{ "\n" + details["ContactDetails"]["Tutor(s)"] }}
+                </view>
+              </view>
+              <view class="course-code">
+                <view class="course-code-content">
+                  <span class="course-code-title">
+                    {{ $t("classDetail.courseCode") }}:
+                  </span>
+                  {{ details["CourseCode"] }}
+                </view>
+              </view>
+              <view class="unit-name">
+                <view class="unit-name-content">
+                  <span class="unit-name-title">
+                    {{ $t("classDetail.unitName") }}:
+                  </span>
+                  {{ details["Unit name"] }}
+                </view>
+              </view>
+              <view class="unit-code">
+                <view class="unit-code-content">
+                  <span class="unit-code-title">
+                    {{ $t("classDetail.unitCode") }}:
+                  </span>
+                  {{ details["UnitCode"] }}
+                </view>
+              </view>
+              <view class="session">
+                <view class="session-content">
+                  <span class="session-title">
+                    {{ $t("classDetail.session") }}:
+                  </span>
+                  {{ details["Session"] }}
+                </view>
+              </view>
+              <view class="academic-unit">
+                <view class="academic-unit-content">
+                  <span class="academic-unit-title">
+                    {{ $t("classDetail.academicUnit") }}:
+                  </span>
+                  {{ details["Academic unit"] }}
+                </view>
+              </view>
+              <view class="overview">
+                <view class="overview-content">
+                  <span class="overview-title">
+                    {{ $t("classDetail.overview") }}:
+                  </span>
+                  {{ details["Overview"] }}
+                </view>
+              </view>
+              <view
+                class="assessment-summary-notes"
+                v-if="
+                  details['AssessmentSummary'] &&
+                  details['AssessmentSummary']['Notes']
+                "
+              >
+                <view class="assessment-summary-notes-title">
+                  {{ $t("classDetail.AssessmentSummaryNotes") }}:
+                </view>
+                <view
+                  class="assessment-summary-notes-content"
+                  v-for="(notes, index) in details['AssessmentSummary'][
+                    'Notes'
+                  ]"
+                  :key="index"
+                >
+                  <view class="assessment-summary-note">
+                    {{ notes }}
+                  </view>
+                </view>
+              </view>
+              <view class="assessment-details">
+                <view class="assessment-details-title">
+                  {{ $t("classDetail.AssessmentDetails") }}:
+                </view>
+                <view
+                  class="assessment-details-content"
+                  v-for="(assessment, index) in details['AssessmentDetails']"
+                  :key="index"
+                >
+                  <view class="assessment-detail-type">
+                    <view class="assessment-detail-type-title">
+                      {{ $t("classDetail.Assessment Type") }}
+                    </view>
+                    <view class="assessment-detail-type-content">
+                      {{ assessment["Type"] }}
+                    </view>
+                  </view>
+                  <view
+                    class="assessment-detail-description"
+                    v-if="assessment['Description']"
+                  >
+                    <view class="assessment-detail-description-title">
+                      {{ $t("classDetail.Assessment Description") }}
+                    </view>
+                    <view class="assessment-detail-description-content">
+                      {{ assessment["Description"] }}
+                    </view>
+                  </view>
+                  <view class="assessment-detail-weight">
+                    <view class="assessment-detail-weight-title">
+                      {{ $t("classDetail.Assessment Weight") }}
+                    </view>
+                    <view class="assessment-detail-weight-content">
+                      {{ assessment["Weight"] }}
+                    </view>
+                  </view>
+                  <view class="assessment-detail-due" v-if="assessment['Due']">
+                    <view class="assessment-detail-due-title">
+                      {{ $t("classDetail.Assessment Due") }}
+                    </view>
+                    <view class="assessment-detail-due-content">
+                      {{ assessment["Due"] }}
+                    </view>
+                  </view>
+                  <view
+                    class="assessment-detail-group-or-individual"
+                    v-if="assessment['GroupOrIndividual']"
+                  >
+                    <view class="assessment-detail-group-or-individual-title">
+                      {{ $t("classDetail.GroupOrIndividual") }}
+                    </view>
+                    <view class="assessment-detail-group-or-individual-content">
+                      {{ assessment["GroupOrIndividual"] }}
+                    </view>
+                  </view>
+                  <view
+                    class="assessment-detail-length"
+                    v-if="assessment['Length']"
+                  >
+                    <view class="assessment-detail-length-title">
+                      {{ $t("classDetail.Assessment Length") }}
+                    </view>
+                    <view class="assessment-detail-length-content">
+                      {{ assessment["Length"] }}
+                    </view>
+                  </view>
+                </view>
+              </view>
+            </view>
+          </textfolder>
+        </view>
+      </view>
+      <view v-else>
+        <view class="error">
+          <u-icon name="error" size="20" color="#979191" />
+          <view class="error-text">
+            {{ $t("classDetail.课程信息获取失败") }}
+          </view>
+        </view>
+      </view>
 
-  <view class="class-discussion">
-    <Comment
-      v-for="(reply, index) in replyList.results"
-      :key="reply.id"
-      :reply="reply"
-      :index="index"
-      replyType="root"
-      @onReply="inputReply"
-    />
-  </view>
-  <view class="comment">
-    <view class="reply-notify-box">
-        <view
-          class="reply-notify"
-          :class="{ 'reply-notify-inactive': reply.parent == null }"
-        >
-          <view class="reply-notify-text">
-            {{ placeholder }}
-          </view>
-          <view class="reply-notify-cancel" @tap="cancelReply">
-            <view class="reply-notify-cancel-icon">
-              <u-icon name="close" size="20" color="#979191" />
+      <view class="class-discussion">
+        <Comment
+          v-for="(reply, index) in replyList.results"
+          :key="reply.id"
+          :reply="reply"
+          :index="index"
+          replyType="root"
+          @onReply="inputReply"
+        />
+      </view>
+      <view class="comment" v-if="!error">
+        <view class="reply-notify-box">
+          <view
+            class="reply-notify"
+            :class="{ 'reply-notify-inactive': reply.parent == null }"
+          >
+            <view class="reply-notify-text">
+              {{ placeholder }}
+            </view>
+            <view class="reply-notify-cancel" @tap="cancelReply">
+              <view class="reply-notify-cancel-icon">
+                <u-icon name="close" size="20" color="#979191" />
+              </view>
             </view>
           </view>
         </view>
-    </view>
-    <view class="reply-form">
-      <form>
-        <u-textarea
-          :placeholder="placeholder"
-          v-model="replyContent"
-          count
-          autoHeight
-          maxlength="1000"
-          :focus="inputingReply"
-          :showConfirmBar="false"
-          :disableDefaultPadding="true"
-          confirmType="return"
-        />
-        <view class="submit" @tap="commitReply">
-          {{ $t("classDetail.提交") }}
+        <view class="reply-form">
+          <form>
+            <u-textarea
+              :placeholder="placeholder"
+              v-model="replyContent"
+              count
+              autoHeight
+              maxlength="1000"
+              :focus="inputingReply"
+              :showConfirmBar="false"
+              :disableDefaultPadding="true"
+              confirmType="return"
+            />
+            <view class="submit" @tap="commitReply">
+              {{ $t("classDetail.提交") }}
+            </view>
+          </form>
         </view>
-      </form>
-    </view>
+      </view>
+    </scroll-view>
   </view>
 </template>
 
@@ -257,6 +280,7 @@ const getReplyList = () => {
 
 const inputReply = (parentReplyId: number, parentReplyName: string) => {
   inputingReply.value = true;
+  console.log(parentReplyId);
   reply.value.parent = parentReplyId;
   placeholder.value = t("classDetail.回复给") + parentReplyName + ": ";
   hideReplyNotify.value = "visible";
@@ -268,10 +292,6 @@ const cancelReply = () => {
   reply.value.parent = null;
   placeholder.value = t("classDetail.请输入评论内容");
   notifyTransform.value = "translate(110%, 0)";
-  setTimeout(() => {
-    hideReplyNotify.value = "hidden";
-    notifyTransform.value = "translateY(0)";
-  }, 1000);
 };
 
 const concatenatingReplyList = (response: any) => {
@@ -347,6 +367,7 @@ const commitReply = () => {
     });
 };
 
+const error = ref(false);
 onMounted(() => {
   Api.getCourseDetail(
     props.courseCode,
@@ -358,9 +379,13 @@ onMounted(() => {
       console.log(res.data);
       details.value = res.data;
       loadFolder.value = true;
+      if (res.data["error"] != undefined) {
+        ErrorHandler(res);
+      }
     })
     .catch((err) => {
       console.log(err);
+      error.value = true;
     });
   getReplyList();
 });
@@ -371,9 +396,18 @@ onReachBottom(() => {
 </script>
 
 <style lang="scss" scoped>
+.body {
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+}
+
 .class-detail {
+  width: -webkit-fill-available;
+  position: relative;
   margin: 1rem;
   box-shadow: 0 8px 10px -5px rgba(0, 0, 0, 0.1);
+  overflow: auto;
   .class-name {
     display: flex;
     flex-direction: column;
@@ -485,6 +519,21 @@ onReachBottom(() => {
   }
 }
 
+.error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+  .error-text {
+    font-size: xx-large;
+    font-weight: bold;
+    margin-top: 1rem;
+    color: #000000;
+  }
+}
+
 .comment {
   z-index: 2333;
   display: flex;
@@ -492,7 +541,8 @@ onReachBottom(() => {
   flex-direction: column;
   position: sticky;
   bottom: 0;
-  margin: 0 1rem 2rem 1rem;
+  margin: 2rem 1rem;
+  height: auto;
   background: white;
   .reply-notify-box {
     width: -webkit-fill-available;
@@ -524,9 +574,9 @@ onReachBottom(() => {
         height: 1.5rem;
       }
       &-inactive {
-        transform: v-bind('notifyTransform');
+        transform: v-bind("notifyTransform");
         opacity: 0;
-        display: v-bind('hideReplyNotify');
+        display: v-bind("hideReplyNotify");
       }
     }
   }

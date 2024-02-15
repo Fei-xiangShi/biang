@@ -177,6 +177,7 @@ onMounted(() => {
 
 <style lang="scss" scoped>
 .reply-item {
+  position: relative;
   width: -webkit-fill-available;
   display: flex;
   flex-direction: column;

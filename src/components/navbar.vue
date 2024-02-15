@@ -4,7 +4,7 @@
     <view class="statusBar" :style="{ paddingTop: statusBarHeight + 'px' }" />
     <!-- 真正的导航栏内容 -->
     <view class="navBar">
-      <slot/>
+      <slot />
       <view class="return-button" @tap="goBack" v-if="!isRootPage()">
         <u-icon name="arrow-left" :size="20" :color="returnButtonIconColor" />
       </view>
@@ -50,7 +50,7 @@ schools.forEach((element) => {
   });
 });
 
-defineProps({
+const props = defineProps({
   returnButtonIconColor: {
     type: String,
     default: "black",
@@ -62,6 +62,10 @@ defineProps({
   title: {
     type: String,
     default: "",
+  },
+  backgroundColor: {
+    type: String,
+    default: "rgba(0,0,0,0)",
   },
 });
 
@@ -100,18 +104,25 @@ const closeChangeSchool = () => {
 
 <style lang="scss" scoped>
 .statusBar {
+  position: relative;
   width: 100%;
   height: 0;
-  background: rgba($color: #000000, $alpha: 0);
+  background: v-bind('props.backgroundColor');
 }
 
-.navBarBox .navBar {
-  display: flex;
-  align-items: center;
-  background-color: rgba($color: #000000, $alpha: 0);
-  color: #fff;
-  height: 44px;
-  width: -webkit-fill-available;
+.navBarBox {
+  position: sticky;
+  width: auto;
+  top: 0;
+  z-index: 233;
+  .navBar {
+    display: flex;
+    align-items: center;
+    background-color: v-bind('props.backgroundColor');
+    color: #fff;
+    height: 44px;
+    width: -webkit-fill-available;
+  }
 }
 
 .return-button {

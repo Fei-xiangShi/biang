@@ -1,39 +1,56 @@
 <template>
-  <view class="container">
-    <navbar />
-    <view class="verifyEmail">
-      <view class="notice">
-        <text class="notice-text">{{ $t("verifyEmail.请输入邮箱提示") }}</text>
-      </view>
-      <view class="title">
-        <text class="title-text">{{ $t("verifyEmail.验证您的身份") }}</text>
-      </view>
-      <view class="email-input">
-        <u-input v-model="email.content" clearable @blur="checkEmail(email)" />
-      </view>
-      <view class="email.value.warning" v-if="!email.valid && email.warning">
-        <text class="email.value.warning-text">
-          {{ $t(email.warning) }}
-        </text>
-      </view>
-      <view class="tab-notice">
-        <text class="tab-notice-text">
-          {{ $t("verifyEmail.邮箱验证详细信息") }}
-        </text>
-      </view>
-      <view
-        class="confirm-button"
-        :class="{ loading: loading || !email.valid }"
+  <view class="body">
+    <view class="container">
+      <navbar />
+      <scroll-view
+        :scroll-y="true"
+        :scroll-with-animation="true"
+        style="height: 100%"
       >
-        <view class="button-text" @tap="confirm">
-          {{ $t("verifyEmail.确认") }}
+        <view class="verifyEmail">
+          <view class="notice">
+            <text class="notice-text">{{
+              $t("verifyEmail.请输入邮箱提示")
+            }}</text>
+          </view>
+          <view class="title">
+            <text class="title-text">{{ $t("verifyEmail.验证您的身份") }}</text>
+          </view>
+          <view class="email-input">
+            <u-input
+              v-model="email.content"
+              clearable
+              @blur="checkEmail(email)"
+            />
+          </view>
+          <view
+            class="email.value.warning"
+            v-if="!email.valid && email.warning"
+          >
+            <text class="email.value.warning-text">
+              {{ $t(email.warning) }}
+            </text>
+          </view>
+          <view class="tab-notice">
+            <text class="tab-notice-text">
+              {{ $t("verifyEmail.邮箱验证详细信息") }}
+            </text>
+          </view>
+          <view
+            class="confirm-button"
+            :class="{ loading: loading || !email.valid }"
+          >
+            <view class="button-text" @tap="confirm">
+              {{ $t("verifyEmail.确认") }}
+            </view>
+          </view>
+          <view class="bottom">
+            <text class="bottom-text">
+              {{ $t("verifyEmail.邮箱验证底部提示") }}
+            </text>
+          </view>
         </view>
-      </view>
-      <view class="bottom">
-        <text class="bottom-text">
-          {{ $t("verifyEmail.邮箱验证底部提示") }}
-        </text>
-      </view>
+      </scroll-view>
     </view>
   </view>
 </template>
@@ -72,7 +89,7 @@ const confirm = () => {
       }
     })
     .catch((err: any) => {
-      if (err.code === RequestErrorCode.UnkownError) {
+      if (err.code === RequestErrorCode.DefaultError) {
         uni.showToast({
           title: t(err.message),
           icon: "none",
@@ -89,6 +106,12 @@ const confirm = () => {
 </script>
 
 <style scoped lang="scss">
+.body {
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+}
+
 .container {
   position: absolute;
   width: 100%;

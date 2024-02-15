@@ -1,106 +1,114 @@
 <template>
-  <navbar />
-  <view class="login-container">
-    <view class="title-text">{{ $t("wxRegister.微信注册新账号") }}</view>
-    <view class="sub-title-text">{{
-      $t("wxRegister.微信注册副标题提示")
-    }}</view>
-    <view class="avatar">
-      <view class="avatar-title">
-        <view class="avatar-title-text">{{
-          $t("wxRegister.头像选择框标题")
-        }}</view>
-      </view>
-      <view class="upload-avatar">
-        <button
-          class="avatar-wrapper"
-          open-type="chooseAvatar"
-          @chooseavatar="onChooseAvatar"
-        >
-          <view class="avatarShow">
-            <image class="avatar-image" :src="userAvatarUrl" />
+  <view class="body">
+    <scroll-view
+      :scroll-y="true"
+      :scroll-with-animation="true"
+      style="height: 100%"
+    >
+      <navbar background-color="white"/>
+      <view class="login-container">
+        <view class="title-text">{{ $t("wxRegister.微信注册新账号") }}</view>
+        <view class="sub-title-text">
+          {{ $t("wxRegister.微信注册副标题提示") }}
+        </view>
+        <view class="avatar">
+          <view class="avatar-title">
+            <view class="avatar-title-text">
+              {{ $t("wxRegister.头像选择框标题") }}
+            </view>
           </view>
-        </button>
-      </view>
-    </view>
-    <view class="username">
-      <view class="username-input-title">
-        <view class="username-input-title-text">
-          {{ $t("wxRegister.用户名输入框标题") }}*
+          <view class="upload-avatar">
+            <button
+              class="avatar-wrapper"
+              open-type="chooseAvatar"
+              @chooseavatar="onChooseAvatar"
+            >
+              <view class="avatarShow">
+                <image class="avatar-image" :src="userAvatarUrl" />
+              </view>
+            </button>
+          </view>
         </view>
-      </view>
-      <view class="username-input">
-        <u-input
-          v-model="username.content"
-          :placeholder="t('wxRegister.用户名输入框占位符')"
-          @blur="checkUsername(username)"
-        />
-      </view>
-      <view class="username-input-warning">
-        <view
-          class="username-input-warning-text"
-          v-if="username.valid === false"
-        >
-          {{ $t(username.warning) }}
+        <view class="username">
+          <view class="username-input-title">
+            <view class="username-input-title-text">
+              {{ $t("wxRegister.用户名输入框标题") }}*
+            </view>
+          </view>
+          <view class="username-input">
+            <u-input
+              v-model="username.content"
+              :placeholder="t('wxRegister.用户名输入框占位符')"
+              @blur="checkUsername(username)"
+            />
+          </view>
+          <view class="username-input-warning">
+            <view
+              class="username-input-warning-text"
+              v-if="username.valid === false"
+            >
+              {{ $t(username.warning) }}
+            </view>
+          </view>
         </view>
-      </view>
-    </view>
-    <view class="email">
-      <view class="email-input-title">
-        <view class="email-input-title-text">
-          {{ $t("wxRegister.邮箱输入框标题") }}
+        <view class="email">
+          <view class="email-input-title">
+            <view class="email-input-title-text">
+              {{ $t("wxRegister.邮箱输入框标题") }}
+            </view>
+          </view>
+          <view class="email-input">
+            <u-input
+              v-model="email.content"
+              :placeholder="t('wxRegister.邮箱输入框占位符')"
+              @blur="checkEmail(email)"
+            />
+          </view>
+          <view class="email-input-warning">
+            <view
+              class="email-input-warning-text"
+              v-if="email.valid === false"
+              :style="{ color: 'rgb(167, 167, 167)' }"
+            >
+              {{ $t(email.warning) }}
+            </view>
+          </view>
         </view>
-      </view>
-      <view class="email-input">
-        <u-input
-          v-model="email.content"
-          :placeholder="t('wxRegister.邮箱输入框占位符')"
-          @blur="checkEmail(email)"
-        />
-      </view>
-      <view class="email-input-warning">
-        <view
-          class="email-input-warning-text"
-          v-if="email.valid === false"
-          :style="{ color: 'rgb(167, 167, 167)' }"
-        >
-          {{ $t(email.warning) }}
-        </view>
-      </view>
-    </view>
-    <view class="school-select-input">
-      <u-form>
-        <u-form-item
-          :label="t('wxRegister.学校选择框标题') + '*'"
-          @click="hideKeyboard"
-        >
-          <u-input
-            v-model="school"
-            disabled
-            disabledColor="rgb(0,0,0,0)"
-            :placeholder="t('wxRegister.学校选择框占位符')"
-            shape="circle"
+        <view class="school-select-input">
+          <u-form>
+            <u-form-item
+              :label="t('wxRegister.学校选择框标题') + '*'"
+              @click="hideKeyboard"
+            >
+              <u-input
+                v-model="school"
+                disabled
+                disabledColor="rgb(0,0,0,0)"
+                :placeholder="t('wxRegister.学校选择框占位符')"
+                shape="circle"
+              />
+            </u-form-item>
+          </u-form>
+          <u-picker
+            :show="showSchoolPicker"
+            :columns="schools"
+            closeOnClickOverlay
+            @cancel="cancelPick"
+            @confirm="confirmPick"
+            @close="closePick"
+            :loading="pickerLoading"
+            :title="t('wxRegister.学校选择')"
           />
-        </u-form-item>
-      </u-form>
-      <u-picker
-        :show="showSchoolPicker"
-        :columns="schools"
-        closeOnClickOverlay
-        @cancel="cancelPick"
-        @confirm="confirmPick"
-        @close="closePick"
-        :loading="pickerLoading"
-        :title="t('wxRegister.学校选择')"
-      />
-    </view>
-    <view class="next">
-      <view class="next-step">
-        <view class="next-step-text" @tap="commitRegister">{{
-          $t("wxRegister.下一步")
-        }}</view>
+        </view>
+        <view class="next">
+          <view class="next-step">
+            <view class="next-step-text" @tap="commitRegister">{{
+              $t("wxRegister.下一步")
+            }}</view>
+          </view>
+        </view>
       </view>
-    </view>
+    </scroll-view>
   </view>
 </template>
 
@@ -253,6 +261,12 @@ const commitRegister = () => {
 </script>
 
 <style lang="scss" scoped>
+.body {
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+}
+
 .login-container {
   display: flex;
   flex-direction: column;

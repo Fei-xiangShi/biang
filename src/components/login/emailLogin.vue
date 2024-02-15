@@ -4,7 +4,9 @@
     <img src="../../static/icons/logo.png" class="icon" />
     <view class="email-login-title">{{ $t("emailLogin.邮箱登录") }}</view>
     <view class="email-login-input-container">
-      <view class="email-login-input-title">{{ $t("emailLogin.邮箱") }}</view>
+      <view class="email-login-input-title">
+        {{ $t("emailLogin.邮箱") }}
+      </view>
       <input
         class="email-login-input"
         :placeholder="t('emailLogin.请输入邮箱')"
@@ -34,12 +36,14 @@
       class="nav-to-register"
       @click="navTo(RouteConfig.my.login.emailRegister.url)"
     >
-      <view class="nav-to-register-text">{{
-        $t("emailLogin.没有账号？去注册")
-      }}</view>
+      <view class="nav-to-register-text">
+        {{ $t("emailLogin.没有账号？去注册") }}
+      </view>
     </view>
     <view class="toggle-to-wx" @tap="emit('toggleLogin', wxLogin)">
-      <view class="toggle-to-wx-text">{{ $t("emailLogin.使用微信登录") }}</view>
+      <view class="toggle-to-wx-text">
+        {{ $t("emailLogin.使用微信登录") }}
+      </view>
     </view>
     <view class="user-agreement">
       <view class="user-agreement-text">
@@ -110,6 +114,7 @@ const emit = defineEmits(["loginSuccess", "loginFail", "toggleLogin"]);
 
 <style lang="scss" scoped>
 .email-login-container {
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -206,7 +211,7 @@ const emit = defineEmits(["loginSuccess", "loginFail", "toggleLogin"]);
     display: flex;
     align-items: center;
     justify-content: center;
-    position: absolute;
+    position: fixed;
     bottom: 50px;
     .user-agreement-text {
       font-size: 12px;
@@ -221,6 +226,4 @@ const emit = defineEmits(["loginSuccess", "loginFail", "toggleLogin"]);
     }
   }
 }
-
 </style>
-

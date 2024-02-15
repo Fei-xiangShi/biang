@@ -6,7 +6,9 @@
       </view>
       <view class="folded-overlay" :class="{ 'unfolded-overlay': unfolding }" />
       <view class="toggle" @tap="toggleStatus">
-        <view class="title">{{ unfolding ? $t("textfolder.收起") : $t("textfolder.展开") }}</view>
+        <view class="title">
+          {{ unfolding ? $t("textfolder.收起") : $t("textfolder.展开") }}
+        </view>
         <view class="toggle-button">
           <view
             class="folded-button-icon"
@@ -63,6 +65,7 @@ const toggleStatus = () => {
   display: flex;
   justify-content: center;
   align-items: center;
+  position: relative;
 }
 
 .folded {

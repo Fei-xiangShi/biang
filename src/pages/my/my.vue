@@ -1,87 +1,105 @@
 <template>
-  <view class="container">
-    <navbar :showChangeSchoolButton="true" />
-    <u-notify ref="Notify" />
-    <view class="changeLanguageModal">
-      <changeLanguageModal
-        :show="showChooseLangualge"
-        @confirm="confirmLang"
-        @cancel="cancelLang"
-      />
-    </view>
-    <view class="head" @tap="navTo(RouteConfig.my.login.url)" v-if="!isLogin">
-      <view class="avatar">
-        <u-avatar icon="star-fill" />
-      </view>
-      <view class="username">
-        <view class="username-text">{{ $t("my.未登录用户名") }}</view>
-        <view class="username-arrow">
-          <u-icon name="arrow-right" :size="20" />
-        </view>
-      </view>
-    </view>
-    <view class="head" @tap="navTo(RouteConfig.options.url)" v-else>
-      <view class="avatar">
-        <up-avatar :src="userAvatarUrl" />
-      </view>
-      <view class="username">
-        <view class="username-text">{{ username }}</view>
-        <view class="username-arrow">
-          <u-icon name="arrow-right" :size="20" />
-        </view>
-      </view>
-    </view>
-    <view class="myFunction">
-      <view
-        class="myFunctionItems"
-        v-for="(item, index) in RouteConfig.my.myItemList"
-        @tap="navTo(item.url)"
-        :key="index"
+  <view class="body">
+    <view class="container">
+      <navbar :showChangeSchoolButton="true" />
+      <scroll-view
+        :scroll-y="true"
+        :scroll-with-animation="true"
+        style="height: 100%"
       >
-        <view class="myFunctionItem">
-          <i :class="item.icon" class="item-icon"/>
-          <view class="myFunctionItemText">
-            {{ $t(item.text) }}
+        <u-notify ref="Notify" />
+        <view class="changeLanguageModal">
+          <changeLanguageModal
+            :show="showChooseLangualge"
+            @confirm="confirmLang"
+            @cancel="cancelLang"
+          />
+        </view>
+        <view
+          class="head"
+          @tap="navTo(RouteConfig.my.login.url)"
+          v-if="!isLogin"
+        >
+          <view class="avatar">
+            <u-avatar icon="star-fill" />
+          </view>
+          <view class="username">
+            <view class="username-text">{{ $t("my.未登录用户名") }}</view>
+            <view class="username-arrow">
+              <u-icon name="arrow-right" :size="20" />
+            </view>
           </view>
         </view>
-      </view>
-    </view>
-    <view class="admin-funtions" v-if="isAdmin">
-      <u-loadmore
-        loadmoreText="管理面板"
-        color="#1CD29B"
-        lineColor="#1CD29B"
-        dashed
-        :line="true"
-      />
-      <view class="notices-funtion" @tap="navTo(RouteConfig.admin.notices.url)">
-        <view class="notices-funtion-text"> 公告管理 </view>
-        <view class="notices-funtion-arrow">
-          <u-icon name="arrow-right" :size="20" />
+        <view class="head" @tap="navTo(RouteConfig.options.url)" v-else>
+          <view class="avatar">
+            <up-avatar :src="userAvatarUrl" />
+          </view>
+          <view class="username">
+            <view class="username-text">{{ username }}</view>
+            <view class="username-arrow">
+              <u-icon name="arrow-right" :size="20" />
+            </view>
+          </view>
         </view>
-      </view>
-      <view class="notices-funtion" @tap="navTo(RouteConfig.admin.test.url)">
-        <view class="notices-funtion-text"> 测试 </view>
-        <view class="notices-funtion-arrow">
-          <u-icon name="arrow-right" :size="20" />
+        <view class="myFunction">
+          <view
+            class="myFunctionItems"
+            v-for="(item, index) in RouteConfig.my.myItemList"
+            @tap="navTo(item.url)"
+            :key="index"
+          >
+            <view class="myFunctionItem">
+              <i :class="item.icon" class="item-icon" />
+              <view class="myFunctionItemText">
+                {{ $t(item.text) }}
+              </view>
+            </view>
+          </view>
         </view>
-      </view>
-    </view>
-    <view class="swiperContainer">
-      <view class="swiper">
-        <u-swiper
-          :list="swiperList"
-          keyName="image"
-          showTitle
-          :autoplay="true"
-          circular
-          indicator
-          indicatorMode="line"
-          radius="5"
-          bgColor="rgba(0,0,0,0)"
-          interval="10000"
-        />
-      </view>
+        <view class="admin-funtions" v-if="isAdmin">
+          <u-loadmore
+            loadmoreText="管理面板"
+            color="#1CD29B"
+            lineColor="#1CD29B"
+            dashed
+            :line="true"
+          />
+          <view
+            class="notices-funtion"
+            @tap="navTo(RouteConfig.admin.notices.url)"
+          >
+            <view class="notices-funtion-text"> 公告管理 </view>
+            <view class="notices-funtion-arrow">
+              <u-icon name="arrow-right" :size="20" />
+            </view>
+          </view>
+          <view
+            class="notices-funtion"
+            @tap="navTo(RouteConfig.admin.test.url)"
+          >
+            <view class="notices-funtion-text"> 测试 </view>
+            <view class="notices-funtion-arrow">
+              <u-icon name="arrow-right" :size="20" />
+            </view>
+          </view>
+        </view>
+        <!-- <view class="swiperContainer">
+          <view class="swiper">
+            <u-swiper
+              :list="swiperList"
+              keyName="image"
+              showTitle
+              :autoplay="true"
+              circular
+              indicator
+              indicatorMode="line"
+              radius="5"
+              bgColor="rgba(0,0,0,0)"
+              interval="10000"
+            />
+          </view>
+        </view> -->
+      </scroll-view>
     </view>
   </view>
 </template>
@@ -174,7 +192,7 @@ onMounted(() => {
           }
           username.value = res.data.username;
           userAvatarUrl.value = res.data.avatar_url;
-          uni.setStorageSync("avatarUrl", res.data.avatar_url)
+          uni.setStorageSync("avatarUrl", res.data.avatar_url);
         } else {
           ErrorHandler(res);
         }
@@ -201,6 +219,12 @@ onMounted(() => {
 </script>
 
 <style scoped lang="scss">
+.body {
+  height: 100vh;
+  width: 100vw;
+  top: 0;
+}
+
 .container {
   display: flex;
   flex-direction: column;

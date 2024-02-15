@@ -1,7 +1,7 @@
 <template>
-  <view class="container" :class="{'visible': show}">
-    <overlay :show="true" @tap="onClickOverlay"/>
-    
+  <view class="container" :class="{ visible: show }">
+    <overlay :show="true" @tap="onClickOverlay" />
+
     <view class="modal">
       <view class="modal-title">{{ title }}</view>
       <view class="modal-content">{{ content }}</view>

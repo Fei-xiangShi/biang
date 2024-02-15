@@ -41,6 +41,10 @@ const apiUrl = {
   changeUsername: `${baseUrl}/changeUsername`,
   // 获得所有Units
   allUnits: `${baseUrl}/allUnits`,
+  // 发送通用验证码
+  sendEmailVerificationCode: `${baseUrl}/sendEmailVerificationCode`,
+  // 验证通用验证码
+  codeVertify: `${baseUrl}/codeVertify`,
 };
 
 export default apiUrl;

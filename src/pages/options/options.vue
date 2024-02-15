@@ -1,40 +1,48 @@
 <template>
-  <view class="page">
+  <view class="body">
     <view class="navbar">
       <navbar :title="t('options.设置')" />
     </view>
-    <view class="container">
-      <view
-        class="options-list"
-        v-for="(list, index) in RouteConfig.options.optionList"
-        :key="index"
-      >
+    <scroll-view
+      :scroll-y="true"
+      :scroll-with-animation="true"
+      style="height: 100%"
+    >
+      <view class="container">
         <view
-          class="options-list-item"
-          v-for="(item, index) in list"
-          @tap="navTo(item.url)"
+          class="options-list"
+          v-for="(list, index) in RouteConfig.options.optionList"
           :key="index"
         >
-          <view v-if="index != 0" class="options-list-item-block" />
-          <view class="content">
-            <view class="options-list-item-text">
-              <view class="options-list-item-title">{{ $t(item.title) }}</view>
-              <view class="options-list-item-desc" v-if="item.desc">
-                {{ $t(item.desc) }}
+          <view
+            class="options-list-item"
+            v-for="(item, index) in list"
+            @tap="navTo(item.url)"
+            :key="index"
+          >
+            <view v-if="index != 0" class="options-list-item-block" />
+            <view class="content">
+              <view class="options-list-item-text">
+                <view class="options-list-item-title">{{
+                  $t(item.title)
+                }}</view>
+                <view class="options-list-item-desc" v-if="item.desc">
+                  {{ $t(item.desc) }}
+                </view>
               </view>
-            </view>
-            <view class="options-list-item-arrow">
-              <u-icon name="arrow-right" :size="20" />
+              <view class="options-list-item-arrow">
+                <u-icon name="arrow-right" :size="20" />
+              </view>
             </view>
           </view>
         </view>
-      </view>
-      <view class="logoutButton">
-        <view class="logoutButton" @tap="logout">
-          {{ $t("options.退出登录") }}
+        <view class="logoutButton">
+          <view class="logoutButton" @tap="logout">
+            {{ $t("options.退出登录") }}
+          </view>
         </view>
       </view>
-    </view>
+    </scroll-view>
   </view>
 </template>
 
@@ -71,8 +79,10 @@ const logout = () => {
 </script>
 
 <style scoped lang="scss">
-.page {
+.body {
+  top: 0;
   background-color: #f0f0f0;
+  width: 100vw;
   height: 100vh;
 }
 

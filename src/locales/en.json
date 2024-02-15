@@ -118,6 +118,8 @@
   "classDetail.提交": "Commit",
   "classTable.导入课表": "Import Class Schedule",
   "classTable.课表链接": "Class Schedule Link",
+  "classTable.请输入课表链接": "Please enter your class schedule link",
+  "classDetail.课程信息获取失败": "Failed to get course information",
   "index.加载中": "Loading...",
   "index.课程查找标题": "Course Details and Discussion",
   "index.课表查询按钮": "Query course details",
