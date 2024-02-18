@@ -163,8 +163,8 @@ const Api = {
       email: email,
       lang: lang,
     }),
-  codeVertify: (email: string, verification_code: string, type: string) =>
-    http.post(apiUrl.codeVertify, {
+  codeVerify: (email: string, verification_code: string, type: string) =>
+    http.post(apiUrl.codeVerify, {
       email: email,
       verification_code: verification_code,
       type: type,

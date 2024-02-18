@@ -183,6 +183,7 @@
   "emailRegister.验证码已发送": "Verification code has been sent",
   "emailRegister.请输入邮箱警告": "Please enter your email",
   "emailRegister.等待重新获取验证码": "Xs before resending",
+  "emailRegister.验证码错误": "Incorrect verification code",
   "wxRegister.微信注册新账号": "WeChat user registration",
   "wxRegister.微信注册副标题提示": "Complete your account information for the first time using WeChat login",
   "wxRegister.头像选择框标题": "Please upload your avatar",

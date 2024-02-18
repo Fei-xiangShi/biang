@@ -44,7 +44,7 @@ const apiUrl = {
   // 发送通用验证码
   sendEmailVerificationCode: `${baseUrl}/sendEmailVerificationCode`,
   // 验证通用验证码
-  codeVertify: `${baseUrl}/codeVertify`,
+  codeVerify: `${baseUrl}/codeVerify`,
 };
 
 export default apiUrl;

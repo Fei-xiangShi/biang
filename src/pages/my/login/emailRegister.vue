@@ -5,7 +5,7 @@
       :scroll-with-animation="true"
       style="height: 100vh"
     >
-      <navbar background-color="white"/>
+      <navbar background-color="white" />
       <view class="login-container">
         <view class="title-text">{{ $t("emailRegister.注册新账号") }}</view>
         <view class="sub-title-text">
@@ -18,15 +18,24 @@
             </view>
           </view>
           <view class="upload-avatar">
+            <!-- #ifdef MP-WEIXIN  -->
             <button
               class="avatar-wrapper"
               open-type="chooseAvatar"
               @chooseavatar="onChooseAvatar"
             >
               <view class="avatarShow">
-                <image class="avatar-image" :src="avatarUrl" />
+                <img class="avatar-image" :src="avatarUrl" />
               </view>
             </button>
+            <!-- #endif -->
+            <!-- #ifdef H5 -->
+            <button class="avatar-wrapper" @tap="handleButtonClick">
+              <view class="avatarShow">
+                <img class="avatar-image" :src="avatarUrl" />
+              </view>
+            </button>
+            <!-- #endif -->
           </view>
         </view>
         <view class="email">
@@ -182,7 +191,7 @@
           <u-form>
             <u-form-item
               :label="t('emailRegister.学校选择框标题') + '*'"
-              @click="hideKeyboard"
+              @tap="hideKeyboard"
             >
               <u-input
                 v-model="school"
@@ -280,6 +289,23 @@ const onChooseAvatar = (e: any) => {
   });
 };
 
+const handleButtonClick = () => {
+  uni.chooseImage({
+    count: 1, 
+    sizeType: ["original", "compressed"], 
+    sourceType: ["album", "camera"],
+    success: (res) => {
+      avatarUrl.value = res.tempFilePaths[0];
+      uni.getFileInfo({
+        filePath: avatarUrl.value,
+        success: (res) => {
+          size = String(res.size);
+        },
+      });
+    },
+  });
+};
+
 const start = () => {
   tips.value = t("emailRegister.正在获取验证码");
 };
@@ -342,15 +368,75 @@ const commitRegister = () => {
     email.value.valid &&
     username.value.valid
   ) {
-    Api.codeVertify(email.value.content, code.value.content, "email")
+    Api.codeVerify(email.value.content, code.value.content, "email")
       .then((res: any) => {
         if (res.data.success) {
           code.value.valid = true;
+          Api.emailRegister(
+            email.value.content,
+            username.value.content,
+            password.value.content,
+            schoolId.value,
+            size,
+            uni.getStorageSync("lang")
+          )
+            .then((res: any) => {
+              if (res.data.success) {
+                uni.showToast({
+                  title: t("emailRegister.注册成功"),
+                  icon: "success",
+                  duration: 2000,
+                });
+                userInitFromRequest(res);
+                // #ifdef WP-WEIXIN
+                uni.getFileSystemManager().readFile({
+                  filePath: avatarUrl.value,
+                  success: (result) => {
+                    const headers = {
+                      "Content-Type": "image/jpeg",
+                      "Content-Length": size,
+                    };
+                    Api.uploadAvatar(
+                      res.data.presigned_url,
+                      result.data,
+                      headers
+                    ).then((res: any) => {
+                      if (res.statusCode === 200) {
+                        uni.reLaunch({
+                          url: RouteConfig.my.url,
+                        });
+                      } else {
+                        ErrorHandler(res);
+                      }
+                    });
+                  },
+                });
+                // #endif
+                // #ifdef H5
+                // #endif
+              } else {
+                ErrorHandler(res);
+              }
+            })
+            .catch((err: any) => {
+              if (err.code === RequestErrorCode.EmailExistsError) {
+                email.value.valid = false;
+                email.value.warning = t(err.message);
+              } else if (err.code === RequestErrorCode.UsernameExistsError) {
+                username.value.valid = false;
+                username.value.warning = t(err.message);
+              } else {
+                uni.showToast({
+                  title: t(err.message),
+                  icon: "none",
+                  duration: 2000,
+                });
+              }
+            });
         } else {
           code.value.valid = false;
           code.value.warning = t("emailRegister.验证码错误");
           ErrorHandler(res);
-          return;
         }
       })
       .catch((err: any) => {
@@ -359,63 +445,7 @@ const commitRegister = () => {
           icon: "none",
           duration: 2000,
         });
-      });
-    Api.emailRegister(
-      email.value.content,
-      username.value.content,
-      password.value.content,
-      schoolId.value,
-      size,
-      uni.getStorageSync("lang")
-    )
-      .then((res: any) => {
-        if (res.data.success === true) {
-          uni.showToast({
-            title: t("emailRegister.注册成功"),
-            icon: "success",
-            duration: 2000,
-          });
-          userInitFromRequest(res);
-          uni.getFileSystemManager().readFile({
-            filePath: avatarUrl.value,
-            success: (result) => {
-              const headers = {
-                "Content-Type": "image/jpeg",
-                "Content-Length": size,
-              };
-              Api.uploadAvatar(
-                res.data.presigned_url,
-                result.data,
-                headers
-              ).then((res: any) => {
-                if (res.statusCode === 200) {
-                  uni.reLaunch({
-                    url: RouteConfig.my.url,
-                  });
-                } else {
-                  ErrorHandler(res);
-                }
-              });
-            },
-          });
-        } else {
-          ErrorHandler(res);
-        }
-      })
-      .catch((err: any) => {
-        if (err.code === RequestErrorCode.EmailExistsError) {
-          email.value.valid = false;
-          email.value.warning = t(err.message);
-        } else if (err.code === RequestErrorCode.UsernameExistsError) {
-          username.value.valid = false;
-          username.value.warning = t(err.message);
-        } else {
-          uni.showToast({
-            title: t(err.message),
-            icon: "none",
-            duration: 2000,
-          });
-        }
+        return;
       });
   }
 };
